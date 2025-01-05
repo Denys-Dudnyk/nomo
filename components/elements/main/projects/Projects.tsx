@@ -49,7 +49,7 @@ const Projects: FC<PartnersProps> = ({ bgColor }) => {
 	return (
 		<section className={`${bgColor}`}>
 			<div className={'containers'}>
-				<h2 className='py-[60px] text-center text-[54px] leading-[72.9px] font-extrabold'>
+				<h2 className='py-[60px] text-center font-extrabold text-[35px] sm:text-[54px]  leading-tight sm:leading-[72.9px]'>
 					Дізнайся більше про наші проекти
 				</h2>
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-10  pb-[30px]'>

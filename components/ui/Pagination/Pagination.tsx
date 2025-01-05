@@ -17,7 +17,7 @@ const Pagination = ({
 	}
 
 	return (
-		<div className='flex items-center justify-center space-x-2 mt-8 gap-[18px] mb-[50px]'>
+		<div className='flex items-center justify-center space-x-2 mt-8 gap-[18px] mb-[50px] flex-wrap'>
 			<button
 				onClick={() => handlePageChange(currentPage - 1)}
 				disabled={currentPage === 1}

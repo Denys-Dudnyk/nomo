@@ -17,7 +17,7 @@ export const ReviewsItem = ({
 	text,
 }: TestimonialCardProps) => {
 	return (
-		<div className='bg-white rounded-3xl review-shadow pt-[26px] pb-[52px]  flex flex-col items-center w-full mx-auto max-w-[362px] max-h-[488px]'>
+		<div className='bg-white rounded-3xl review-shadow pt-[26px] pb-[52px]  flex flex-col items-center w-full mx-auto max-w-[362px] h-full xl:max-h-[488px]'>
 			<img
 				src={avatar}
 				alt={`${name} ${surname}`}
@@ -26,8 +26,7 @@ export const ReviewsItem = ({
 			<p className='text-[31px] font-bold m-0 max-w-[133px] text-center'>
 				{name}
 			</p>
-			{/* <p className='text-[31px] font-bold m-0'>{surname}</p> */}
-			<div className='mt-[17px] mb-[17px]'>
+			<div className='mt-[17px] mb-[17px] relative z-10'>
 				<StarRating rating={rating} />
 			</div>
 

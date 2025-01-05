@@ -15,7 +15,7 @@ const BenefitCard = ({
 	className,
 }: BenefitCardProps) => {
 	return (
-		<div className='relative'>
+		<div className='relative w-full max-w-[350px]'>
 			<div className='absolute -top-[35px] left-1/2 -translate-x-1/2 '>
 				<div className='bg-[#0F0F0F] rounded-[38px] gradient-border  benefit-shadow'>
 					<div className=' gradient-text text-[16px] leading-[126%] tracking-[-4%] font-bold py-[15px] px-[30px] rounded-[38px] w-fit uppercase text-center'>

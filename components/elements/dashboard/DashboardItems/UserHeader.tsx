@@ -12,7 +12,7 @@ interface UserHeaderProps {
 
 export default function UserHeader({ user, profile }: UserHeaderProps) {
 	return (
-		<div className='flex items-center justify-between mb-[35px] gap-4 '>
+		<div className='flex items-center justify-between mb-[35px] gap-4 flex-col md:flex-row'>
 			<div className='flex items-center gap-6 flex-col mr-[21px]'>
 				<div className='relative h-[150px] w-[150px]'>
 					<Image
@@ -29,8 +29,10 @@ export default function UserHeader({ user, profile }: UserHeaderProps) {
 				</h2>
 			</div>
 
-			<NavigationCards userProfile={profile} />
-			<div className='flex justify-end'>
+			<div className='w-full lg:w-auto'>
+				<NavigationCards userProfile={profile} />
+			</div>
+			<div className='flex justify-end card-h'>
 				<CardPreview cardHolder={profile?.full_name} />
 			</div>
 		</div>

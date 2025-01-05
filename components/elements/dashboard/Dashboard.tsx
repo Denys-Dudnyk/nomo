@@ -22,12 +22,10 @@ export default function Dashboard({ session, profile }: DashboardContentProps) {
 	const [currency, setCurrency] = useState('UAH')
 
 	return (
-		<div className=' mx-[80px] px-4 pt-[110px] pb-[100px]'>
+		<div className='mx-5 md:mx-[80px] px-4 pt-[110px] pb-[100px]'>
 			<div className='grid grid-cols-1 gap-8'>
 				<UserHeader user={session.user} profile={profile} />
-				{/* <NavigationCards balance={profile?.cashback_balance || 0} /> */}
-
-				<Balance balance={profile?.cashback_balance || 0} />
+				<Balance balance={profile?.cashback_balance || 0} profile={profile} />
 				<TransactionsTable
 					currentMonth={currentMonth}
 					currency={currency}

@@ -15,15 +15,15 @@ const PartnerCard: FC<PartnerCardProps> = ({
 }) => {
 	return (
 		<div
-			className={`rounded-[30px] bg-[#FF8D2A] overflow-hidden  w-[594px] h-[556px] flex flex-col`}
+			className={`rounded-[30px] bg-[#FF8D2A] overflow-hidden w-auto partnership-card sm:w-full md:w-full max-w-max  sm:max-w-[597px] md:max-w-[594px] md:aspect-[594/556]  flex flex-col`}
 		>
 			<div
-				className={`${bgColor} flex-1 flex items-center  justify-center px-[90px] py-[44px] rounded-[30px] max-h-[388.35px] h-[388.35px]`}
+				className={`${bgColor} flex-1 flex items-center  justify-center px-0 sm:px-[90px] py-0 sm:py-[44px] rounded-[30px] max-h-[388.35px] h-[388.35px]`}
 			>
 				<img
 					src={image}
 					alt={title}
-					className='object-cover max-w-[530px] max-h-[329px] '
+					className='object-cover w-auto sm:max-w-[530px] h-auto sm:max-h-[329px] '
 				/>
 			</div>
 			<div className='text-[#000] pt-6 px-[45px] pb-[73px]  text-center'>

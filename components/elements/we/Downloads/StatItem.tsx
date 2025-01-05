@@ -23,7 +23,7 @@ const StatItem = ({
 }: StatItemProps) => {
 	return (
 		<div
-			className={`flex justify-center text-center items-center flex-col gap-[28px] bg-accent ${paddingX} ${paddingY}  rounded-[13px] w-[170px] h-[180px]`}
+			className={`flex justify-center text-center items-center flex-col gap-[28px] bg-accent ${paddingX} ${paddingY}  rounded-[13px] w-full sm:w-[170px] h-[180px]`}
 		>
 			<Image src={image} alt={rateTitle} width={width} height={height} />
 			<p className='text-[26px] font-bold text-[#fff] leading-[15px] tracking-wide'>

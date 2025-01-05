@@ -18,6 +18,8 @@ export default function LoginForm() {
 	const [error, setError] = useState<string | null>(null)
 	const router = useRouter()
 	const [showDev, setShowDev] = useState(false)
+	const [resetEmail, setResetEmail] = useState('')
+	const [showVerification, setShowVerification] = useState(false)
 
 	const supabase = createClient()
 
@@ -60,6 +62,10 @@ export default function LoginForm() {
 		setShowDev(true)
 	}
 
+	const handleForgotPassword = () => {
+		router.push('/forgot-password')
+	}
+
 	return (
 		<>
 			<div className='w-full max-w-[428px] p-8 rounded-3xl bg-[#1C1C1C] text-white'>
@@ -67,14 +73,14 @@ export default function LoginForm() {
 
 				<button
 					onClick={openDevelopModal}
-					className='relative flex items-center w-full mb-[18px] px-[60px] rounded-[41px] py-[19.5px] bg-transparent border border-[#fff] hover:bg-gray-800 text-[18px] font-bold'
+					className='flex items-center justify-between w-full mb-[18px] px-[20px] sm:px-[60px] rounded-[41px] py-[10px] sm:py-[19.5px] bg-transparent border border-[#fff] hover:bg-gray-800 text-[15px] sm:text-[18px] font-bold'
 				>
 					{/* <BrandTelegram className='mr-2' /> */}
-					Продовжити через
+					<span>Продовжити через</span>
 					<Image
 						src={'/auth/tg.svg'}
 						alt='Telegram Auth'
-						className='absolute right-[65px]'
+						className=''
 						width={51}
 						height={51}
 					/>
@@ -126,7 +132,7 @@ export default function LoginForm() {
 					<a
 						href='#'
 						className='text-sm text-gray-400 hover:text-white'
-						onClick={openDevelopModal}
+						onClick={handleForgotPassword}
 					>
 						Забули пароль?
 					</a>

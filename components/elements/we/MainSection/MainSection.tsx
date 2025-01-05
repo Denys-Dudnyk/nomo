@@ -5,25 +5,18 @@ const MainSection: FC = () => {
 	return (
 		<section className={'relative min-h-screen w-full'}>
 			<div className='bg-we '></div>
-			<div className='max-w-[1400px] my-0 px-[70px]  mx-auto  flex flex-col lg:flex-row items-center justify-between'>
+			<div className='max-w-[1400px] my-0 px-[20px] sm:px-[70px]  mx-auto  flex flex-col lg:flex-row items-center justify-between'>
 				<div className='lg:w-1/2 mt-[203px] '>
-					<div className=''>
-						<h1 className='leading-[126%] lg:text-[56px] font-bold mb-6 tracking-tight items-center gap-2 '>
-							{/* <Image
-								src={'/we/logo.svg'}
-								width={163}
-								height={38}
-								alt='Nomo App Interface'
-								className='float-left  items-center'
-							/>{' '} */}
+					<div className='w-full'>
+						<h1 className='leading-[126%] text-[35px] sm:text-[40px] lg:text-[56px] font-bold mb-6 tracking-tight items-center gap-2 '>
 							<span className='text-[#FF8D2A]'>Nomo</span> твій особистий
 							бенефіціар - кешбек, що обирає сам!
 						</h1>
-						<p className='text-[24px] leading-[140%] tracking-tight text-[#CECECE] mb-8'>
+						<p className='text-[20px] sm:text-[24px] leading-[140%] tracking-tight text-[#CECECE] mb-8'>
 							Ми віримо - таємниця успішних покупок полягає в обраному кешбеку.
 							Отримуйте максимум вигоди разом із nomo.
 						</p>
-						<div className='flex gap-4 mb-[242px]'>
+						<div className='flex gap-4 mb-[30px] lg:mb-[242px]'>
 							<a href='#' className='hover:opacity-80 transition-opacity'>
 								<Image
 									src={'/we/apple.svg'}
@@ -75,7 +68,7 @@ const MainSection: FC = () => {
 							className=' mx-auto'
 						/>
 					</div>
-					<div className='absolute bottom-0 right-0 w-full h-full bg-gradient-to-t from-[#1A1A1A] to-transparent lg:hidden' />
+					{/* <div className='absolute inset-0 bg-gradient-to-t from-[#1A1A1A] to-transparent opacity-0 lg:hidden' /> */}
 				</div>
 			</div>
 		</section>

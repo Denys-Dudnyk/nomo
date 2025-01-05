@@ -13,17 +13,26 @@ const navItems = [
 	{ label: 'Хто Ми', href: '/we' },
 ]
 
-const Navbar = () => {
+interface NavbarProps {
+	isResettingPassword?: boolean
+}
+
+const Navbar = ({ isResettingPassword = false }: NavbarProps) => {
 	const pathname = usePathname()
+	const router = useRouter()
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
 	const supabase = createClient()
 
 	useEffect(() => {
 		const checkAuth = async () => {
-			const {
-				data: { session },
-			} = await supabase.auth.getSession()
-			setIsAuthenticated(!!session)
+			if (!isResettingPassword) {
+				const {
+					data: { session },
+				} = await supabase.auth.getSession()
+				setIsAuthenticated(!!session)
+			} else {
+				setIsAuthenticated(false)
+			}
 		}
 
 		checkAuth()
@@ -31,19 +40,29 @@ const Navbar = () => {
 		const {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange((_event, session) => {
-			setIsAuthenticated(!!session)
+			if (!isResettingPassword) {
+				setIsAuthenticated(!!session)
+			}
 		})
 
 		return () => subscription.unsubscribe()
-	}, [])
+	}, [isResettingPassword])
 
-	const allNavItems = isAuthenticated
-		? [{ label: 'Мій кабінет', href: '/dashboard' }, ...navItems]
-		: navItems
+	const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>) => {
+		if (isResettingPassword) {
+			e.preventDefault()
+			router.push('/reset-password')
+		}
+	}
+
+	const allNavItems =
+		!isResettingPassword && isAuthenticated
+			? [{ label: 'Мій кабінет', href: '/dashboard' }, ...navItems]
+			: navItems
 
 	return (
 		<nav>
-			<ul className='hidden lg:flex items-center font-bold gap-[38px]'>
+			<ul className='flex items-start lg:items-center flex-col lg:flex-row font-bold gap-[38px] md:space-y-0'>
 				{allNavItems.map(item => (
 					<li key={item.href}>
 						<Link
@@ -51,6 +70,7 @@ const Navbar = () => {
 							className={`hover:text-accent transition-colors ${
 								pathname === item.href ? 'text-accent' : ''
 							}`}
+							onClick={handleNavigation}
 						>
 							{item.label}
 						</Link>

@@ -23,7 +23,7 @@ const Statistics = () => {
 					<span className='text-[#7F7F7F]  font-normal  '>Block</span> N{' '}
 					<span className='text-[#7F7F7F]  font-normal  '>сьогодні</span>
 				</h2>
-				<h3 className='text-[52px] font-bold  leading-[62.93px] text-[#1D2733] mb-12'>
+				<h3 className='text-[30px] sm:text-[52px] font-bold   leading-tight sm:leading-[62.93px] text-[#1D2733] mb-12'>
 					Найновіша статистика мережі
 				</h3>
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-[70px]'>

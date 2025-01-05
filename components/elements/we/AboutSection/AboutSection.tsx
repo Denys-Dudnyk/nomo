@@ -5,35 +5,35 @@ const AboutSection: FC = () => {
 	return (
 		<section className={'mt-[150px] mb-[78px]'}>
 			<div className='containers'>
-				<div className='lg:w-1/2 mt-[150px] ml-[158px] mb-[75px]'>
-					<div className=' '>
+				<div className='lg:w-2/3 mt-[150px] lg:ml-[158px] mb-[75px]'>
+					<div className='grid grid-cols-1'>
 						<div className='flex items-center gap-4'>
-							<span className='text-[#FF8D2A] text-[58px] tracking-tight font-bold'>
+							<span className='text-[#FF8D2A] text-[30px] sm:text-[58px] tracking-tight font-bold whitespace-nowrap'>
 								5 000 000 +
 							</span>
-							<span className='text-[#0f0f0f] font-bold text-[19px]'>
+							<span className='text-[#0f0f0f] font-bold  text-[15px] sm:text-[19px]'>
 								випущено Ncoin
 							</span>
 						</div>
 						<div className='flex items-center gap-4'>
-							<span className='text-[#FF8D2A] text-[58px] tracking-tight font-bold'>
+							<span className='text-[#FF8D2A] text-[30px] sm:text-[58px] tracking-tight font-bold whitespace-nowrap'>
 								60 000 +
 							</span>
-							<span className='text-[#0f0f0f] font-bold text-[19px]'>
+							<span className='text-[#0f0f0f] font-bold text-[15px] sm:text-[19px]'>
 								людей використовують наш сервіс
 							</span>
 						</div>
 						<div className='flex items-center gap-4'>
-							<span className='text-[#FF8D2A] text-[58px] tracking-tight font-bold'>
+							<span className='text-[#FF8D2A] text-[30px] sm:text-[58px] tracking-tight font-bold whitespace-nowrap'>
 								830 +
 							</span>
-							<span className='text-[#0f0f0f] font-bold text-[19px]'>
+							<span className='text-[#0f0f0f] font-bold text-[15px] sm:text-[19px]'>
 								партнерів у різних країнах
 							</span>
 						</div>
 					</div>
 				</div>
-				<div className='grid-about w-full'>
+				<div className='grid-about'>
 					<div className='bg-[#212121] rounded-[33px] px-5 py-[33px] max-w-[389px] '>
 						<div className='flex items-center gap-[10px]'>
 							<Image src={'/we/about-icon.svg'} alt='' width={28} height={22} />
@@ -92,14 +92,14 @@ const AboutSection: FC = () => {
 					{/* Left content */}
 					<div className='lg:w-1/2'>
 						<div className='mb-8'>
-							<h1 className='text-[54px] font-extrabold mb-[21px] leading-[135%] flex flex-col items-start gap-2'>
+							<h1 className='text-[40px] md:text-[54px] font-extrabold mb-[21px] leading-[135%] flex flex-col items-start gap-2'>
 								<div className='flex items-center gap-2'>
 									<span>Загадка</span>
 									<span className='text-accent'>nomo:</span>
 								</div>
 								<span>розкриваємо нашу сутність!</span>
 							</h1>
-							<p className='text-[24px] text-[#4F4F4F] text-left leading-[140%] -tracking-[0.04em] font-semibold w-[720px] max-w-[720px]'>
+							<p className='text-[20px] md:text-[24px] text-[#4F4F4F] text-left leading-[140%] -tracking-[0.04em] font-semibold w-full max-w-[720px]'>
 								В нашому світі nomo ми втілюємо унікальність і індивідуальність.
 								Кожен елемент нашої ідентичності розкривається через кожну
 								послугу та кожну вигоду, яку ми пропонуємо. Приєднуйтеся до

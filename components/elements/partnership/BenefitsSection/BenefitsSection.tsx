@@ -42,19 +42,19 @@ const BenefitsSection = () => {
 	return (
 		<section className='py-16 px-4 '>
 			<div className='max-w-7xl mx-auto'>
-				<h2 className='text-[64px]  text-[#0f0f0f] font-bold text-center mb-[30px]'>
+				<h2 className='text-[30px] sm:text-[55px] lg:text-[64px]  text-[#0f0f0f] font-bold text-center mb-[30px]'>
 					Партнерська програма{' '}
 					<span className='relative '>
 						Nomo
 						<span className='absolute bg-text'></span>
 					</span>
 				</h2>
-				<p className='text-[#4e4e4e] text-center text-[25px]  max-w-[750px] mx-auto mb-[90px]'>
+				<p className='text-[#4e4e4e] text-center text-[20px] sm:text-[25px]  max-w-[750px] mx-auto mb-[90px]'>
 					Пропозиція для digital, маркетингових та брендингових агенцій. Ставши
 					партнером, ви отримуєте
 				</p>
 
-				{isMobile ? (
+				{/* {isMobile ? (
 					<Swiper
 						modules={[Pagination]}
 						spaceBetween={20}
@@ -68,13 +68,15 @@ const BenefitsSection = () => {
 							</SwiperSlide>
 						))}
 					</Swiper>
-				) : (
-					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-						{benefits.map((benefit, index) => (
-							<BenefitCard key={index} {...benefit} />
-						))}
-					</div>
-				)}
+				) : ( */}
+				<div className='grid  grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-12 xl:gap-6'>
+					{benefits.map((benefit, index) => (
+						<div key={index} className='mx-auto'>
+							<BenefitCard {...benefit} />
+						</div>
+					))}
+				</div>
+				{/* )} */}
 			</div>
 		</section>
 	)

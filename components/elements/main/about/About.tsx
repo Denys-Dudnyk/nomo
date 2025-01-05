@@ -7,7 +7,7 @@ const About = () => {
 				<div className='containers text-[#1D2733]'>
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 items-center'>
 						<div className='max-w-4xl'>
-							<h2 className='text-[52px]  font-bold mb-[30px] leading-[62.93px]'>
+							<h2 className='text-[35px] sm:text-[52px]  leading-tight sm:leading-[62.93px]  font-bold mb-[30px]'>
 								Інноваційна програма кешбеку
 							</h2>
 							<p className='text-base'>
@@ -45,7 +45,7 @@ const About = () => {
 							/>
 						</div>
 						<div className='max-w-4xl'>
-							<h2 className='text-[52px] font-bold mb-[30px] leading-[62.93px]'>
+							<h2 className='text-[35px] sm:text-[52px]  leading-tight sm:leading-[62.93px] font-bold mb-[30px]'>
 								Фінансова свобода
 							</h2>
 							<p className='text-base'>
@@ -61,7 +61,7 @@ const About = () => {
 				<div className='containers text-[#1D2733]'>
 					<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 items-center'>
 						<div className='max-w-4xl'>
-							<h2 className='text-[52px] w-[800px] font-bold mb-[30px] leading-[62.93px]'>
+							<h2 className='text-[35px] sm:text-[48px] lg:text-[52px] w-auto lg:w-[800px] font-bold mb-[30px] leading-tight sm:leading-[62.93px]'>
 								Заохочення використання криптовалюти
 							</h2>
 							<p className='text-base'>
@@ -100,7 +100,7 @@ const About = () => {
 							/>
 						</div>
 						<div className='max-w-4xl'>
-							<h2 className='text-[52px] font-bold mb-[30px] leading-[62.93px]'>
+							<h2 className='text-[35px] sm:text-[52px]  leading-tight sm:leading-[62.93px] font-bold mb-[30px]'>
 								Прозорість та безпека
 							</h2>
 							<p className='text-base'>

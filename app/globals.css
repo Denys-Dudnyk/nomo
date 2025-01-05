@@ -11,6 +11,7 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	/* outline: 4px solid green; */
 }
 
 body {
@@ -39,10 +40,6 @@ body {
 	background-repeat: no-repeat;
 	background-position: center right;
 }
-
-/* .bg-text {
-	position: absolute;
-} */
 
 .bg-text {
 	background-image: url('../public/partnership/bg-text.svg');
@@ -244,27 +241,30 @@ body {
 	gap: 44px;
 	margin: 0 auto;
 }
-
 .grid-about {
 	display: grid;
 
 	grid-template-columns: repeat(3, 389px);
 	gap: 24px;
-	margin: 0 auto;
-	justify-content: center; /* Горизонтальное выравнивание */
+	/* margin: 0 auto; */
+	justify-content: center;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1280px) {
 	.grid-about {
-		grid-template-columns: repeat(2, 1fr); /* Две колонки */
+		grid-template-columns: repeat(2, 1fr);
 	}
 }
 
 /* Для экранов шириной 768px и меньше */
 @media (max-width: 768px) {
 	.grid-about {
-		align-content: center;
-		grid-template-columns: 1fr; /* Одна колонка */
+		/* align-content: center; */
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		/* Одна колонка */
 		gap: 16px; /* Уменьшение промежутка между элементами */
 	}
 }
@@ -275,11 +275,78 @@ body {
 		grid-template-columns: repeat(auto-fit, minmax(269px, 3fr));
 		gap: 44px;
 	}
+	.card-h {
+		display: none;
+	}
+}
+
+@media (min-width: 800px) {
+	.hero-btn {
+		flex-direction: row;
+		gap: 0;
+	}
+
+	.mb {
+		margin-bottom: 0;
+	}
 }
 
 @media (max-width: 720px) {
 	.grid-cashback {
 		gap: 16px;
+	}
+	.bg-text {
+		left: -50px;
+	}
+	.bg-text-2 {
+		right: 0;
+	}
+}
+
+@media (max-width: 450px) {
+	.cat-hidden {
+		display: none;
+	}
+}
+
+/* @media (max-width: 1279px) {
+	.grid-about {
+		
+	}
+} */
+
+@media (min-width: 425px) {
+	.hero-text {
+		font-size: 16px;
+	}
+}
+
+@media (min-width: 320px) {
+	.hero-text {
+		font-size: 12px;
+	}
+	.hero-h1 {
+		font-size: 45px;
+	}
+}
+
+@media (max-width: 425px) {
+	.balance-direction {
+		flex-direction: column;
+		height: auto;
+	}
+	.balance-line {
+		transform: rotate(90deg);
+		height: 100px;
+	}
+}
+
+@media (max-width: 375px) {
+	.partnership-card {
+		max-width: 288px;
+	}
+	.grid-filter {
+		gap: 10px;
 	}
 }
 

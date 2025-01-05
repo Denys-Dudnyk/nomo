@@ -45,18 +45,74 @@ export async function middleware(request: NextRequest) {
 		}
 	)
 
-	const {
-		data: { session },
-	} = await supabase.auth.getSession()
+	// const {
+	// 	data: { session },
+	// } = await supabase.auth.getSession()
 
 	// Protected routes
 	const verifyToken = request.nextUrl.searchParams.get('token')
 	const isVerifyPage = request.nextUrl.pathname === '/verify'
 
-	// Protected routes
-	if (!session && request.nextUrl.pathname.startsWith('/dashboard')) {
-		return NextResponse.redirect(new URL('/login', request.url))
+	// Get reset password state from cookies
+	const isResettingPassword =
+		request.cookies.get('resetting_password')?.value === 'true'
+	const currentPath = request.nextUrl.pathname
+
+	// If user is in password reset flow
+	if (isResettingPassword) {
+		// Allow only reset-password page and essential assets
+		const allowedPaths = [
+			'/reset-password',
+			'/_next',
+			'/favicon.ico',
+			'/header',
+			'/auth',
+		]
+
+		const isAllowedPath = allowedPaths.some(path =>
+			currentPath.startsWith(path)
+		)
+
+		if (!isAllowedPath) {
+			return NextResponse.redirect(new URL('/reset-password', request.url))
+		}
+
+		// Explicitly block dashboard access during reset
+		if (currentPath.startsWith('/dashboard')) {
+			return NextResponse.redirect(new URL('/reset-password', request.url))
+		}
+
+		return response
 	}
+
+	// If trying to access reset-password page without being in reset flow
+	if (currentPath === '/reset-password' && !isResettingPassword) {
+		return NextResponse.redirect(new URL('/auth/login', request.url))
+	}
+
+	// Normal auth flow
+	const {
+		data: { session },
+	} = await supabase.auth.getSession()
+
+	if (!session && currentPath.startsWith('/dashboard')) {
+		return NextResponse.redirect(new URL('/auth/login', request.url))
+	}
+
+	if (
+		session &&
+		(currentPath.startsWith('/auth') ||
+			currentPath === '/auth/login' ||
+			currentPath === '/auth/register' ||
+			currentPath === '/forgot-password')
+	) {
+		return NextResponse.redirect(new URL('/dashboard', request.url))
+	}
+
+	// Protected routes
+	// if (!session && request.nextUrl.pathname.startsWith('/dashboard')) {
+	// 	return NextResponse.redirect(new URL('/auth/login', request.url))
+	// }
 
 	// Verify page protection
 	if (isVerifyPage) {

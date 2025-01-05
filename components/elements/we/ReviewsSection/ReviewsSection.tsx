@@ -81,7 +81,7 @@ export const ReviewsSection = () => {
 	return (
 		<>
 			<section className='py-16 px-4 max-w-7xl mx-auto text-[#0f0f0f]'>
-				<h2 className='text-[54px] font-extrabold text-center mb-[56px] '>
+				<h2 className='text-[40px] sm:text-[54px] font-extrabold text-center mb-[56px] '>
 					<span className='relative'>
 						Що кажуть наші
 						<span className='absolute -bottom-3 left-[55%] transform -translate-x-1/2 w-full h-[9px] bg-accent rounded-full'></span>

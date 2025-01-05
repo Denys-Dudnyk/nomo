@@ -126,26 +126,28 @@ export default function TransactionsTable({
 	return (
 		<Card className='bg-[#121212] border border-[#242424] rounded-[19px] shadow-table'>
 			<div className='p-6'>
-				<div className='flex justify-between items-center mb-6'>
-					<h2 className='text-[25px] font-light text-[#fff]'>Транзакції</h2>
+				<div className='flex justify-between items-center mb-6 gap-4 sm:gap-0'>
+					<h2 className='text-[20px] sm:text-[25px] font-light text-[#fff]'>
+						Транзакції
+					</h2>
 					<div className='text-[#919191] font-normal text-[14px] leading-[18px]'>
 						Сьогодні
 						{formattedDate}
 					</div>
 				</div>
-				<div className='flex gap-[32px] max-h-[38px] mb-12'>
-					<div className='flex items-center gap-16'>
+				<div className='flex gap-[32px] max-h-[38px] mb-[240px] md:mb-24 lg:mb-12 flex-col lg:flex-row '>
+					<div className='flex items-center gap-16 grid-filter'>
 						<Input
 							type='text'
 							placeholder='Останні транзакції'
 							className='bg-[#1E2128] border-[0.5px] border-[#919191] rounded-[7px] px-6 py-[10px] placeholder:text-[14px] h-full'
 						/>
-						<Button className='bg-[#1E2128] text-[#919191]  text-[14px] leading-[18px] font-normal px-6 py-[7px] h-full flex gap-[12px]'>
+						<Button className='bg-[#1E2128] text-[#919191]  text-[14px] leading-[18px] font-normal px-6 py-[7px] h-[43px] lg:h-full flex gap-[12px]'>
 							<Filter className='h-6 w-6' />
 							<div>Фільтри</div>
 						</Button>
 					</div>
-					<div className='flex items-center gap-[32px]'>
+					<div className='flex  md:items-center flex-col md:flex-row md:justify-between lg:justify-center gap-[32px] h-full md:h-auto'>
 						<Button className='bg-[#1E2128] px-[12px] py-[10px] text-[14px] leading-[18px] font-normal h-full text-[#919191] flex gap-7'>
 							{currentMonth}
 							<CalendarRange className={'w-4 h-4'} />
@@ -153,7 +155,7 @@ export default function TransactionsTable({
 						<Select>
 							{/* {currency} */}
 
-							<SelectTrigger className='border-none bg-[#1E2128] px-[12px] py-[10px] text-[14px] leading-[18px] font-normal h-full text-[#919191] flex gap-7 '>
+							<SelectTrigger className='border-none bg-[#1E2128] px-[12px] py-[10px] text-[14px] leading-[18px] font-normal text-[#919191] flex gap-7 w-auto h-[38px] md:h-full'>
 								<Image
 									src={'/dashboard/uah.svg'}
 									alt='UAH'
@@ -286,7 +288,7 @@ export default function TransactionsTable({
 					</Table>
 				</div>
 
-				<div className='flex justify-between items-center mt-6'>
+				<div className='flex justify-between items-center mt-6 flex-col md:flex-row gap-4 md:gap-0'>
 					<Button
 						variant='outline'
 						className='border-[#1E2128] px-[7.5px] py-[10px] text-[#919191] bg-transparent'
@@ -294,7 +296,7 @@ export default function TransactionsTable({
 						<ChevronLeft className='h-4 w-4 mr-2' />
 						Назад
 					</Button>
-					<div className='flex items-center gap-12'>
+					<div className='flex items-center gap-5 sm:gap-12'>
 						{[1, 2, 3, '...', 8, 9, 10].map((page, i) => (
 							<Button
 								key={i}

@@ -200,6 +200,7 @@ export default function RegisterForm() {
 				email={formData.email}
 				isOpen={showVerification}
 				onClose={() => setShowVerification(false)}
+				type='signup'
 			/>
 		</>
 	)

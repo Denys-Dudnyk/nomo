@@ -42,9 +42,9 @@ const Downloads: FC = () => {
 			<div className='containers'>
 				<div className='flex flex-col lg:flex-row items-center justify-between  text-[#0F0F0F] mt-[78px] '>
 					{/* Left content */}
-					<div className='max-w-[600px]'>
+					<div className='w-full max-w-[600px]'>
 						<div className='mb-8'>
-							<h1 className='text-[54px] font-extrabold mb-[17px] leading-[135%] flex flex-col items-start gap-2'>
+							<h1 className='text-[40px] sm:text-[54px] font-extrabold mb-[17px] leading-[135%] flex flex-col items-start gap-2'>
 								Завантажуй та отримуй кешбек
 							</h1>
 							<p className='text-[14px] text-[#262525] text-left leading-[160%] -tracking-[0.04em] font-normal  '>
@@ -72,7 +72,7 @@ const Downloads: FC = () => {
 								</a>
 							</div>
 
-							<div className='flex flex-row  items-center gap-[27px]'>
+							<div className='flex flex-col sm:flex-row  items-center gap-[27px]'>
 								{statItems.map(item => (
 									<StatItem key={item.id} {...item} />
 								))}
@@ -81,7 +81,7 @@ const Downloads: FC = () => {
 					</div>
 
 					{/* Right content - Phone image */}
-					<div className='relative w-[811px]'>
+					<div className='relative sm:w-auto lg:w-[811px]'>
 						<Image
 							src='/we/iphone3.png'
 							alt='Nomo App Interface'

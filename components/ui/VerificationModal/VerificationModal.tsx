@@ -1,6 +1,4 @@
-'use client'
-
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 
 import { useRouter } from 'next/navigation'
@@ -19,12 +17,14 @@ interface VerificationModalProps {
 	email: string
 	isOpen: boolean
 	onClose: () => void
+	type: 'signup' | 'reset'
 }
 
 export default function VerificationModal({
 	email,
 	isOpen,
 	onClose,
+	type,
 }: VerificationModalProps) {
 	const [code, setCode] = useState(['', '', '', '', '', ''])
 	const [loading, setLoading] = useState(false)
@@ -32,6 +32,21 @@ export default function VerificationModal({
 	const router = useRouter()
 
 	const supabase = createClient()
+
+	// useEffect(() => {
+	// 	if (type === 'reset') {
+	// 		const {
+	// 			data: { subscription },
+	// 		} = supabase.auth.onAuthStateChange(async (event, session) => {
+	// 			if (event === 'PASSWORD_RECOVERY') {
+	// 				// Отключаем авторизацию в процессе сброса
+	// 				await supabase.auth.signOut()
+	// 			}
+	// 		})
+
+	// 		return () => subscription.unsubscribe()
+	// 	}
+	// }, [type])
 
 	const handleCodeChange = (index: number, value: string) => {
 		if (value.length <= 1) {
@@ -67,13 +82,21 @@ export default function VerificationModal({
 			const { error } = await supabase.auth.verifyOtp({
 				email,
 				token: verificationCode,
-				type: 'signup',
+				type: type === 'reset' ? 'recovery' : 'signup',
 			})
 
 			if (error) throw error
 
-			onClose()
-			router.push('/dashboard')
+			//onClose()
+			if (type === 'reset') {
+				// For password reset, redirect without waiting for auth state change
+				router.push('/reset-password')
+				onClose()
+			} else {
+				// For signup, allow normal flow
+				router.push('/dashboard')
+				onClose()
+			}
 		} catch (error) {
 			setError(error instanceof Error ? error.message : 'An error occurred')
 		} finally {
@@ -83,11 +106,18 @@ export default function VerificationModal({
 
 	const handleResendCode = async () => {
 		try {
-			const { error } = await supabase.auth.resend({
-				type: 'signup',
-				email,
-			})
-			if (error) throw error
+			if (type === 'reset') {
+				const { error } = await supabase.auth.resetPasswordForEmail(email, {
+					redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+				})
+				if (error) throw error
+			} else {
+				const { error } = await supabase.auth.resend({
+					type: 'signup',
+					email,
+				})
+				if (error) throw error
+			}
 			alert('Код відправлено повторно')
 		} catch (error) {
 			setError(error instanceof Error ? error.message : 'An error occurred')
@@ -97,12 +127,12 @@ export default function VerificationModal({
 	return (
 		<>
 			<Dialog open={isOpen} onOpenChange={onClose}>
-				<DialogContent className='sm:max-w-md bg-[#1C1C1C] text-white border-gray-800'>
-					<DialogHeader>
+				<DialogContent className='w-full h-auto sm:max-w-md bg-[#1C1C1C] text-white border-[#1c1c1c] rounded-[32px] px-0 sm:p-6'>
+					<DialogHeader className='px-4'>
 						<div className='flex justify-center mb-8'>
 							<BrandLogo />
 						</div>
-						<DialogTitle className='text-2xl font-bold text-center'>
+						<DialogTitle className='text-[18px] sm:text-2xl font-bold text-center'>
 							Введіть код підтвердження
 						</DialogTitle>
 					</DialogHeader>
@@ -113,17 +143,17 @@ export default function VerificationModal({
 							вашу поштову скриньку та введіть отриманий код для продовження.
 						</p>
 
-						<div className='flex justify-center gap-3 mb-6'>
+						<div className='flex justify-center gap-2 sm:gap-3 mb-6 w-auto'>
 							{code.map((digit, index) => (
 								<input
 									key={index}
 									id={`code-${index}`}
-									type='text'
+									type='tel'
 									maxLength={1}
 									value={digit}
 									onChange={e => handleCodeChange(index, e.target.value)}
 									onKeyDown={e => handleKeyDown(index, e)}
-									className='w-12 h-12 text-center text-xl bg-transparent border-2 border-gray-600 rounded-lg focus:border-[#ff8d2a] focus:outline-none'
+									className='w-11 h-11 sm:w-12 sm:h-12 text-center text-xl bg-transparent border-2 border-gray-600 rounded-lg focus:border-accent focus:outline-none'
 								/>
 							))}
 						</div>
@@ -131,7 +161,7 @@ export default function VerificationModal({
 						<div className='text-center mb-6'>
 							<button
 								onClick={handleResendCode}
-								className='text-[#ff8d2a] hover:text-accenthover'
+								className='text-accent hover:text-accenthover'
 							>
 								Надіслати повторно
 							</button>
@@ -139,7 +169,7 @@ export default function VerificationModal({
 
 						<Button
 							onClick={handleVerification}
-							className='w-full bg-[#ff8d2a] hover:bg-accenthover px-[30px] py-[10px]'
+							className='w-auto sm:w-full bg-accent hover:bg-accenthover px-[30px] py-[10px]'
 							disabled={loading}
 						>
 							{loading ? (

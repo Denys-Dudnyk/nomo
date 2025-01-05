@@ -46,11 +46,11 @@ const StatsCard = ({ title, data }: StatsCardProps) => {
 
 	return (
 		<Card className='bg-[#0F0F0F] text-white border-none'>
-			<CardHeader className='mb-[30px]'>
-				<CardTitle className='text-[26px] leading-[32px] font-normal mb-[30px]'>
+			<CardHeader className='mb-[30px] pl-0 sm:pl-7'>
+				<CardTitle className='text-[26px] leading-[32px] font-normal mb-[30px] text-center sm:text-left'>
 					{title}
 				</CardTitle>
-				<div className='flex  text-[15px] font-normal leading-[18.15px]'>
+				<div className='flex text-[10px] sm:text-[15px] font-normal leading-[18.15px] px-2 sm:px-0 items-center sm:items-start justify-center sm:justify-start'>
 					<button
 						onClick={() => setActiveTimeframe('12m')}
 						className={`border border-[#919191] rounded-tl-[10px] rounded-bl-[10px]  px-3 py-[14px] ${

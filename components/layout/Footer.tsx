@@ -12,10 +12,9 @@ import Link from 'next/link'
 
 const Footer = () => {
 	return (
-		<footer className='bg-[#0F0F0F] text-white pt-5 pb-[98px] '>
-			<div className='containers mx-auto '>
-				<div className='grid grid-cols-2 items-start gap-[216px] '>
-					{/* Contact Information */}
+		<footer className='bg-[#0F0F0F] text-[#fff] pt-5 pb-[80px] md:pb-[98px]'>
+			<div className='containers mx-auto px-4 sm:px-6 lg:px-8'>
+				<div className='grid grid-cols-1 md:grid-cols-2 gap-[90px] md:gap-[216px]'>
 					<div className='mx-auto'>
 						<h3 className='text-[25px] font-bold leading-[126%] tracking-[-4%] text-center  mb-[13px]'>
 							Зв’язок з нами
@@ -29,7 +28,7 @@ const Footer = () => {
 									width={38}
 									height={55}
 								/>
-								<p className='text-[#fff] text-[21px] font-medium'>
+								<p className='text-[#fff] text-[16px] sm:text-[21px] font-medium'>
 									вул. Івасюка, 84, Івано-Франківськ,
 									<br />
 									Івано-Франківська область, 76000
@@ -55,7 +54,7 @@ const Footer = () => {
 									width={55}
 									height={44}
 								/>
-								<p className='text-[#fff] text-[21px] font-medium'>
+								<p className='text-[#fff] text-[14px] sm:text-[21px] font-medium'>
 									curtis.weaver@example.com
 								</p>
 							</div>
