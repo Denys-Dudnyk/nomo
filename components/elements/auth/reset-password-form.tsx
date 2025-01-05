@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import BrandLogo from './brandlogo'
 import SuccessModal from '@/components/ui/SuccessModal/success-modal'
-import { NextRequest, NextResponse } from 'next/server'
 
 export default function ResetPasswordForm() {
 	const [password, setPassword] = useState('')
@@ -17,19 +16,15 @@ export default function ResetPasswordForm() {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const [showSuccess, setShowSuccess] = useState(false)
-	const [email, setEmail] = useState<string>('')
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const router = useRouter()
 	const supabase = createClient()
 
-	// Function to clean up reset state
 	const cleanupResetState = async () => {
 		await supabase.auth.signOut()
 		document.cookie =
 			'resetting_password=false; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
 		localStorage.removeItem('resetEmail')
-
-		router.push('/auth/login')
-		return
 	}
 
 	useEffect(() => {
@@ -39,76 +34,38 @@ export default function ResetPasswordForm() {
 			return
 		}
 
-		// Function to handle navigation attempts
-		const handleNavigation = async () => {
-			const currentPath = window.location.pathname
-			if (currentPath !== '/reset-password') {
+		const handleBeforeUnload = async (e: BeforeUnloadEvent) => {
+			if (!isSubmitting) {
+				e.preventDefault()
+				e.returnValue =
+					'Якщо ви залишите цю сторінку, ваш пароль не буде змінено. Ви впевнені?'
+
+				await cleanupResetState()
+			}
+		}
+
+		const handlePopState = async () => {
+			if (!isSubmitting) {
 				const shouldLeave = window.confirm(
 					'Якщо ви залишите цю сторінку, ваш пароль не буде змінено. Ви впевнені?'
 				)
-				const {
-					data: { session },
-				} = await supabase.auth.getSession()
 
 				if (shouldLeave) {
 					await cleanupResetState()
-
-					return true
 				} else {
-					window.history.pushState(null, '', '/reset-password')
-					return false
+					window.location.href = '/reset-password'
 				}
 			}
-			return false
 		}
 
-		// Watch for URL changes
-		let lastUrl = window.location.href
-		const observer = new MutationObserver(async () => {
-			if (window.location.href !== lastUrl) {
-				lastUrl = window.location.href
-				await handleNavigation()
-			}
-		})
-
-		observer.observe(document, { subtree: true, childList: true })
-
-		// Handle browser back/forward buttons
-		window.onpopstate = async () => {
-			await handleNavigation()
-		}
-
-		// Handle direct URL changes
-		const originalPushState = window.history.pushState
-		const originalReplaceState = window.history.replaceState
-
-		window.history.pushState = function () {
-			originalPushState.apply(this, arguments as any)
-			handleNavigation()
-		}
-
-		window.history.replaceState = function () {
-			originalReplaceState.apply(this, arguments as any)
-			handleNavigation()
-		}
-
-		// Handle page unload
-		window.onbeforeunload = async e => {
-			await cleanupResetState()
-			e.preventDefault()
-			e.returnValue =
-				'Якщо ви залишите цю сторінку, ваш пароль не буде змінено. Ви впевнені?'
-			return e.returnValue
-		}
+		window.addEventListener('beforeunload', handleBeforeUnload)
+		window.addEventListener('popstate', handlePopState)
 
 		return () => {
-			observer.disconnect()
-			window.onpopstate = null
-			window.history.pushState = originalPushState
-			window.history.replaceState = originalReplaceState
-			window.onbeforeunload = null
+			window.removeEventListener('beforeunload', handleBeforeUnload)
+			window.removeEventListener('popstate', handlePopState)
 		}
-	}, [router])
+	}, [router, isSubmitting])
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -120,30 +77,28 @@ export default function ResetPasswordForm() {
 
 		setLoading(true)
 		setError(null)
+		setIsSubmitting(true) // Устанавливаем состояние отправки
 
 		try {
-			// First ensure we're signed out
-			// await supabase.auth.signOut()
-
 			const resetEmail = localStorage.getItem('resetEmail')
 			if (!resetEmail) {
 				throw new Error('Reset email not found')
 			}
 
-			// Update the password using email and new password
 			const { error } = await supabase.auth.updateUser({
 				password,
 			})
 
 			if (error) throw error
 
-			// Clear the reset email from localStorage
-			window.onbeforeunload = null
+			// Очищаем состояние после успешного сброса
 			await cleanupResetState()
-			// Show success modal
+
+			// Показываем модальное окно успешного сброса
 			setShowSuccess(true)
 		} catch (error) {
 			setError(error instanceof Error ? error.message : 'An error occurred')
+			setIsSubmitting(false) // Сбрасываем состояние отправки при ошибке
 		} finally {
 			setLoading(false)
 		}
@@ -202,7 +157,8 @@ export default function ResetPasswordForm() {
 				isOpen={showSuccess}
 				onClose={() => {
 					setShowSuccess(false)
-					router.push('/login')
+					setIsSubmitting(false) // Сбрасываем состояние отправки при редиректе
+					router.push('/auth/login')
 				}}
 			/>
 		</>
