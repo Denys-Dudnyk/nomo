@@ -1,0 +1,334 @@
+{
+	"header": {
+		"menu": {
+			"cashback": "Zwrot",
+			"card": "Mapa",
+			"crypto": "Kryptowaluta",
+			"partnership": "Partnerstwo",
+			"aboutUs": "Kim jesteśmy",
+			"my_account": "Moje konto"
+		},
+		"auth": {
+			"login": "Zaloguj się",
+			"logout": "Wyloguj się"
+		}
+	},
+	"footer": {
+		"contactTitle": "Kontakt z nami",
+		"address": "ul. Iwasjuka 84, Iwano-Frankiwsk,",
+		"address2": "Obwód Iwano-Frankiwsk, 76000",
+		"phone": "(480) 555-0103",
+		"email": "curtis.weaver@example.com",
+		"socialMediaTitle": "Śledź nas w mediach społecznościowych!",
+		"altMap": "Mapa",
+		"altPhone": "Telefon",
+		"altEmail": "E-mail",
+		"altFacebook": "Facebook",
+		"altInstagram": "Instagram",
+		"altTelegram": "Telegram",
+		"altX": "Sieć społecznościowa X"
+	},
+	"mainpage": {
+		"hero": {
+			"title1": "GLOBALNA",
+			"title2": "DIGITAL 2025",
+			"title3": "WYDANIE",
+			"subtitle": "Podziel się pulą nagród 1 000 000 Ncoin",
+			"joinNow": "Dołącz teraz"
+		},
+		"productOverview": {
+			"title": "Poznajmy się",
+			"subtitle": "Cześć, to Nomo!",
+			"description": "Jestem technologią, która łączy cyfrowe pieniądze, globalne płatności i aplikacje. Nasza społeczność stworzyła rozwijającą się gospodarkę cyfrową, otworzyła nowe ścieżki dla twórców do zarabiania online i osiągnęła postęp w wielu innych dziedzinach. Ta technologia jest dostępna dla każdego i wszędzie. Wszystko, czego potrzebujesz, to Internet."
+		},
+		"projects": {
+			"title": "Dowiedz się więcej o naszych projektach",
+			"item1": {
+				"title": "Własna kryptowaluta",
+				"main": "Ncoin ",
+				"text": "— stale doskonalimy kryptowalutę i dodajemy innowacyjne funkcje, które upraszczają transakcje finansowe i oferują dodatkowe korzyści użytkownikom. Wydanie zaplanowane na ",
+				"date": "01.02.2025",
+				"img": "/main/project-img1.png",
+				"objectFit": "cover"
+			},
+			"item2": {
+				"title": "Portfel inwestycyjny",
+				"main": "N-Inwest ",
+				"text": "— innowacyjna platforma, która pozwala użytkownikom inwestować cashback w różne aktywa finansowe. Inwestycje pomagają zwiększyć pasywny dochód użytkowników. Projekt ma na celu optymalizację wykorzystania cashbacku w celu osiągnięcia stabilności finansowej. Wydanie zaplanowane na ",
+				"date": "01.03.2025",
+				"img": "/main/project-img2.png",
+				"objectFit": "contain"
+			},
+			"item3": {
+				"title": "Portfel",
+				"main": "Portfel ",
+				"text": "będzie wspierać integrację z różnymi usługami i aplikacjami, aby zapewnić rozszerzone możliwości dla użytkowników. Wydanie zaplanowane na ",
+				"date": "01.06.2025",
+				"img": "/main/project-img3.png",
+				"objectFit": "cover"
+			},
+			"item4": {
+				"title": "Cashback NOMO",
+				"main": "Innowacyjna ",
+				"text": "program cashbackowy oferuje wyjątkową możliwość otrzymywania cashbacku za zakupy za pomocą kryptowaluty, otwierając nowe możliwości dla użytkowników do zarabiania i korzystania z kryptowaluty. Wydanie zaplanowane na ",
+				"date": "01.01.2025",
+				"img": "/main/project-img4.png",
+				"objectFit": "cover"
+			}
+		},
+		"about": {
+			"section1": {
+				"title": "Innowacyjny program cashbackowy",
+				"text": "Nasz projekt oferuje innowacyjną możliwość otrzymywania cashbacku za zakupy za pomocą kryptowaluty, rewolucjonizując sposób otrzymywania nagród za zakupy.",
+				"alt": "Ilustracja programu cashback"
+			},
+			"section2": {
+				"title": "Wolność finansowa",
+				"text": "Nasz program cashbackowy w kryptowalutach pozwala użytkownikom otrzymywać nagrody w postaci kryptowaluty, zapewniając większą wolność finansową i kontrolę nad swoimi aktywami.",
+				"alt": "Ilustracja programu cashback"
+			},
+			"section3": {
+				"title": "Zachęcanie do korzystania z kryptowalut",
+				"text": "Dzięki cashbackowi w kryptowalutach zachęcamy więcej użytkowników do udziału w transakcjach kryptowalutowych i rozwijania globalnego ekosystemu kryptowalut.",
+				"alt": "Ilustracja programu cashback"
+			},
+			"section4": {
+				"title": "Przejrzystość i bezpieczeństwo",
+				"text": "Nasz program cashbackowy oparty jest na technologii blockchain, co zapewnia wysoki poziom przejrzystości i bezpieczeństwa transakcji dla wszystkich uczestników.",
+				"alt": "Ilustracja programu cashback"
+			}
+		},
+		"statistics": {
+			"block": "Blok",
+			"today": "dzisiaj",
+			"subtitle": "Najświeższe statystyki sieci",
+			"cards": {
+				"visits": "Odwiedziny strony",
+				"users": "Zarejestrowani użytkownicy",
+				"transactions": "Zrealizowane transakcje",
+				"crypto": "Zarobiona kryptowaluta"
+			},
+			"days": {
+				"12m": "12 miesięcy",
+				"30d": "30 dni",
+				"7d": "7 dni",
+				"24h": "24 godziny"
+			}
+		},
+		"news": {
+			"header": "Śledź aktualności z Nomo",
+			"news1": {
+				"title": "Zakończenie rozwoju wersji strony 1.6.3",
+				"description": "Pojęcie 'strona' obejmuje wiele różnych projektów: od prostych stron docelowych po złożone usługi online składające się ze setek ekranów i tysięcy funkcji.",
+				"date": "Wczoraj, 10:46"
+			},
+			"news2": {
+				"title": "Zarejestruj się teraz!",
+				"description": "Wszyscy zarejestrowani użytkownicy otrzymają 10 Ncoin w swoim portfelu.",
+				"date": "01.01.2025"
+			},
+			"news3": {
+				"title": "O przyszłości",
+				"description": "Rozpoczęcie prac nad aplikacją Ncoin Cashback/Giełda.",
+				"date": "18.01.2025"
+			},
+			"familyMessage": "Z nami nie jesteś tylko klientem, jesteś częścią naszej rodziny, naszym bezcennym",
+			"purchaseMessage": "Z każdymi zakupami w",
+			"cashbackMessage": "Twój cashback rośnie.",
+			"alt1": "Nr 1",
+			"alt2": "Logo Nomo",
+			"altCat": "Kot"
+		}
+	},
+	"LocaleSwitcher": {
+		"ua": "Українська",
+		"en": "English",
+		"pl": "Polski",
+		"es": "Español",
+		"label": "Sprache"
+	},
+	"partnership": {
+		"benefits": {
+			"program": "Program Partnerski",
+			"programDescription": "Oferta dla agencji digital, marketingowych i brandingowych. Dołączając do programu, zyskujesz",
+			"item1": {
+				"icon": "/partnership/item1.svg",
+				"title": "Atrakcyjność dla Klientów",
+				"description": "Zwiększ zaangażowanie klientów dzięki Nomo, naszej zaawansowanej aplikacji cashbackowej opartej na kryptowalutach, która umożliwia klientom zdobywanie nagród w kryptowalutach za zakupy w Twoim sklepie. Przyjazna użytkownikowi aplikacja wzmacnia lojalność klientów i zachęca do ponownych zakupów, ponieważ została zaprojektowana z myślą o wygodzie. Zapewnij swoim klientom innowacyjne i bezpieczne doświadczenie cashbacku i wyróżnij się na tle konkurencji już dziś!"
+			},
+			"item2": {
+				"icon": "/partnership/item2.svg",
+				"title": "ZWIĘKSZENIE SPRZEDAŻY",
+				"description": "Zwiększ swoją sprzedaż dzięki Nomo, rozwiązaniu cashbackowemu opartemu na kryptowalutach, które nagradza klientów kryptowalutą za każdy zakup. Oddając część ich wydatków w kryptowalutach, nasza aplikacja zachęca do częstszych transakcji i wspiera budowanie długoterminowych relacji z klientami. Wykorzystaj zaawansowane rozwiązania Nomo, aby zwiększyć retencję klientów i podnieść wolumen sprzedaży."
+			},
+			"item3": {
+				"icon": "/partnership/item3.svg",
+				"title": "ROZSZERZENIE AUDIENCJI",
+				"description": "Rozszerz swój zasięg rynkowy dzięki Nomo, naszej zaawansowanej aplikacji cashbackowej opartej na kryptowalutach, która przyciąga użytkowników z całego świata zainteresowanych kryptowalutami. Nasza platforma pozwala przyciągać nowych klientów, oferując im nowoczesne i korzystne doświadczenie cashbacku. Zintegruj Nomo ze swoją strategią biznesową, aby otworzyć nowe możliwości rozwoju i skutecznie rozszerzyć swoją bazę klientów."
+			},
+			"item4": {
+				"icon": "/partnership/item4.svg",
+				"title": "PRZEWAGA KONKURENCYJNA",
+				"description": "Zdobądź znaczną przewagę konkurencyjną dzięki Nomo, naszej innowacyjnej aplikacji cashbackowej opartej na kryptowalutach, która oferuje unikalne nagrody kryptowalutowe za zakupy. Dzięki wyróżnieniu swojej firmy za pomocą unikalnych i wartościowych ofert, Nomo zwiększa Twoją obecność na rynku i atrakcyjność. Wdróż Nomo, aby zwiększyć rozpoznawalność i atrakcyjność swojej marki na konkurencyjnym rynku."
+			}
+		},
+		"partnerprogram": {
+			"partner": "Programy",
+			"program": "Partnerskie",
+			"program1": {
+				"title": "PROGRAM PARTNERSKI CASHBACK",
+				"status": "W przygotowaniu..."
+			},
+			"program2": {
+				"title": "PROGRAM PARTNERSKI KRYPTOWALUT",
+				"status": "W przygotowaniu..."
+			},
+			"program3": {
+				"title": "REFERENCJE BIZNESOWE",
+				"status": "W przygotowaniu..."
+			},
+			"program4": {
+				"title": "REFERENCJE UŻYTKOWNIKÓW",
+				"status": "W przygotowaniu..."
+			}
+		}
+	},
+	"we": {
+		"main": {
+			"headline": "twój osobisty beneficjent - cashback, który wybiera sam!",
+			"description": "Wierzymy, że sekret udanych zakupów tkwi w wybranym cashbacku. Uzyskaj jak najwięcej korzyści dzięki nomo.",
+			"appleAlt": "Interfejs aplikacji na Apple",
+			"googleAlt": "Interfejs aplikacji na Google Play",
+			"ctaApple": "Pobierz z App Store",
+			"ctaGoogle": "Pobierz z Google Play",
+			"imageAlt": "Interfejs aplikacji"
+		},
+		"about": {
+			"stats": {
+				"ncoin": {
+					"value": "5 000 000+",
+					"label": "wydanych monet Ncoin"
+				},
+				"users": {
+					"value": "60 000+",
+					"label": "osób korzysta z naszej usługi"
+				},
+				"partners": {
+					"value": "830+",
+					"label": "partnerów w różnych krajach"
+				}
+			},
+			"features": {
+				"customCashback": {
+					"title": "Cashback na twoich zasadach",
+					"description": "Z nomo kontrolujesz swoje korzyści. Wybierz cashback, który odpowiada twoim potrzebom, i odzyskaj pieniądze za każdy zakup."
+				},
+				"instantAccess": {
+					"title": "Natychmiastowy dostęp do cashbacku",
+					"description": "Dzięki nomo uzyskanie cashbacku nigdy nie było prostsze. Możesz wypłacać środki w dowolnym momencie w wygodny dla ciebie sposób."
+				},
+				"wideNetwork": {
+					"title": "Szeroka sieć partnerów",
+					"description": "Nasz program współpracuje z szeroką gamą partnerów, co oznacza, że możesz korzystać z korzyści za zakupy w dowolnym miejscu, gdzie zwykle robisz zakupy."
+				}
+			},
+			"reveal": {
+				"headline": {
+					"line1": "Tajemnica",
+					"line2": "odkrywamy naszą istotę!"
+				},
+				"description": "W naszym świecie nomo ucieleśniamy wyjątkowość i indywidualność. Każdy element naszej tożsamości objawia się poprzez każdą usługę i korzyść, którą oferujemy. Dołącz do naszej społeczności, aby odkryć tę tajemnicę razem z nami i cieszyć się światem nomo!"
+			}
+		},
+		"program": {
+			"title": "droga do wygody i efektywności!",
+			"description": "Nasz program umożliwia otrzymywanie cashbacku w kryptowalutach za dowolny zakup, czyniąc twoje wydatki jeszcze bardziej korzystnymi.",
+			"features": {
+				"save_money_title": "OSZCZĘDZAJ PIENIĄDZE NA ZAKUPACH",
+				"save_money_description": "Otrzymuj część swoich wydatków z powrotem w postaci aktywów kryptowalutowych i oszczędzaj pieniądze na przyszłe zakupy lub inwestycje.",
+				"innovative_title": "INNOWACYJNE MOŻLIWOŚCI",
+				"innovative_description": "Cashback w kryptowalutach otwiera nowe możliwości wykorzystania aktywów cyfrowych w codziennym życiu.",
+				"cashback_title": "OTRZYMUJ CASHBACK W KRYPTOWALUTACH",
+				"cashback_description": "Nasz program pozwala na otrzymywanie cashbacku w popularnych kryptowalutach, takich jak Bitcoin, Ethereum i inne.",
+				"simple_process_title": "PROSTY I WYGODNY PROCES",
+				"simple_process_description": "Nasz program jest łatwy w użyciu; możesz bez wysiłku uzyskać cashback za swoje zakupy.",
+				"secure_title": "BEZPIECZEŃSTWO I NIEZAWODNOŚĆ",
+				"secure_description": "Cashback w kryptowalutach zapewnia bezpieczeństwo i niezawodność transakcji dzięki zastosowaniu zaawansowanych technologii blockchain.",
+				"version_tag": "WERSJA IOS I ANDROID"
+			}
+		},
+		"review": {
+			"what_says_our": "Co mówią nasi",
+			"clients": "klienci",
+			"create_review": "Dodaj komentarz..."
+		},
+		"downloads": {
+			"title": "Pobierz i odbierz cashback",
+			"description": "Odkryj nowe horyzonty finansowej wolności! Pobierz naszą aplikację i odbierz cashback w kryptowalutach za każdy zakup. Rozpocznij swoją drogę do pasywnego dochodu już dziś — nie przegap szansy na zamianę wydatków na zysk!",
+			"ctaApple": "Pobierz z App Store",
+			"ctaGoogle": "Pobierz z Google Play"
+		}
+	},
+	"auth": {
+		"login": {
+			"continueWith": "Kontynuuj przez",
+			"emailPlaceholder": "E-mail",
+			"passwordPlaceholder": "Hasło",
+			"loginButton": "Zaloguj się",
+			"forgotPassword": "Zapomniałeś hasła?",
+			"notWithUs": "Jeszcze z nami?",
+			"register": "Zarejestruj się",
+			"or": "Lub"
+		},
+		"register": {
+			"register": "Rejestracja",
+			"fullNamePlaceholder": "Imię i Nazwisko",
+			"phonePlaceholder": "Numer telefonu",
+			"emailPlaceholder": "E-mail",
+			"passwordPlaceholder": "Hasło",
+			"referralCodePlaceholder": "Twój kod polecający",
+			"registerButton": "Zarejestruj się",
+			"alreadyHaveAccount": "Masz już konto?",
+			"login": "Zaloguj się"
+		},
+		"forgot": {
+			"title": "Zapomniałeś hasła?",
+			"instruction": "Wprowadź swój adres e-mail, aby zresetować hasło",
+			"emailPlaceholder": "E-mail",
+			"submitButton": "Wyślij",
+			"backToLogin": "Wróć do logowania"
+		},
+		"reset": {
+			"title": "Zresetuj hasło do konta",
+			"description": "Wprowadź nowe hasło",
+			"passwordPlaceholder": "Hasło",
+			"passwordPlaceholder2": "Potwierdź hasło",
+			"resetPass": "Zresetuj hasło",
+			"succesReset": "Hasło zostało pomyślnie zmienione",
+			"succesResetdesc1": "Teraz możesz ",
+			"succesResetdesc12": "używając nowych danych",
+			"login": "zalogować się"
+		},
+		"verifcode": {
+			"title": "Wprowadź kod weryfikacyjny",
+			"instruction": "Wysłaliśmy kod weryfikacyjny na twój adres e-mail ",
+			"instruction2": ". Sprawdź swoją skrzynkę i wprowadź otrzymany kod, aby kontynuować.",
+			"resendCode": "Wyślij ponownie",
+			"verifyButton": "Potwierdź"
+		}
+	},
+	"portfolio": {
+		"transactions": "Transakcje",
+		"token": "Token",
+		"price": "Cena",
+		"change24h": "24h",
+		"trade": "Handel",
+		"market": "Rynek",
+		"cash_on_balance": "Środki na saldzie",
+		"give": "Oddać",
+		"get": "Otrzymać",
+		"buy": "Kup",
+		"task": "Zadanie",
+		"no_task": "Brak zadań."
+	}
+}

@@ -1,0 +1,334 @@
+{
+	"header": {
+		"menu": {
+			"cashback": "Cashback",
+			"card": "Map",
+			"crypto": "Cryptocurrency",
+			"partnership": "Partnership",
+			"aboutUs": "About Us",
+			"my_account": "My Account"
+		},
+		"auth": {
+			"login": "Login",
+			"logout": "Logout"
+		}
+	},
+	"footer": {
+		"contactTitle": "Contact Us",
+		"address": "Ivasyuka St., 84, Ivano-Frankivsk,",
+		"address2": "Ivano-Frankivsk Region, 76000",
+		"phone": "(480) 555-0103",
+		"email": "curtis.weaver@example.com",
+		"socialMediaTitle": "Follow us on social media!",
+		"altMap": "Map",
+		"altPhone": "Phone",
+		"altEmail": "Email",
+		"altFacebook": "Facebook",
+		"altInstagram": "Instagram",
+		"altTelegram": "Telegram",
+		"altX": "Social Network X"
+	},
+	"mainpage": {
+		"hero": {
+			"title1": "GLOBAL",
+			"title2": "DIGITAL 2025",
+			"title3": "EVENT",
+			"subtitle": "Share the prize pool of 1,000.000 Ncoin",
+			"joinNow": "Join Now"
+		},
+		"productOverview": {
+			"title": "Let’s Get Acquainted",
+			"subtitle": "Hi, this is Nomo!",
+			"description": "I am a technology that connects digital money, global payments, and applications. Our community has built a growing digital economy, opened new paths for developers to earn online, and achieved progress in many other areas. This technology is available to everyone, anywhere. All you need is the Internet."
+		},
+		"projects": {
+			"title": "Learn More About Our Projects",
+			"item1": {
+				"title": "Own Cryptocurrency",
+				"main": "Ncoin ",
+				"text": "— constantly improving the cryptocurrency and adding innovative features to simplify your financial transactions and provide additional benefits to users. The release is scheduled for ",
+				"date": "01.02.2025",
+				"img": "/main/project-img1.png",
+				"objectFit": "cover"
+			},
+			"item2": {
+				"title": "Investment Portfolio",
+				"main": "N-Inwest ",
+				"text": "— an innovative platform that allows users to invest cashback into various financial assets. Investments help increase users' passive income. The project aims to optimize cashback use for financial stability. The release is scheduled for ",
+				"date": "01.03.2025",
+				"img": "/main/project-img2.png",
+				"objectFit": "contain"
+			},
+			"item3": {
+				"title": "Wallet",
+				"main": "Wallet ",
+				"text": "will support integration with various services and applications to provide extended opportunities for users. The release is scheduled for ",
+				"date": "01.06.2025",
+				"img": "/main/project-img3.png",
+				"objectFit": "cover"
+			},
+			"item4": {
+				"title": "Cashback NOMO",
+				"main": "Innovative ",
+				"text": "cashback program offers a unique opportunity to earn cashback for purchases through cryptocurrency, opening new ways for users to earn and use cryptocurrency. The release is scheduled for ",
+				"date": "01.01.2025",
+				"img": "/main/project-img4.png",
+				"objectFit": "cover"
+			}
+		},
+		"about": {
+			"section1": {
+				"title": "Innovative Cashback Program",
+				"text": "Our project offers an innovative opportunity to earn cashback for purchases through cryptocurrency, revolutionizing the way rewards for purchases are received.",
+				"alt": "Cashback program illustration"
+			},
+			"section2": {
+				"title": "Financial Freedom",
+				"text": "Our cryptocurrency cashback program allows users to earn rewards in the form of cryptocurrency, providing greater financial freedom and control over their assets.",
+				"alt": "Cashback program illustration"
+			},
+			"section3": {
+				"title": "Encouraging Cryptocurrency Use",
+				"text": "By providing cashback through cryptocurrency, we encourage more users to participate in cryptocurrency transactions and grow the global cryptocurrency ecosystem.",
+				"alt": "Cashback program illustration"
+			},
+			"section4": {
+				"title": "Transparency and Security",
+				"text": "Our cashback program is based on blockchain technology, ensuring high levels of transparency and security for all participants.",
+				"alt": "Cashback program illustration"
+			}
+		},
+		"statistics": {
+			"block": "Block",
+			"today": "today",
+			"subtitle": "Latest Network Statistics",
+			"cards": {
+				"visits": "Site Visits",
+				"users": "Registered Users",
+				"transactions": "Transactions Made",
+				"crypto": "Cryptocurrency Earned"
+			},
+			"days": {
+				"12m": "12 months",
+				"30d": "30 days",
+				"7d": "7 days",
+				"24h": "24 hours"
+			}
+		},
+		"news": {
+			"header": "Stay Updated with Nomo News",
+			"news1": {
+				"title": "Site Version 1.6.3 Development Completed",
+				"description": "The concept of 'site' encompasses a variety of projects: from simple landing pages to complex online services with hundreds of screens and thousands of features.",
+				"date": "Yesterday, 10:46"
+			},
+			"news2": {
+				"title": "Register Now!",
+				"description": "All registered users will receive 10 Ncoin in their portfolio.",
+				"date": "01.01.2025"
+			},
+			"news3": {
+				"title": "About the Future",
+				"description": "Development of the Ncoin Cashback/Exchange app begins.",
+				"date": "18.01.2025"
+			},
+			"familyMessage": "With us, you're not just a client, you're part of our family, our invaluable",
+			"purchaseMessage": "With every purchase at",
+			"cashbackMessage": "your cashback grows.",
+			"alt1": "No.1",
+			"alt2": "Nomo Logo",
+			"altCat": "Cat"
+		}
+	},
+	"LocaleSwitcher": {
+		"ua": "Українська",
+		"en": "English",
+		"pl": "Polski",
+		"es": "Español",
+		"label": "Sprache"
+	},
+	"partnership": {
+		"benefits": {
+			"program": "Partnership Program",
+			"programDescription": "An offer for digital, marketing, and branding agencies. By becoming a partner, you gain",
+			"item1": {
+				"icon": "/partnership/item1.svg",
+				"title": "Customer Appeal",
+				"description": "Increase customer engagement with Nomo, our advanced cryptocurrency cashback app that offers buyers the opportunity to earn cryptocurrency rewards for purchases in your store. The user-friendly app enhances customer loyalty and encourages repeat purchases, as it is designed with convenience in mind. Provide your customers with an innovative and secure cashback experience and stand out from the competition today!"
+			},
+			"item2": {
+				"icon": "/partnership/item2.svg",
+				"title": "BOOST SALES",
+				"description": "Increase your sales with Nomo, a cryptocurrency cashback solution that rewards customers with cryptocurrency for every purchase. By returning a portion of their spending in cryptocurrency, our app encourages more frequent transactions and fosters long-term customer relationships. Utilize Nomo's advanced solutions to enhance customer retention and boost sales volumes."
+			},
+			"item3": {
+				"icon": "/partnership/item3.svg",
+				"title": "EXPAND YOUR AUDIENCE",
+				"description": "Expand your market reach with Nomo, our advanced cryptocurrency cashback app that attracts users worldwide who are interested in cryptocurrency. Our platform allows you to attract new customers by offering them a modern and profitable cashback experience. Integrate Nomo into your business strategy to unlock new growth opportunities and effectively expand your customer base."
+			},
+			"item4": {
+				"icon": "/partnership/item4.svg",
+				"title": "COMPETITIVE ADVANTAGE",
+				"description": "Gain a significant competitive advantage with Nomo, our innovative cryptocurrency cashback app that provides unique cryptocurrency rewards for purchases. By differentiating your business with unique and valuable offerings, Nomo enhances your market presence and appeal. Implement Nomo to increase your brand awareness and attractiveness in a crowded marketplace."
+			}
+		},
+		"partnerprogram": {
+			"partner": "Partnership",
+			"program": "Programs",
+			"program1": {
+				"title": "CASHBACK PARTNERSHIP PROGRAM",
+				"status": "In development..."
+			},
+			"program2": {
+				"title": "CRYPTOCURRENCY PARTNERSHIP PROGRAM",
+				"status": "In development..."
+			},
+			"program3": {
+				"title": "BUSINESS REFERRAL",
+				"status": "In development..."
+			},
+			"program4": {
+				"title": "USER REFERRAL",
+				"status": "In development..."
+			}
+		}
+	},
+	"we": {
+		"main": {
+			"headline": "your personal beneficiary - cashback that chooses itself!",
+			"description": "We believe the secret to successful shopping lies in chosen cashback. Get the most out of your purchases with nomo.",
+			"appleAlt": "App interface on Apple",
+			"googleAlt": "App interface on Google Play",
+			"ctaApple": "Download from App Store",
+			"ctaGoogle": "Download from Google Play",
+			"imageAlt": "App interface"
+		},
+		"about": {
+			"stats": {
+				"ncoin": {
+					"value": "5,000,000+",
+					"label": "Ncoin issued"
+				},
+				"users": {
+					"value": "60,000+",
+					"label": "people use our service"
+				},
+				"partners": {
+					"value": "830+",
+					"label": "partners in different countries"
+				}
+			},
+			"features": {
+				"customCashback": {
+					"title": "Cashback on your terms",
+					"description": "With nomo, you control your benefits. Choose the cashback that suits your needs and get money back for every purchase."
+				},
+				"instantAccess": {
+					"title": "Instant cashback access",
+					"description": "With nomo, getting your cashback has never been easier. You can withdraw funds at any time in a way convenient for you."
+				},
+				"wideNetwork": {
+					"title": "Wide network of partners",
+					"description": "Our program works with a wide range of partners, meaning you can get benefits for purchases anywhere you usually shop."
+				}
+			},
+			"reveal": {
+				"headline": {
+					"line1": "The mystery",
+					"line2": "unveiling our essence!"
+				},
+				"description": "In our world of nomo, we embody uniqueness and individuality. Every element of our identity is revealed through each service and benefit we offer. Join our community to unravel this mystery with us and enjoy the world of nomo!"
+			}
+		},
+		"program": {
+			"title": "the path to convenience and efficiency!",
+			"description": "Our program allows you to receive cryptocurrency cashback for any purchase, making your expenses even more beneficial.",
+			"features": {
+				"save_money_title": "SAVE MONEY ON PURCHASES",
+				"save_money_description": "Get a portion of your expenses back as cryptocurrency assets and save money for future purchases or investments.",
+				"innovative_title": "INNOVATIVE POSSIBILITIES",
+				"innovative_description": "Cryptocurrency cashback opens new opportunities for using digital assets in everyday life.",
+				"cashback_title": "GET CRYPTOCURRENCY CASHBACK",
+				"cashback_description": "Our program allows you to receive cashback in popular cryptocurrencies such as Bitcoin, Ethereum, and others.",
+				"simple_process_title": "SIMPLE AND CONVENIENT PROCESS",
+				"simple_process_description": "Our program is easy to use; you can effortlessly get cashback for your purchases.",
+				"secure_title": "SECURITY AND RELIABILITY",
+				"secure_description": "Cryptocurrency cashback ensures the security and reliability of transactions through the use of advanced blockchain technologies.",
+				"version_tag": "IOS & ANDROID VERSION"
+			}
+		},
+		"review": {
+			"what_says_our": "What our",
+			"clients": "clients say",
+			"create_review": "Add a comment..."
+		},
+		"downloads": {
+			"title": "Download and get cashback",
+			"description": "Discover new horizons of financial freedom! Download our app and get cryptocurrency cashback for every purchase. Start your journey to passive income today—don’t miss the chance to turn expenses into profit!",
+			"ctaApple": "Download from App Store",
+			"ctaGoogle": "Download from Google Play"
+		}
+	},
+	"auth": {
+		"login": {
+			"continueWith": "Continue with",
+			"emailPlaceholder": "Email",
+			"passwordPlaceholder": "Password",
+			"loginButton": "Log In",
+			"forgotPassword": "Forgot password?",
+			"notWithUs": "Not with us?",
+			"register": "Register",
+			"or": "Or"
+		},
+		"register": {
+			"register": "Register",
+			"fullNamePlaceholder": "Full Name",
+			"phonePlaceholder": "Phone Number",
+			"emailPlaceholder": "Email",
+			"passwordPlaceholder": "Password",
+			"referralCodePlaceholder": "Your Referral Code",
+			"registerButton": "Sign Up",
+			"alreadyHaveAccount": "Already have an account?",
+			"login": "Log In"
+		},
+		"forgot": {
+			"title": "Forgot Password?",
+			"instruction": "Enter your email to reset your password",
+			"emailPlaceholder": "Email",
+			"submitButton": "Send",
+			"backToLogin": "Back to Login"
+		},
+		"reset": {
+			"title": "Reset Account Password",
+			"description": "Enter a new password",
+			"passwordPlaceholder": "Password",
+			"passwordPlaceholder2": "Confirm Password",
+			"resetPass": "Reset Password",
+			"succesReset": "Your password has been successfully changed",
+			"succesResetdesc1": "Now you can ",
+			"succesResetdesc12": "using your new credentials",
+			"login": "log in"
+		},
+		"verifcode": {
+			"title": "Enter the Verification Code",
+			"instruction": "We have sent a verification code to your email ",
+			"instruction2": ". Check your inbox and enter the received code to continue.",
+			"resendCode": "Resend Code",
+			"verifyButton": "Verify"
+		}
+	},
+	"portfolio": {
+		"transactions": "Transactions",
+		"token": "Token",
+		"price": "Price",
+		"change24h": "24h",
+		"trade": "Trade",
+		"market": "Market",
+		"cash_on_balance": "Cash on balance",
+		"give": "Give",
+		"get": "Get",
+		"buy": "Buy",
+		"task": "Task",
+		"no_task": "No tasks."
+	}
+}
