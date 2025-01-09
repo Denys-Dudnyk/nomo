@@ -1,29 +1,34 @@
+'use client'
+
 import { FC } from 'react'
+import { useTranslations } from 'next-intl'
 import PartnerCard from './PartnerCard'
 
 const PartnerPrograms: FC = () => {
+	const t = useTranslations('partnership.partnerprogram')
+
 	const programs = [
 		{
-			title: 'ПАРТНЕРСЬКА ПРОГРАМА З КЕШБЕКОМ',
-			status: 'У розробці...',
+			title: t('program1.title'),
+			status: t('program1.status'),
 			bgColor: 'bg-[#E8F5E9]',
 			image: '/partnership/img1.svg',
 		},
 		{
-			title: 'ПАРТНЕРСЬКА ПРОГРАМА З ВИКОРИСТАННЯМ КРИПТОВАЛЮТИ',
-			status: 'У розробці...',
+			title: t('program2.title'),
+			status: t('program2.status'),
 			bgColor: 'bg-[#FFF8E1]',
 			image: '/partnership/img2.svg',
 		},
 		{
-			title: 'БІЗНЕС-РЕФЕРАЛ',
-			status: 'У розробці...',
+			title: t('program3.title'),
+			status: t('program3.status'),
 			bgColor: 'bg-[#E3F2FD]',
 			image: '/partnership/img3.svg',
 		},
 		{
-			title: 'КОРИСТУВАЧ-РЕФЕРАЛ',
-			status: 'У розробці...',
+			title: t('program4.title'),
+			status: t('program4.status'),
 			bgColor: 'bg-[#FCE4EC]',
 			image: '/partnership/img4.svg',
 		},
@@ -31,11 +36,11 @@ const PartnerPrograms: FC = () => {
 
 	return (
 		<section className='max-w-7xl mx-auto px-4 py-16'>
-			<div className=' mb-[130px]'>
-				<h2 className='text-[30px] sm:text-[50px] lg:text-[64px] text-[#0f0f0f] font-bold tracking-tight mx-auto w-full max-w-[400px]  md:w-auto'>
-					Партнерські{' '}
+			<div className='mb-[130px]'>
+				<h2 className='text-[30px] sm:text-[50px] lg:text-[64px] text-[#0f0f0f] font-bold tracking-tight mx-auto w-full max-w-[400px] md:w-auto'>
+					{t('partner')}{' '}
 					<span className='relative'>
-						Програми
+						{t('program')}
 						<span className='absolute bg-text-2'></span>
 					</span>
 				</h2>

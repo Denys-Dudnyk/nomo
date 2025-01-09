@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import DevelopModal from '@/components/ui/DevelopModal/DevelopModal'
+import { useTranslations } from 'next-intl'
 
 export default function LoginForm() {
 	const [email, setEmail] = useState('')
@@ -22,6 +23,9 @@ export default function LoginForm() {
 	const [showVerification, setShowVerification] = useState(false)
 
 	const supabase = createClient()
+
+	// Загружаем переводы
+	const t = useTranslations('auth.login')
 
 	const handleEmailLogin = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -69,14 +73,15 @@ export default function LoginForm() {
 	return (
 		<>
 			<div className='w-full max-w-[428px] p-8 rounded-3xl bg-[#1C1C1C] text-white'>
-				<h1 className='text-[31px] font-bold text-center mb-[18px]'>Вхід</h1>
+				<h1 className='text-[31px] font-bold text-center mb-[18px]'>
+					{t('loginButton')}
+				</h1>
 
 				<button
 					onClick={openDevelopModal}
 					className='flex items-center justify-between w-full mb-[18px] px-[20px] sm:px-[60px] rounded-[41px] py-[10px] sm:py-[19.5px] bg-transparent border border-[#fff] hover:bg-gray-800 text-[15px] sm:text-[18px] font-bold'
 				>
-					{/* <BrandTelegram className='mr-2' /> */}
-					<span>Продовжити через</span>
+					<span>{t('continueWith')}</span>
 					<Image
 						src={'/auth/tg.svg'}
 						alt='Telegram Auth'
@@ -87,25 +92,22 @@ export default function LoginForm() {
 				</button>
 
 				<div className='relative mb-[18px]'>
-					{/* <div className='absolute inset-0 flex items-center'>
-					<div className='w-full border-t border-gray-600'></div>
-				</div> */}
 					<div className='relative flex justify-center text-[19px] font-bold'>
-						<span className='px-2 bg-[#1C1C1C] text-gray-400'>Або</span>
+						<span className='px-2 bg-[#1C1C1C] text-gray-400'>{t('or')}</span>
 					</div>
 				</div>
 
 				<form onSubmit={handleEmailLogin} className='space-y-4'>
 					<Input
 						type='email'
-						placeholder='Електронна пошта'
+						placeholder={t('emailPlaceholder')}
 						value={email}
 						onChange={e => setEmail(e.target.value)}
 						className='bg-transparent '
 					/>
 					<Input
 						type='password'
-						placeholder='Пароль'
+						placeholder={t('passwordPlaceholder')}
 						value={password}
 						onChange={e => setPassword(e.target.value)}
 						className='bg-transparent '
@@ -119,7 +121,7 @@ export default function LoginForm() {
 						{loading ? (
 							<LuLoader className='size-[17px] animate-spin' />
 						) : (
-							'Увійти'
+							t('loginButton')
 						)}
 					</Button>
 				</form>
@@ -134,15 +136,15 @@ export default function LoginForm() {
 						className='text-sm text-gray-400 hover:text-white'
 						onClick={handleForgotPassword}
 					>
-						Забули пароль?
+						{t('forgotPassword')}
 					</a>
 					<div className='text-sm text-gray-400'>
-						Ще не з нами?{' '}
+						{t('notWithUs')}{' '}
 						<Link
 							href='/auth/register'
 							className='text-[#FF8A00] hover:text-accenthover'
 						>
-							Зареєструватися
+							{t('register')}
 						</Link>
 					</div>
 				</div>

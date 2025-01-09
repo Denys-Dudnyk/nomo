@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
 import BrandLogo from '@/components/elements/auth/brandlogo'
 import { DialogTitle } from '@radix-ui/react-dialog'
+import { useTranslations } from 'next-intl'
 
 interface SuccessModalProps {
 	isOpen: boolean
@@ -13,6 +14,7 @@ interface SuccessModalProps {
 
 export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
 	const router = useRouter()
+	const t = useTranslations('auth.reset')
 
 	const handleClose = () => {
 		onClose()
@@ -30,11 +32,12 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
 
 				<div className='flex flex-col items-center text-center'>
 					<DialogTitle className='text-2xl font-bold mb-4'>
-						Ваш пароль успішно змінено
+						{t('succesReset')}
 					</DialogTitle>
 					<p className='text-gray-400'>
-						Тепер ви можете <span className='text-accent'>увійти</span>{' '}
-						використовуючи нові дані
+						{t('succesResetdesc1')}
+						<span className='text-accent'>{t('login')}</span>{' '}
+						{t('succesResetdesc12')}
 					</p>
 				</div>
 			</DialogContent>

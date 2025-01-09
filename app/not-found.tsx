@@ -4,7 +4,7 @@ import Link from 'next/link'
 export default function Custom404() {
 	return (
 		<div className='flex flex-col items-center justify-center  text-foreground'>
-			<Image src={'404.svg'} alt='404' width={600} height={600} />
+			<Image src={'/404.svg'} alt='404' width={600} height={600} />
 			<h2 className='text-[54px] font-extrabold leading-[72.9px] mb-[37px] text-black'>
 				<span className='relative z-10'>
 					Упссс... У{' '}

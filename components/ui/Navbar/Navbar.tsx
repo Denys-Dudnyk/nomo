@@ -1,16 +1,17 @@
 'use client'
 
 import { createClient } from '@/lib/supabase/client'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const navItems = [
-	{ label: 'Кешбек', href: '/cashback' },
-	{ label: 'Карта', href: '/map' },
-	{ label: 'Криптовалюта', href: '/' },
-	{ label: 'Партнерство', href: '/partnership' },
-	{ label: 'Хто Ми', href: '/we' },
+	{ label: 'menu.cashback', href: '/cashback' },
+	{ label: 'menu.card', href: '/map' },
+	{ label: 'menu.crypto', href: '/' },
+	{ label: 'menu.partnership', href: '/partnership' },
+	{ label: 'menu.aboutUs', href: '/we' },
 ]
 
 interface NavbarProps {
@@ -22,6 +23,7 @@ const Navbar = ({ isResettingPassword = false }: NavbarProps) => {
 	const router = useRouter()
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
 	const supabase = createClient()
+	const t = useTranslations('header')
 
 	useEffect(() => {
 		const checkAuth = async () => {
@@ -57,7 +59,7 @@ const Navbar = ({ isResettingPassword = false }: NavbarProps) => {
 
 	const allNavItems =
 		!isResettingPassword && isAuthenticated
-			? [{ label: 'Мій кабінет', href: '/dashboard' }, ...navItems]
+			? [{ label: 'menu.my_account', href: '/dashboard' }, ...navItems]
 			: navItems
 
 	return (
@@ -72,7 +74,7 @@ const Navbar = ({ isResettingPassword = false }: NavbarProps) => {
 							}`}
 							onClick={handleNavigation}
 						>
-							{item.label}
+							{t(item.label)}
 						</Link>
 					</li>
 				))}

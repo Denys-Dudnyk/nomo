@@ -9,13 +9,14 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import BrandLogo from './brandlogo'
 import ResetPasswordVerificationModal from '@/components/ui/ResetverificationModal/reset-password-verification-modal'
+import { useTranslations } from 'next-intl'
 
 export default function ForgotPasswordForm() {
 	const [email, setEmail] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const [showVerification, setShowVerification] = useState(false)
-
+	const t = useTranslations('auth.forgot')
 	const supabase = createClient()
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -45,17 +46,15 @@ export default function ForgotPasswordForm() {
 		<>
 			<div className='w-full max-w-[428px] p-8 rounded-3xl bg-[#1C1C1C] text-white'>
 				<h1 className='text-[31px] font-bold text-center mb-[18px]'>
-					Забули пароль?
+					{t('title')}
 				</h1>
 
-				<p className='text-center text-gray-400 mb-8'>
-					Введіть вашу електронну пошту для відновлення паролю
-				</p>
+				<p className='text-center text-gray-400 mb-8'>{t('instruction')}</p>
 
 				<form onSubmit={handleSubmit} className='space-y-4'>
 					<Input
 						type='email'
-						placeholder='Електронна пошта'
+						placeholder={t('emailPlaceholder')}
 						value={email}
 						onChange={e => setEmail(e.target.value)}
 						className='bg-transparent'
@@ -70,7 +69,7 @@ export default function ForgotPasswordForm() {
 						{loading ? (
 							<LuLoader className='size-[17px] animate-spin' />
 						) : (
-							'Відправити'
+							t('submitButton')
 						)}
 					</Button>
 				</form>
@@ -84,7 +83,7 @@ export default function ForgotPasswordForm() {
 						href='/auth/login'
 						className='text-[#FF8A00] hover:text-accenthover'
 					>
-						Повернутися до входу
+						{t('backToLogin')}
 					</Link>
 				</div>
 			</div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Search, Filter } from 'lucide-react'
 import Pagination from '@/components/ui/Pagination/Pagination'
@@ -12,62 +12,46 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import CashbackModal from './CashbackModal/CashBackModal'
 import FilterModal from '@/components/ui/FilterModal/FilterModal'
+import { useRouter } from 'next/navigation'
+import { Company } from '@/types/company'
+import { UserProfile } from '@/types/database'
 
-const mockData = [
-	{
-		id: 1,
-		name: 'Hyatt Regency',
-		logoUrl: '/cashback/item.svg',
-		discount: 15,
-		category: 'Hotels',
-		description: 'Luxury hotel chain with premium amenities',
-		isActive: true,
-	},
-	{
-		id: 2,
-		name: 'Hyatt Place',
-		logoUrl: '/cashback/item.svg',
-		discount: 10,
-		category: 'Restaurants',
-		description: 'Business-friendly hotel chain',
-		isActive: true,
-	},
-	...Array(45)
-		.fill(null)
-		.map((_, index) => ({
-			id: index + 3,
-			name: `Hotel ${index + 3}`,
-			logoUrl: '/cashback/item.svg',
-			discount: 15,
-			category: 'Hotels',
-			description: 'Sample hotel description',
-			isActive: true,
-		})),
-]
+import { getUserProfile } from '@/lib/database'
+import { createClient } from '@/lib/supabase/server'
 
 const ITEMS_PER_PAGE = 15
 
-const Cashback = () => {
+const Cashback = ({
+	initialCompanies,
+	profile
+}: {
+	initialCompanies: Company[]
+	profile: UserProfile | null
+}) => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
 	const [searchTerm, setSearchTerm] = useState('')
 
-	const totalItems = mockData.length
+	const router = useRouter()
+
+	const totalItems = initialCompanies.length
 	const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE)
 	const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
 	const endIndex = startIndex + ITEMS_PER_PAGE
 
-	const filteredItems = mockData.filter(
+	const filteredItems = initialCompanies.filter(
 		item =>
 			item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			item.category.toLowerCase().includes(searchTerm.toLowerCase())
+			item.location?.toLowerCase().includes(searchTerm.toLowerCase())
 	)
 
 	const currentItems = filteredItems.slice(startIndex, endIndex)
 
+	const isAdmin = profile?.role === 'admin'
+
 	const handleAddDeal = () => {
-		setIsModalOpen(true)
+		router.push('/company/new')
 	}
 
 	const handleCloseModal = () => {
@@ -97,11 +81,11 @@ const Cashback = () => {
 							Найкращі пропозиції
 						</h2>
 						<div className='bg-[#fff] rounded-xl  p-4 sm:p-6'>
-							{/* <h3 className='text-xl sm:text-2xl font-semibold text-center mb-6'>
-								Популярні бренди
-							</h3> */}
 							<div className='overflow-hidden'>
-								<CarouselScroll />
+								<CarouselScroll
+									initialCompanies={currentItems}
+									isAdmin={isAdmin}
+								/>
 							</div>
 						</div>
 					</div>
@@ -109,7 +93,7 @@ const Cashback = () => {
 					<div className='mb-12'>
 						<div className='flex flex-col md:flex-row justify-between items-center mb-8'>
 							<h1 className='text-3xl sm:text-4xl font-bold text-gray-800 mb-4 md:mb-0'>
-								ОНЛАЙН КЕШБЕК
+								КЕШБЕК
 							</h1>
 							<div className='flex items-center space-x-4'>
 								<Button
@@ -139,6 +123,9 @@ const Cashback = () => {
 									<CashbackItem {...item} />
 								</motion.div>
 							))}
+
+							{/* Кнопка для создания доступна только администраторам */}
+							{isAdmin && (
 							<Card className='min-h-[250px] w-full flex justify-center items-center border-dashed border-2 border-gray-300 hover:border-accent transition-colors duration-300 self-center'>
 								<CardContent className='flex flex-col items-center justify-center p-4 space-y-4'>
 									<button
@@ -149,6 +136,7 @@ const Cashback = () => {
 									</button>
 								</CardContent>
 							</Card>
+							)}
 						</motion.div>
 					</div>
 

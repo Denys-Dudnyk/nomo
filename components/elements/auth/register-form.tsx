@@ -8,6 +8,7 @@ import BrandLogo from './brandlogo'
 import VerificationModal from '@/components/ui/VerificationModal/VerificationModal'
 import { LuLoader } from 'react-icons/lu'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 export default function RegisterForm() {
 	const [formData, setFormData] = useState({
@@ -115,46 +116,50 @@ export default function RegisterForm() {
 		}
 	}
 
+	const t = useTranslations('auth.register')
+
 	return (
 		<>
 			<div className='w-full max-w-[386px] p-8 rounded-3xl bg-[#1C1C1C] text-white'>
-				<h1 className='text-[31px] font-bold text-center mb-6'>Реєстрація</h1>
+				<h1 className='text-[31px] font-bold text-center mb-6'>
+					{t('register')}
+				</h1>
 
 				<form onSubmit={handleRegister} className='space-y-[30px]'>
 					<Input
 						type='text'
 						name='fullName'
-						placeholder='ПІБ'
+						placeholder={t('fullNamePlaceholder')}
 						value={formData.fullName}
 						onChange={handleChange}
-						className='bg-transparent text-[#fff] placeholder:text-[#fff] '
+						className='bg-transparent text-[#fff] placeholder:text-[#fff]'
 						required
 					/>
 					<Input
 						type='tel'
 						name='phone'
-						placeholder='Номер телефону'
+						placeholder={t('phonePlaceholder')}
 						value={formData.phone}
 						onChange={handleChange}
-						className='bg-transparent text-[#fff] placeholder:text-[#fff] '
+						className='bg-transparent text-[#fff] placeholder:text-[#fff]'
 						required
 					/>
 					<Input
 						type='email'
 						name='email'
-						placeholder='Електронна пошта'
+						placeholder={t('emailPlaceholder')}
 						value={formData.email}
 						onChange={handleChange}
-						className='bg-transparent text-[#fff] placeholder:text-[#fff] '
+						className='bg-transparent text-[#fff] placeholder:text-[#fff]'
 						required
 					/>
 					<Input
 						type='password'
 						name='password'
-						placeholder='Пароль'
+						placeholder={t('passwordPlaceholder')}
 						value={formData.password}
 						onChange={handleChange}
-						className='bg-transparent text-[#fff] placeholder:text-[#fff] '
+						className='bg-transparent text-[#fff] placeholder:text-[#fff]'
 						required
 					/>
 
@@ -166,16 +171,17 @@ export default function RegisterForm() {
 						{loading ? (
 							<LuLoader className='size-[17px] animate-spin' />
 						) : (
-							'Увійти'
+							t('registerButton')
 						)}
 					</Button>
+
 					<Input
 						type='text'
 						name='referralCode'
-						placeholder='Ваш реферал'
+						placeholder={t('referralCodePlaceholder')}
 						value={formData.referralCode}
 						onChange={handleChange}
-						className='bg-transparent text-[#fff]  '
+						className='bg-transparent text-[#fff]'
 					/>
 				</form>
 
@@ -185,12 +191,12 @@ export default function RegisterForm() {
 
 				<div className='mt-6 text-center'>
 					<div className='text-sm text-gray-400'>
-						Вже є аккаунт?{' '}
+						{t('alreadyHaveAccount')}{' '}
 						<Link
 							href='/auth/login'
 							className='text-[#FF8A00] hover:text-accenthover'
 						>
-							Увійти
+							{t('login')}
 						</Link>
 					</div>
 				</div>

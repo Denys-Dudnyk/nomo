@@ -1,36 +1,37 @@
 import { FC } from 'react'
-import { Calendar, Smartphone, Lightbulb, Shield } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
+
 const ProgramSection: FC = () => {
+	const t = useTranslations('we.program')
+
 	return (
 		<section className={'bg-[#0F0F0F] pt-[90px] pb-[114px]'}>
-			<div className=''>
+			<div>
 				<div className='mb-[76px] text-center max-w-[607px] mx-auto'>
 					<h2 className='text-[40px] sm:text-[54px] font-extrabold leading-[135%] mb-[37px]'>
-						<span className='text-accent '>N</span>
-						omo: шлях до зручності і ефективності!
+						<span className='text-accent'>N</span>
+						omo: {t('title')}
 					</h2>
 					<p className='text-[14px] leading-[160%] -tracking-wider text-[#CECECE]'>
-						Наша програма надає вам можливість отримувати кешбек у криптовалюті
-						за будь-яку покупку, що робить ваші витрати ще більш вигідними.
+						{t('description')}
 					</p>
 				</div>
 			</div>
 
 			<div className='max-w-7xl mx-auto pt-[76px]'>
-				<div className='grid grid-cols-1 md:grid-cols-3 relative '>
+				<div className='grid grid-cols-1 md:grid-cols-3 relative'>
 					{/* Left Column Features */}
 					<div className='space-y-[100px] md:space-y-[250px] md:mt-44'>
-						<div className='text-center md:text-right  '>
+						<div className='text-center md:text-right'>
 							<div className='flex items-center mt-[200px] md:mt-0 justify-center md:justify-end gap-4 mb-4'>
 								<Image src={'/we/cashback.svg'} alt='' width={51} height={48} />
 							</div>
 							<h3 className='font-bold text-[25px] leading-[126%] -tracking-wider'>
-								ЗАОЩАДЖУЙТЕ ГРОШІ ПРИ ПОКУПКАХ
+								{t('features.save_money_title')}
 							</h3>
 							<p className='text-[#cecece] text-[14px] leading-[160%] -tracking-wider mt-[23px]'>
-								Отримуйте частину своїх витрат назад у вигляді криптовалютних
-								активів і зекономте гроші на майбутні покупки або інвестування.
+								{t('features.save_money_description')}
 							</p>
 						</div>
 						<div className='text-center md:text-right'>
@@ -43,11 +44,10 @@ const ProgramSection: FC = () => {
 								/>
 							</div>
 							<h3 className='font-bold text-[25px] leading-[126%] -tracking-wider'>
-								ІННОВАЦІЙНІ МОЖЛИВОСТІ
+								{t('features.innovative_title')}
 							</h3>
 							<p className='text-[#cecece] text-[14px] leading-[160%] -tracking-wider mt-[23px]'>
-								Криптовалютний кешбек відкриває нові можливості використання
-								цифрових активів у повсякденному житті.
+								{t('features.innovative_description')}
 							</p>
 						</div>
 					</div>
@@ -59,11 +59,10 @@ const ProgramSection: FC = () => {
 								<Image src={'/we/message.svg'} alt='' width={49} height={44} />
 							</div>
 							<h2 className='text-[25px] leading-[126%] -tracking-wider font-bold mb-[20px]'>
-								ОТРИМУЙТЕ КЕШБЕК У КРИПТОВАЛЮТІ
+								{t('features.cashback_title')}
 							</h2>
-							<p className='text-[14px] leading-[160%] -tracking-wider font-normal text-[#CECECE]  mb-[34px]'>
-								Наша програма дозволяє вам отримувати кешбек у вигляді
-								популярних криптовалют, таких як Bitcoin, Ethereum та інші.
+							<p className='text-[14px] leading-[160%] -tracking-wider font-normal text-[#CECECE] mb-[34px]'>
+								{t('features.cashback_description')}
 							</p>
 						</div>
 						<div className='relative w-full max-w-[300px] mx-auto px-5'>
@@ -84,11 +83,10 @@ const ProgramSection: FC = () => {
 								<Image src={'/we/process.svg'} alt='' width={32} height={54} />
 							</div>
 							<h3 className='font-bold text-[25px] leading-[126%] -tracking-wider'>
-								ПРОСТИЙ ТА ЗРУЧНИЙ ПРОЦЕС
+								{t('features.simple_process_title')}
 							</h3>
 							<p className='text-[#cecece] text-[14px] leading-[160%] -tracking-wider mt-[23px]'>
-								Наша програма проста у використанні, ви зможете легко отримувати
-								кешбек за свої покупки без зайвих зусиль.
+								{t('features.simple_process_description')}
 							</p>
 						</div>
 						<div className='text-center md:text-left'>
@@ -96,11 +94,10 @@ const ProgramSection: FC = () => {
 								<Image src={'/we/secure.svg'} alt='' width={57} height={52} />
 							</div>
 							<h3 className='font-bold text-[25px] leading-[126%] -tracking-wider'>
-								БЕЗПЕКА ТА НАДІЙНІСТЬ
+								{t('features.secure_title')}
 							</h3>
 							<p className='text-[#cecece] text-[14px] leading-[160%] -tracking-wider mt-[23px]'>
-								Криптовалютний кешбек забезпечує безпеку та надійність операцій
-								завдяки застосуванню передових технологій блокчейн.
+								{t('features.secure_description')}
 							</p>
 						</div>
 					</div>
@@ -111,10 +108,11 @@ const ProgramSection: FC = () => {
 					<div className='flex items-center justify-center gap-4 mb-[25px]'>
 						<Image src={'/we/admin.svg'} alt='' width={39.5} height={50} />
 					</div>
-					<p className='text-xl font-bold'>IOS & ANDROID VERSION</p>
+					<p className='text-xl font-bold'>{t('features.version_tag')}</p>
 				</div>
 			</div>
 		</section>
 	)
 }
+
 export default ProgramSection

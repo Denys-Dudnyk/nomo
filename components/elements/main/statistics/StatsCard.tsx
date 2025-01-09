@@ -10,6 +10,7 @@ import {
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface DataPoint {
 	value: number
@@ -30,6 +31,8 @@ const StatsCard = ({ title, data }: StatsCardProps) => {
 	const formatMonth = (month: string) => {
 		return month.charAt(0).toUpperCase() + month.slice(1).replace('.', '')
 	}
+
+	const t = useTranslations('mainpage.statistics')
 
 	const getFilteredData = () => {
 		switch (activeTimeframe) {
@@ -57,7 +60,7 @@ const StatsCard = ({ title, data }: StatsCardProps) => {
 							activeTimeframe === '12m' ? 'text-accent' : 'text-[#919191]'
 						}`}
 					>
-						12 місяців
+						{t('days.12m')}
 					</button>
 					<button
 						onClick={() => setActiveTimeframe('30d')}
@@ -65,7 +68,7 @@ const StatsCard = ({ title, data }: StatsCardProps) => {
 							activeTimeframe === '30d' ? 'text-accent' : 'text-[#919191]'
 						}`}
 					>
-						30 днів
+						{t('days.30d')}
 					</button>
 					<button
 						onClick={() => setActiveTimeframe('7d')}
@@ -73,7 +76,7 @@ const StatsCard = ({ title, data }: StatsCardProps) => {
 							activeTimeframe === '7d' ? 'text-accent' : 'text-[#919191]'
 						}`}
 					>
-						7 днів
+						{t('days.7d')}
 					</button>
 					<button
 						onClick={() => setActiveTimeframe('24h')}
@@ -81,7 +84,7 @@ const StatsCard = ({ title, data }: StatsCardProps) => {
 							activeTimeframe === '24h' ? 'text-accent' : 'text-[#919191]'
 						}`}
 					>
-						24 години
+						{t('days.24h')}
 					</button>
 				</div>
 			</CardHeader>

@@ -13,11 +13,13 @@ import { LineChartComponent } from '../Charts/LineChart'
 import { BarChartComponent } from '../Charts/BarChart'
 
 import { CryptoTable } from '../Tables/CryptoTable'
+import { useTranslations } from 'next-intl'
 
 export function LeftPanel({ className }: { className?: string }) {
 	const [chartType, setChartType] = useState('line')
 	const [selectedRange, setSelectedRange] = useState('D')
 	const rangeOptions = ['D', 'W', 'M', 'Y']
+	const t = useTranslations('portfolio')
 
 	return (
 		<section className={`flex-auto w-full p-4 relative ${className}`}>
@@ -37,7 +39,7 @@ export function LeftPanel({ className }: { className?: string }) {
 				{/* NCOIN Header */}
 				<div>
 					<h1 className='text-xl sm:text-2xl font-bold text-white'>
-						Транзакції
+						{t('transactions')}
 					</h1>
 				</div>
 

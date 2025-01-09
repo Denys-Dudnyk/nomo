@@ -9,53 +9,22 @@ import {
 } from '@/components/ui/carousel'
 import CashbackItem from '../cashback/CashbackItem'
 import CashbackModal from '../cashback/CashbackModal/CashBackModal'
+import { Company } from '@/types/company'
+import { useRouter } from 'next/navigation'
 
-const mockData = [
-	{
-		id: 1,
-		name: 'Hyatt Regency',
-		logoUrl: '/cashback/item.svg',
-		discount: 15,
-		category: 'Hotels',
-		description: 'Luxury hotel chain with premium amenities',
-		isActive: true,
-	},
-	{
-		id: 2,
-		name: 'Hyatt Place',
-		logoUrl: '/cashback/item.svg',
-		discount: 10,
-		category: 'Hotels',
-		description: 'Business-friendly hotel chain',
-		isActive: true,
-	},
-	{
-		id: 3,
-		name: 'Hyatt Place',
-		logoUrl: '/cashback/item.svg',
-		discount: 10,
-		category: 'Hotels',
-		description: 'Business-friendly hotel chain',
-		isActive: true,
-	},
-	{
-		id: 4,
-		name: 'Hyatt Place',
-		logoUrl: '/cashback/item.svg',
-		discount: 10,
-		category: 'Hotels',
-		description: 'Business-friendly hotel chain',
-		isActive: true,
-	},
-]
-
-export function CarouselScroll() {
+export function CarouselScroll({
+	initialCompanies,
+	isAdmin = false,
+}: {
+	initialCompanies: Company[]
+	isAdmin: boolean
+}) {
 	const [isModalOpen, setIsModalOpen] = React.useState(false)
+	const router = useRouter()
 
 	const handleAddDeal = () => {
-		setIsModalOpen(true)
+		router.push('/company/new')
 	}
-
 	const handleCloseModal = () => {
 		setIsModalOpen(false)
 	}
@@ -63,26 +32,28 @@ export function CarouselScroll() {
 	return (
 		<div className='w-full'>
 			<Carousel className='w-full'>
-				<CarouselContent className='flex gap-[60px]'>
-					<CarouselItem className='flex-shrink-0 w-full max-w-[269px] '>
-						<Card className='h-full flex justify-center items-center border-dashed border-2 border-gray-300'>
-							<CardContent className='flex flex-col items-center justify-center p-4 space-y-4 '>
-								<button
-									className='w-full h-full flex justify-center items-center text-7xl text-gray-500'
-									onClick={handleAddDeal}
-								>
-									+
-								</button>
-							</CardContent>
-						</Card>
-					</CarouselItem>
+				<CarouselContent className='flex gap-[60px] px-16'>
+					{isAdmin && (
+						<CarouselItem className='flex-shrink-0 w-full max-w-[269px] '>
+							<Card className='h-full flex justify-center items-center border-dashed border-2 border-gray-300'>
+								<CardContent className='flex flex-col items-center justify-center p-4 space-y-4 '>
+									<button
+										className='w-full h-full flex justify-center items-center text-7xl text-gray-500'
+										onClick={handleAddDeal}
+									>
+										+
+									</button>
+								</CardContent>
+							</Card>
+						</CarouselItem>
+					)}
 
-					{mockData.map(item => (
+					{initialCompanies.map(item => (
 						<CarouselItem
 							key={item.id}
 							className='flex-shrink-0 w-[90%] max-w-[250px]'
 						>
-							<div className='flex flex-col items-center justify-center px-4 py-8 space-y-4'>
+							<div className='flex flex-col items-center justify-center  px-4 py-8 space-y-4'>
 								<CashbackItem {...item} />
 							</div>
 						</CarouselItem>

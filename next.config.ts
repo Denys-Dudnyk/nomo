@@ -1,7 +1,25 @@
-import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin'
 
+import type { NextConfig } from 'next'
+
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+	experimental: {
+		serverActions: {
+			bodySizeLimit: '5mb',
+		},
+	},
+	images: {
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'nndgocwwteltezwmynvh.supabase.co',
+				// port: '',
+				pathname: '/storage/v1/object/public/company-images/**',
+				// search: '',
+			},
+		],
+	},
+}
 
-export default nextConfig;
+export default withNextIntl(nextConfig)

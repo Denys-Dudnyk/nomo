@@ -11,6 +11,10 @@ import DevelopModal from '../ui/DevelopModal/DevelopModal'
 import { useMediaQuery } from 'react-responsive'
 import { Menu } from 'lucide-react'
 
+import { useTranslation } from 'react-i18next'
+import { useLocale, useTranslations } from 'next-intl'
+import LocaleSwitcher from '../ui/LanguageSwitcher/LocaleSwitcher'
+
 const Header = () => {
 	const navigation = usePathname()
 	const router = useRouter()
@@ -89,6 +93,9 @@ const Header = () => {
 		setIsMenuOpen(!isMenuOpen)
 	}
 
+	// const t = useTranslations('HomePage')
+	const t = useTranslations('header')
+
 	return (
 		<>
 			<header className={`${mainPage} ${wePage} w-full z-[3]`}>
@@ -113,7 +120,7 @@ const Header = () => {
 								onClick={handleLogout}
 								className='bg-accent px-[30px] sm:px-[30px] py-[10px] sm:py-[10px] font-bold rounded-[40px] hover:bg-[#FFBF88] transition-colors   text-[17px] sm:text-[17px]'
 							>
-								Вихід
+								{t('auth.logout')}
 							</button>
 						) : (
 							<Link
@@ -121,23 +128,24 @@ const Header = () => {
 								className='bg-accent px-[30px] sm:px-[30px] py-[10px] sm:py-[10px] font-bold rounded-[40px] hover:bg-[#FFBF88] transition-colors  text-[17px] sm:text-[17px]'
 								onClick={handleNavigation}
 							>
-								Вхід
+								{t('auth.login')}
 							</Link>
 						)}
 						{!isMobile && (
-							<button
-								className='flex items-center gap-[9px] md:gap-[11px] text-[24px] font-normal'
-								onClick={openDevelopModal}
-							>
-								<Image
-									src={'/header/language.svg'}
-									alt='Логотип Nomo'
-									width={42}
-									height={42}
-									className='w-8 h-8 sm:w-[42px] sm:h-[42px]'
-								/>
-								<span className='hidden sm:inline'>Українська</span>
-							</button>
+							// <button
+							// 	className='flex items-center gap-[9px] md:gap-[11px] text-[24px] font-normal'
+							// 	onClick={openDevelopModal}
+							// >
+							// 	<Image
+							// 		src={'/header/language.svg'}
+							// 		alt='Логотип Nomo'
+							// 		width={42}
+							// 		height={42}
+							// 		className='w-8 h-8 sm:w-[42px] sm:h-[42px]'
+							// 	/>
+							// 	<span className='hidden sm:inline'>Українська</span>
+							// </button>
+							<LocaleSwitcher />
 						)}
 						{isMobile && (
 							<button onClick={toggleMenu} className='text-accent'>
@@ -167,7 +175,7 @@ const Header = () => {
 						</div>
 						<Navbar isResettingPassword={isResettingPassword} />
 						<div className='mt-10'>
-							<button
+							{/* <button
 								className='flex items-center gap-2 text-[24px] font-normal mb-4'
 								onClick={() => {
 									openDevelopModal()
@@ -181,7 +189,8 @@ const Header = () => {
 									height={32}
 								/>
 								Українська
-							</button>
+							</button> */}
+							<LocaleSwitcher />
 						</div>
 					</div>
 				</div>

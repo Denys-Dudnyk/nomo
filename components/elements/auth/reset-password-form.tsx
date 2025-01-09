@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import BrandLogo from './brandlogo'
 import SuccessModal from '@/components/ui/SuccessModal/success-modal'
+import { useTranslations } from 'next-intl'
 
 export default function ResetPasswordForm() {
 	const [password, setPassword] = useState('')
@@ -19,6 +20,7 @@ export default function ResetPasswordForm() {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const router = useRouter()
 	const supabase = createClient()
+	const t = useTranslations('auth.reset')
 
 	const cleanupResetState = async () => {
 		await supabase.auth.signOut()
@@ -112,15 +114,15 @@ export default function ResetPasswordForm() {
 				</div>
 
 				<h1 className='text-[31px] font-bold text-center mb-[18px]'>
-					Скинути пароль облікового запису
+					{t('title')}
 				</h1>
 
-				<p className='text-center text-gray-400 mb-8'>Введіть новий пароль</p>
+				<p className='text-center text-gray-400 mb-8'>{t('description')}</p>
 
 				<form onSubmit={handleSubmit} className='space-y-4'>
 					<Input
 						type='password'
-						placeholder='Пароль'
+						placeholder={t('passwordPlaceholder')}
 						value={password}
 						onChange={e => setPassword(e.target.value)}
 						className='bg-transparent border-gray-600'
@@ -128,7 +130,7 @@ export default function ResetPasswordForm() {
 					/>
 					<Input
 						type='password'
-						placeholder='Підтвердити пароль'
+						placeholder={t('passwordPlaceholder2')}
 						value={confirmPassword}
 						onChange={e => setConfirmPassword(e.target.value)}
 						className='bg-transparent border-gray-600'
@@ -143,7 +145,7 @@ export default function ResetPasswordForm() {
 						{loading ? (
 							<LuLoader className='size-[17px] animate-spin' />
 						) : (
-							'Скинути пароль'
+							t('resetPass')
 						)}
 					</Button>
 				</form>

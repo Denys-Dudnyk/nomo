@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/table'
 import { MiniGraph } from '../Charts/MiniGraph'
 import { createTableData } from '../utils/tableUtils'
+import { useTranslations } from 'next-intl'
 
 function TableFilter({
 	onFilterChange,
@@ -57,11 +58,12 @@ export function CryptoTable() {
 	const [period, setPeriod] = useState('today')
 	const [currency, setCurrency] = useState('ncoin')
 	const tableData = createTableData(period, currency)
+	const t = useTranslations('portfolio')
 
 	return (
 		<>
 			<div className='flex justify-between items-center mb-6 flex-wrap gap-4'>
-				<h1 className='text-2xl font-bold text-white'>Транзакції</h1>
+				<h1 className='text-2xl font-bold text-white'>{t('transactions')}</h1>
 				<TableFilter
 					onFilterChange={value => {
 						if (['today', 'this-week', 'last-week'].includes(value)) {
@@ -77,11 +79,11 @@ export function CryptoTable() {
 				<TableHeader>
 					<TableRow className='border-b border-gray-700'>
 						<TableHead className='px-10 py-2'>#</TableHead>
-						<TableHead className='px-4 py-2'>Токен</TableHead>
-						<TableHead className='px-4 py-2'>Ціна</TableHead>
-						<TableHead className='px-4 py-2'>24h</TableHead>
-						<TableHead className='px-4 py-2'>Торгівля</TableHead>
-						<TableHead className='px-4 py-2'>Ринок</TableHead>
+						<TableHead className='px-4 py-2'>{t('token')}</TableHead>
+						<TableHead className='px-4 py-2'>{t('price')}</TableHead>
+						<TableHead className='px-4 py-2'>{t('change24h')}</TableHead>
+						<TableHead className='px-4 py-2'>{t('trade')}</TableHead>
+						<TableHead className='px-4 py-2'>{t('market')}</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

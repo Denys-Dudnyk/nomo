@@ -12,6 +12,7 @@ import { createClient } from '@/lib/supabase/client'
 import BrandLogo from '@/components/elements/auth/brandlogo'
 import Image from 'next/image'
 import { LuLoader } from 'react-icons/lu'
+import { useTranslations } from 'next-intl'
 
 interface VerificationModalProps {
 	email: string
@@ -30,6 +31,8 @@ export default function VerificationModal({
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const router = useRouter()
+		const t = useTranslations('auth.verifcode')
+	
 
 	const supabase = createClient()
 
@@ -133,14 +136,15 @@ export default function VerificationModal({
 							<BrandLogo />
 						</div>
 						<DialogTitle className='text-[18px] sm:text-2xl font-bold text-center'>
-							Введіть код підтвердження
+							{t('title')}
 						</DialogTitle>
 					</DialogHeader>
 
 					<div className='flex flex-col items-center'>
 						<p className='text-center text-gray-400 mb-8'>
-							Ми відправили код підтвердження на вашу пошту {email}. Перевірте
-							вашу поштову скриньку та введіть отриманий код для продовження.
+							{t('instruction')}
+							{email}
+							{t('instruction2')}
 						</p>
 
 						<div className='flex justify-center gap-2 sm:gap-3 mb-6 w-auto'>
@@ -163,7 +167,7 @@ export default function VerificationModal({
 								onClick={handleResendCode}
 								className='text-accent hover:text-accenthover'
 							>
-								Надіслати повторно
+								{t('resendCode')}
 							</button>
 						</div>
 
@@ -175,7 +179,7 @@ export default function VerificationModal({
 							{loading ? (
 								<LuLoader className='size-[17px] animate-spin' />
 							) : (
-								'Підтвердити'
+								t('verifyButton')
 							)}
 						</Button>
 

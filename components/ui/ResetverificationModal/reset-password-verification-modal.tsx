@@ -11,6 +11,7 @@ import {
 import { createClient } from '@/lib/supabase/client'
 import BrandLogo from '@/components/elements/auth/brandlogo'
 import { LuLoader } from 'react-icons/lu'
+import { useTranslations } from 'next-intl'
 
 interface ResetPasswordVerificationModalProps {
 	email: string
@@ -28,6 +29,7 @@ export default function ResetPasswordVerificationModal({
 	const [error, setError] = useState<string | null>(null)
 	const router = useRouter()
 	const supabase = createClient()
+	const t = useTranslations('auth.verifcode')
 
 	const handleCodeChange = (index: number, value: string) => {
 		if (value.length <= 1) {
@@ -102,14 +104,15 @@ export default function ResetPasswordVerificationModal({
 						<BrandLogo />
 					</div>
 					<DialogTitle className='text-[18px] sm:text-2xl font-bold text-center'>
-						Введіть код підтвердження
+						{t('title')}
 					</DialogTitle>
 				</DialogHeader>
 
 				<div className='flex flex-col items-center'>
 					<p className='text-center text-gray-400 mb-8'>
-						Ми відправили код підтвердження на вашу пошту {email}. Перевірте
-						вашу поштову скриньку та введіть отриманий код для продовження.
+						{t('instruction')}
+						{email}
+						{t('instruction2')}
 					</p>
 
 					<div className='flex justify-center gap-2 sm:gap-3 mb-6 w-auto'>
@@ -132,7 +135,7 @@ export default function ResetPasswordVerificationModal({
 							onClick={handleResendCode}
 							className='text-accent hover:text-accenthover'
 						>
-							Надіслати повторно
+							{t('resendCode')}
 						</button>
 					</div>
 
@@ -144,7 +147,7 @@ export default function ResetPasswordVerificationModal({
 						{loading ? (
 							<LuLoader className='size-[17px] animate-spin' />
 						) : (
-							'Підтвердити'
+							t('verifyButton')
 						)}
 					</Button>
 

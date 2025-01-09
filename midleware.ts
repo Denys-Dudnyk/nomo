@@ -1,5 +1,16 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import createMiddleware from 'next-intl/middleware'
+
+export default createMiddleware({
+	locales: ['ua', 'en', 'pl', 'es'],
+	defaultLocale: 'ua',
+	// localePrefix: 'as-needed',
+})
+
+export const config = {
+	matcher: ['/((?!api|_next|.*\\..*).*)'],
+}
 
 export async function middleware(request: NextRequest) {
 	const response = NextResponse.next({
@@ -123,6 +134,7 @@ export async function middleware(request: NextRequest) {
 			return NextResponse.redirect(new URL('/', request.url))
 		}
 	}
+
 	// Add CORS headers to all responses
 	response.headers.set('Access-Control-Allow-Origin', '*')
 	response.headers.set(
@@ -135,8 +147,4 @@ export async function middleware(request: NextRequest) {
 	)
 
 	return response
-}
-
-export const config = {
-	matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 }

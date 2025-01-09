@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { FC } from 'react'
 import StatItem from './StatItem'
+import { useTranslations } from 'next-intl'
 
 const statItems = [
 	{
@@ -37,6 +38,8 @@ const statItems = [
 ]
 
 const Downloads: FC = () => {
+	const t = useTranslations('we.downloads')
+
 	return (
 		<section className={'mt-[120px] mb-[90px]'}>
 			<div className='containers'>
@@ -45,13 +48,10 @@ const Downloads: FC = () => {
 					<div className='w-full max-w-[600px]'>
 						<div className='mb-8'>
 							<h1 className='text-[40px] sm:text-[54px] font-extrabold mb-[17px] leading-[135%] flex flex-col items-start gap-2'>
-								Завантажуй та отримуй кешбек
+								{t('title')}
 							</h1>
 							<p className='text-[14px] text-[#262525] text-left leading-[160%] -tracking-[0.04em] font-normal  '>
-								Відкрий нові горизонти фінансової свободи! Завантажуй наш
-								додаток і отримуй кешбек у криптовалюті за кожну покупку.
-								Розпочни свій шлях до пасивного доходу вже сьогодні — не
-								пропусти шанс перетворити витрати на прибуток!
+								{t('description')}
 							</p>
 							<div className='flex gap-[7px] mt-[52px] mb-[64px]'>
 								<a href='#' className='hover:opacity-80 transition-opacity'>
@@ -59,7 +59,7 @@ const Downloads: FC = () => {
 										src={'/we/googleplay2.svg'}
 										width={159}
 										height={42}
-										alt='Nomo App Interface'
+										alt={t('ctaGoogle')}
 									/>
 								</a>
 								<a href='#' className='hover:opacity-80 transition-opacity'>
@@ -67,7 +67,7 @@ const Downloads: FC = () => {
 										src={'/we/apple2.svg'}
 										width={144}
 										height={42}
-										alt='Nomo App Interface'
+										alt={t('ctaApple')}
 									/>
 								</a>
 							</div>

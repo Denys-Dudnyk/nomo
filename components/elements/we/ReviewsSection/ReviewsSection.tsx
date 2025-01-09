@@ -7,6 +7,7 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { ReviewsItem } from './ReviewsItem'
 import Image from 'next/image'
 import DevelopModal from '@/components/ui/DevelopModal/DevelopModal'
+import { useTranslations } from 'next-intl'
 
 const testimonials = [
 	{
@@ -57,6 +58,7 @@ export const ReviewsSection = () => {
 	const itemsPerPage = isMobile ? 1 : 3
 	const totalPages = Math.ceil(testimonials.length / itemsPerPage)
 	const [showDev, setShowDev] = useState(false)
+	const t = useTranslations('we.review')
 
 	const nextSlide = () => {
 		setCurrentIndex(prev => (prev + 1) % totalPages)
@@ -83,11 +85,11 @@ export const ReviewsSection = () => {
 			<section className='py-16 px-4 max-w-7xl mx-auto text-[#0f0f0f]'>
 				<h2 className='text-[40px] sm:text-[54px] font-extrabold text-center mb-[56px] '>
 					<span className='relative'>
-						Що кажуть наші
+						{t('what_says_our')}
 						<span className='absolute -bottom-3 left-[55%] transform -translate-x-1/2 w-full h-[9px] bg-accent rounded-full'></span>
 					</span>{' '}
 					<span className='relative'>
-						клієнти
+						{t('clients')}
 						<span className='absolute -bottom-3 left-[55%] transform -translate-x-1/2 w-[55%] h-[9px] bg-accent rounded-full'></span>
 					</span>
 				</h2>
@@ -118,7 +120,7 @@ export const ReviewsSection = () => {
 									className='text-[#919191] font-bold text-[18px] underline  transition-colors'
 									onClick={openDevelopModal}
 								>
-									Додати коментар...
+									{t('create_review')}
 								</button>
 							</div>
 						</div>

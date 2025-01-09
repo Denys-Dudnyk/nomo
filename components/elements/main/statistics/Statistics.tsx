@@ -1,4 +1,5 @@
 import StatsCard from './StatsCard'
+import { useTranslations } from 'next-intl'
 
 const generateMockData = (points: number) => {
 	return Array.from({ length: points }, (_, i) => ({
@@ -9,6 +10,8 @@ const generateMockData = (points: number) => {
 }
 
 const Statistics = () => {
+	const t = useTranslations('mainpage.statistics')
+
 	const mockData = {
 		visits: generateMockData(12),
 		users: generateMockData(12),
@@ -18,25 +21,26 @@ const Statistics = () => {
 
 	return (
 		<section className={'mt-16'}>
-			<div className='containers '>
+			<div className='containers'>
 				<h2 className='text-[52px] leading-[62.93px] text-[#000]'>
-					<span className='text-[#7F7F7F]  font-normal  '>Block</span> N{' '}
-					<span className='text-[#7F7F7F]  font-normal  '>сьогодні</span>
+					<span className='text-[#7F7F7F] font-normal'>{t('block')}</span> N{' '}
+					<span className='text-[#7F7F7F] font-normal'>{t('today')}</span>
 				</h2>
-				<h3 className='text-[30px] sm:text-[52px] font-bold   leading-tight sm:leading-[62.93px] text-[#1D2733] mb-12'>
-					Найновіша статистика мережі
+				<h3 className='text-[30px] sm:text-[52px] font-bold leading-tight sm:leading-[62.93px] text-[#1D2733] mb-12'>
+					{t('subtitle')}
 				</h3>
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-[70px]'>
-					<StatsCard title='Відвідано сайт' data={mockData.visits} />
-					<StatsCard title='Користувачів зареєстровано' data={mockData.users} />
+					<StatsCard title={t('cards.visits')} data={mockData.visits} />
+					<StatsCard title={t('cards.users')} data={mockData.users} />
 					<StatsCard
-						title='Здійснено транзакцій'
+						title={t('cards.transactions')}
 						data={mockData.transactions}
 					/>
-					<StatsCard title='Нараховано криптвалюти' data={mockData.crypto} />
+					<StatsCard title={t('cards.crypto')} data={mockData.crypto} />
 				</div>
 			</div>
 		</section>
 	)
 }
+
 export default Statistics
