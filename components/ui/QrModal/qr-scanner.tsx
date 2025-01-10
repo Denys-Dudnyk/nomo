@@ -21,9 +21,9 @@ interface QRScannerProps {
 
 export function QRScanner({ isOpen, onClose, onSuccess }: QRScannerProps) {
 	const [scanning, setScanning] = useState(false)
-	const [facingMode, setFacingMode] = useState<'environment' | 'user'>(
-		'environment'
-	)
+	// const [facingMode, setFacingMode] = useState<'environment' | 'user'>(
+	// 	'environment'
+	// )
 	const { toast } = useToast()
 
 	const handleScan = async (result: any) => {
@@ -63,29 +63,37 @@ export function QRScanner({ isOpen, onClose, onSuccess }: QRScannerProps) {
 		}
 	}
 
-	const toggleCamera = () => {
-		setFacingMode(prev => (prev === 'environment' ? 'user' : 'environment'))
-	}
+	// const toggleCamera = () => {
+	// 	setFacingMode(prev => (prev === 'environment' ? 'user' : 'environment'))
+	// }
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className='sm:max-w-md bg-[#1C1C1C] border-gray-800'>
 				<DialogHeader className='flex flex-row items-center justify-between'>
 					<DialogTitle className='text-white'>Scan QR Code</DialogTitle>
-					<Button
+					{/* <Button
 						variant='ghost'
 						size='icon'
 						onClick={toggleCamera}
 						className='text-white'
 					>
 						<FlipHorizontal className='h-4 w-4' />
-					</Button>
+					</Button> */}
 				</DialogHeader>
-				<div className='w-full aspect-square'>
+				<div className='w-full aspect-square bg-transparent flex items-center justify-center'>
 					<QrReader
 						onResult={handleScan}
-						constraints={{ facingMode }}
-						containerStyle={{ width: '100%', height: '100%' }}
+						constraints={{ facingMode: 'user' }}
+						containerStyle={{
+							width: '100%',
+							height: '100%',
+							position: 'relative',
+						}}
+						videoStyle={{
+							width: '100%',
+							height: '100%',
+						}}
 					/>
 				</div>
 			</DialogContent>
