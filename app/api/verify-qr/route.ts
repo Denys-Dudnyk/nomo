@@ -5,33 +5,43 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
 	try {
 		const cookieStore = cookies()
-		//@ts-ignore
+		// @ts-ignore
 		const supabase = await createClient(cookieStore)
 
 		const { qrData } = await request.json()
+		console.log('Request QR data:', qrData)
 
 		// Get current user
 		const {
 			data: { user },
 			error: userError,
 		} = await supabase.auth.getUser()
+
 		if (userError || !user) {
+			console.error('User auth error:', userError)
 			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 		}
 
 		// Verify QR data format
 		try {
 			const { userId, timestamp, signature } = JSON.parse(qrData)
+			console.log('Parsed QR data:', { userId, timestamp, signature })
 
 			// Check if QR code has already been used
-			const { data: existingTransaction } = await supabase
+			const { data: existingTransaction, error: fetchError } = await supabase
 				.from('transactions')
 				.select('id')
 				.eq('user_id', userId)
 				.eq('qr_signature', signature)
-				.single()
+				.maybeSingle()
+
+			if (fetchError) {
+				console.error('Transaction fetch error:', fetchError)
+				throw fetchError
+			}
 
 			if (existingTransaction) {
+				console.warn('QR code already used')
 				return NextResponse.json(
 					{ error: 'QR code already used' },
 					{ status: 400 }
@@ -43,26 +53,33 @@ export async function POST(request: Request) {
 				.from('transactions')
 				.insert([
 					{
-						user_id: userId,
+						user_id: user.id,
 						description: 'QR Code Verification',
 						status: 'success',
 						amount: 150, // Example amount
 						savings_percent: 28.67,
 						savings_amount: 40,
 						balance: 40,
+						qr_code_id: userId,
 						qr_signature: signature,
 					},
 				])
 				.select()
 				.single()
 
-			if (transactionError) throw transactionError
+			if (transactionError) {
+				console.error('Transaction insert error:', transactionError)
+				throw transactionError
+			}
 
+			console.log('Transaction created:', transaction)
 			return NextResponse.json({ success: true, transaction })
 		} catch (e) {
+			console.error('QR code parsing or validation error:', e)
 			return NextResponse.json({ error: 'Invalid QR code' }, { status: 400 })
 		}
 	} catch (error) {
+		console.error('Unexpected server error:', error)
 		return NextResponse.json({ error: 'Server error' }, { status: 500 })
 	}
 }

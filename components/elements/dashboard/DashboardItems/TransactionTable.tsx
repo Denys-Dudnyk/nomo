@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -27,6 +27,9 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import Image from 'next/image'
+import { getTransactions } from '@/app/actions/transactions'
+// import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/client'
 
 interface TransactionsTableProps {
 	currentMonth: string
@@ -36,75 +39,75 @@ interface TransactionsTableProps {
 }
 
 // Sample data - replace with real data from your API
-const transactions = [
-	{
-		id: 1,
-		date: '05 Трав.',
-		time: '03:46',
-		description: 'Номер у Готелі "ЛЬВІВ"',
-		status: 'Успішно',
-		amount: 150,
-		cashback: 40,
-		balance: 125050.0,
-		ncoin: 0.00013398,
-	},
-	{
-		id: 2,
-		date: '05 Трав.',
-		time: '03:46',
-		description: 'Номер у Готелі "ЛЬВІВ"',
-		status: 'Скасований',
-		amount: 150,
-		cashback: 40,
-		balance: 125050.0,
-		ncoin: 0.00013398,
-	},
-	{
-		id: 3,
-		date: '05 Трав.',
-		time: '03:46',
-		description: 'Номер у Готелі "ЛЬВІВ"',
-		status: 'Скасований',
-		amount: 150,
-		cashback: 40,
-		balance: 125050.0,
-		ncoin: 0.00013398,
-	},
-	{
-		id: 4,
-		date: '05 Трав.',
-		time: '03:46',
-		description: 'Номер у Готелі "ЛЬВІВ"',
-		status: 'Успішно',
-		amount: 150,
-		cashback: 40,
-		balance: 125050.0,
-		ncoin: 0.00013398,
-	},
-	{
-		id: 5,
-		date: '05 Трав.',
-		time: '03:46',
-		description: 'Номер у Готелі "ЛЬВІВ"',
-		status: 'Скасований',
-		amount: 150,
-		cashback: 40,
-		balance: 125050.0,
-		ncoin: 0.00013398,
-	},
-	{
-		id: 6,
-		date: '05 Трав.',
-		time: '03:46',
-		description: 'Номер у Готелі "ЛЬВІВ"',
-		status: 'Скасований',
-		amount: 150,
-		cashback: 40,
-		balance: 125050.0,
-		ncoin: 0.00013398,
-	},
-	// Add more sample transactions...
-]
+// const transactions = [
+// 	{
+// 		id: 1,
+// 		date: '05 Трав.',
+// 		time: '03:46',
+// 		description: 'Номер у Готелі "ЛЬВІВ"',
+// 		status: 'Успішно',
+// 		amount: 150,
+// 		cashback: 40,
+// 		balance: 125050.0,
+// 		ncoin: 0.00013398,
+// 	},
+// 	{
+// 		id: 2,
+// 		date: '05 Трав.',
+// 		time: '03:46',
+// 		description: 'Номер у Готелі "ЛЬВІВ"',
+// 		status: 'Скасований',
+// 		amount: 150,
+// 		cashback: 40,
+// 		balance: 125050.0,
+// 		ncoin: 0.00013398,
+// 	},
+// 	{
+// 		id: 3,
+// 		date: '05 Трав.',
+// 		time: '03:46',
+// 		description: 'Номер у Готелі "ЛЬВІВ"',
+// 		status: 'Скасований',
+// 		amount: 150,
+// 		cashback: 40,
+// 		balance: 125050.0,
+// 		ncoin: 0.00013398,
+// 	},
+// 	{
+// 		id: 4,
+// 		date: '05 Трав.',
+// 		time: '03:46',
+// 		description: 'Номер у Готелі "ЛЬВІВ"',
+// 		status: 'Успішно',
+// 		amount: 150,
+// 		cashback: 40,
+// 		balance: 125050.0,
+// 		ncoin: 0.00013398,
+// 	},
+// 	{
+// 		id: 5,
+// 		date: '05 Трав.',
+// 		time: '03:46',
+// 		description: 'Номер у Готелі "ЛЬВІВ"',
+// 		status: 'Скасований',
+// 		amount: 150,
+// 		cashback: 40,
+// 		balance: 125050.0,
+// 		ncoin: 0.00013398,
+// 	},
+// 	{
+// 		id: 6,
+// 		date: '05 Трав.',
+// 		time: '03:46',
+// 		description: 'Номер у Готелі "ЛЬВІВ"',
+// 		status: 'Скасований',
+// 		amount: 150,
+// 		cashback: 40,
+// 		balance: 125050.0,
+// 		ncoin: 0.00013398,
+// 	},
+// 	// Add more sample transactions...
+// ]
 
 const today = new Date()
 const formattedDate = `${today.getDate()}/${
@@ -126,6 +129,42 @@ export default function TransactionsTable({
 	const formatNCOIN = (value: number) => value.toFixed(8)
 	const formatUAH = (value: number) => `${value} UAH`
 	const formatPercent = (value: number) => `${value.toFixed(2)}%`
+
+	const [transactions, setTransactions] = useState<any[]>([])
+	const [loading, setLoading] = useState<boolean>(true)
+	const [error, setError] = useState<string | null>(null)
+
+	// Fetch transactions when the component mounts
+	useEffect(() => {
+		const fetchTransactions = async () => {
+			try {
+				// Assuming you have a way to get the current userId
+				// const cookieStore = cookies()
+				// @ts-ignore
+				const supabase = await createClient()
+				const {
+					data: { user },
+				} = await supabase.auth.getUser()
+				const userId = String(user?.id) // Replace with real user ID
+				const data = await getTransactions(userId)
+				setTransactions(data)
+				setLoading(false)
+			} catch (err) {
+				setError('Failed to load transactions')
+				setLoading(false)
+			}
+		}
+
+		fetchTransactions()
+	}, [])
+
+	if (loading) {
+		return <div>Loading...</div>
+	}
+
+	if (error) {
+		return <div>{error}</div>
+	}
 
 	return (
 		<Card className='bg-[#121212] border border-[#242424] rounded-[19px] shadow-table'>
@@ -246,7 +285,7 @@ export default function TransactionsTable({
 											<div className='flex flex-col'>
 												{tx.description}
 												<div className='text-[11px] font-normal text-[#919191]'>
-													{tx.time}
+													{tx.created_at}
 												</div>
 											</div>
 										</div>
@@ -255,14 +294,14 @@ export default function TransactionsTable({
 										<div className='flex items-center gap-[12px]'>
 											<div
 												className={`w-[10px] h-[10px] rounded-full ${
-													tx.status === 'Успішно'
+													tx.status === 'success'
 														? 'bg-[#15B76B]'
 														: 'bg-[#DC5656]'
 												}`}
 											/>
 											<span
 												className={
-													tx.status === 'Успішно'
+													tx.status === 'success'
 														? 'text-[#15B76B]'
 														: 'text-[#DC5656]'
 												}
@@ -283,7 +322,7 @@ export default function TransactionsTable({
 									<TableCell>₴ {tx.balance.toLocaleString()}</TableCell>
 									<TableCell>
 										<div className='bg-[#1E2128] px-[26px] py-[4px] text-[11px] font-medium text-accent rounded-[7px] text-center'>
-											{tx.ncoin} Ncoin
+											{tx.ncoins_accrued} Ncoin
 										</div>
 									</TableCell>
 								</TableRow>
