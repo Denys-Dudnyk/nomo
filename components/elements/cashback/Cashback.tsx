@@ -18,16 +18,11 @@ import { UserProfile } from '@/types/database'
 
 import { getUserProfile } from '@/lib/database'
 import { createClient } from '@/lib/supabase/server'
+import { useIsAdmin } from '@/hooks/useIsAdmin'
 
 const ITEMS_PER_PAGE = 15
 
-const Cashback = ({
-	initialCompanies,
-	profile
-}: {
-	initialCompanies: Company[]
-	profile: UserProfile | null
-}) => {
+const Cashback = ({ initialCompanies }: { initialCompanies: Company[] }) => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
@@ -48,7 +43,7 @@ const Cashback = ({
 
 	const currentItems = filteredItems.slice(startIndex, endIndex)
 
-	const isAdmin = profile?.role === 'admin'
+	const { isAdmin } = useIsAdmin()
 
 	const handleAddDeal = () => {
 		router.push('/company/new')
@@ -126,16 +121,16 @@ const Cashback = ({
 
 							{/* Кнопка для создания доступна только администраторам */}
 							{isAdmin && (
-							<Card className='min-h-[250px] w-full flex justify-center items-center border-dashed border-2 border-gray-300 hover:border-accent transition-colors duration-300 self-center'>
-								<CardContent className='flex flex-col items-center justify-center p-4 space-y-4'>
-									<button
-										className='w-full h-full flex justify-center items-center text-7xl text-gray-400 hover:text-accent transition-colors duration-300'
-										onClick={handleAddDeal}
-									>
-										+
-									</button>
-								</CardContent>
-							</Card>
+								<Card className='min-h-[250px] w-full flex justify-center items-center border-dashed border-2 border-gray-300 hover:border-accent transition-colors duration-300 self-center'>
+									<CardContent className='flex flex-col items-center justify-center p-4 space-y-4'>
+										<button
+											className='w-full h-full flex justify-center items-center text-7xl text-gray-400 hover:text-accent transition-colors duration-300'
+											onClick={handleAddDeal}
+										>
+											+
+										</button>
+									</CardContent>
+								</Card>
 							)}
 						</motion.div>
 					</div>

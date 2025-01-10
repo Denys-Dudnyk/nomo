@@ -4,22 +4,22 @@ import { getUserProfile } from '@/lib/database'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function Page() {
-	const supabase = await createClient() // Добавляем await
+	//const supabase = await createClient() // Добавляем await
 
 	// Получаем компании
 	const companies = await getCompanies()
 
 	// Получаем текущую сессию
-	const {
-		data: { session },
-	} = await supabase.auth.getSession()
+	// const {
+	// 	data: { session },
+	// } = await supabase.auth.getSession()
 
-	let userProfile = null
+	// let userProfile = null
 
-	if (session && session.user) {
-		// Получаем профиль пользователя
-		userProfile = await getUserProfile(session.user.id)
-	}
+	// if (session && session.user) {
+	// 	// Получаем профиль пользователя
+	// 	userProfile = await getUserProfile(session.user.id)
+	// }
 
-	return <Cashback initialCompanies={companies} profile={userProfile} />
+	return <Cashback initialCompanies={companies} />
 }

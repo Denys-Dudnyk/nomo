@@ -30,7 +30,7 @@ export default function UserHeader({ user, profile }: UserHeaderProps) {
 			</div>
 
 			<div className='w-full lg:w-auto'>
-				<NavigationCards userProfile={profile} />
+				<NavigationCards userProfile={profile} user={user} />
 			</div>
 			<div className='flex justify-end card-h'>
 				<CardPreview cardHolder={profile?.full_name} />

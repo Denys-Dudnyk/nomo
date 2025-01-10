@@ -123,6 +123,10 @@ export default function TransactionsTable({
 		today.getMonth() + 1
 	}.${today.getFullYear()}`
 
+	const formatNCOIN = (value: number) => value.toFixed(8)
+	const formatUAH = (value: number) => `${value} UAH`
+	const formatPercent = (value: number) => `${value.toFixed(2)}%`
+
 	return (
 		<Card className='bg-[#121212] border border-[#242424] rounded-[19px] shadow-table'>
 			<div className='p-6'>

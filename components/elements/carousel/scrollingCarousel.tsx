@@ -11,10 +11,11 @@ import CashbackItem from '../cashback/CashbackItem'
 import CashbackModal from '../cashback/CashbackModal/CashBackModal'
 import { Company } from '@/types/company'
 import { useRouter } from 'next/navigation'
+import { useIsAdmin } from '@/hooks/useIsAdmin'
 
 export function CarouselScroll({
 	initialCompanies,
-	isAdmin = false,
+	isAdmin,
 }: {
 	initialCompanies: Company[]
 	isAdmin: boolean

@@ -18,6 +18,16 @@ import {
 	X,
 	Star,
 	Slash,
+	LucideIcon,
+	Building2,
+	Wallet,
+	Gift,
+	Coffee,
+	Pizza,
+	Car,
+	Plane,
+	Hotel,
+	ShoppingBag,
 } from 'lucide-react'
 import { Facebook, Instagram, Twitter } from 'lucide-react'
 import { Company } from '@/types/company'
@@ -32,18 +42,28 @@ import {
 	BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { getStorageUrl } from '@/lib/supabase/storage'
+import { useIsAdmin } from '@/hooks/useIsAdmin'
 
 interface CompanyItemProps {
 	company: Company
 }
 
-const iconComponents = {
-	clock: Clock,
-	shield: Shield,
-	map: Map,
-	spa: Spa,
-}
-
+const iconList: LucideIcon[] = [
+	Clock,
+	Shield,
+	Map,
+	Spa,
+	Building2,
+	Wallet,
+	Gift,
+	Star,
+	Coffee,
+	Pizza,
+	Car,
+	Plane,
+	Hotel,
+	ShoppingBag,
+]
 export default function CompanyItem({ company }: CompanyItemProps) {
 	const [activeTab, setActiveTab] = useState('about')
 	const [showQRCode, setShowQRCode] = useState(false)
@@ -58,6 +78,12 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 
 	const bannerUrl = getStorageUrl(company.banner_url)
 	const logoUrl = getStorageUrl(company.logo_url)
+	const { isAdmin } = useIsAdmin()
+
+	const getRandomIcon = () => {
+		const randomIndex = Math.floor(Math.random() * iconList.length)
+		return iconList[randomIndex]
+	}
 
 	return (
 		<div className='min-h-screen bg-[#1C1C1C] text-white'>
@@ -152,15 +178,15 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 							>
 								<QrCode className='h-5 w-5' />
 							</Button>
-							{/* {isAdmin && ( */}
-							<Button
-								size='icon'
-								className='w-10 h-10 bg-gray-700 hover:bg-gray-600 text-white'
-								onClick={handleEditClick}
-							>
-								<Edit className='h-5 w-5' />
-							</Button>
-							{/* )} */}
+							{isAdmin && (
+								<Button
+									size='icon'
+									className='w-10 h-10 bg-gray-700 hover:bg-gray-600 text-white'
+									onClick={handleEditClick}
+								>
+									<Edit className='h-5 w-5' />
+								</Button>
+							)}
 
 							<Button className='bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 w-full md:w-auto'>
 								Contact Us
@@ -215,22 +241,18 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 							<div className='bg-[#252525] rounded-xl p-6'>
 								<h2 className='text-xl font-bold mb-6'>Advantages</h2>
 								<div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
-									{company.advantages.map((advantage, index) => (
-										// const IconComponent =
-										// 	iconComponents[
-										// 		advantage.icon as keyof typeof iconComponents
-										// 	]
-										// return (
-										<div key={index} className='flex items-center gap-3'>
-											<div className='w-10 h-10 rounded-full bg-[#303030] flex items-center justify-center'>
-												{/* {IconComponent && (
-														<IconComponent className='w-6 h-6 text-orange-500' />
-													)} */}
+									{company.advantages.map((advantage, index) => {
+										const IconComponent = getRandomIcon()
+										return (
+											<div key={index} className='flex items-center gap-3'>
+												<div className='w-10 h-10 rounded-full bg-[#303030] flex items-center justify-center'>
+													<IconComponent className='w-6 h-6 text-orange-500' />
+												</div>
+												<span>{advantage}</span>
 											</div>
-											<span>{advantage}</span>
-										</div>
-										// )
-									))}
+		
+										)
+									})}
 								</div>
 							</div>
 

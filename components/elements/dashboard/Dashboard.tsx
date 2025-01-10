@@ -9,6 +9,7 @@ import NavigationCards from './DashboardItems/NavigationCards'
 import TransactionsTable from './DashboardItems/TransactionTable'
 import { Button } from '@/components/ui/button'
 import Balance from './DashboardItems/Balance'
+import { ScanButton } from '@/components/ui/QrModal/scan-button'
 
 interface DashboardContentProps {
 	session: {
@@ -26,6 +27,7 @@ export default function Dashboard({ session, profile }: DashboardContentProps) {
 			<div className='grid grid-cols-1 gap-8'>
 				<UserHeader user={session.user} profile={profile} />
 				<Balance balance={profile?.cashback_balance || 0} profile={profile} />
+				<ScanButton />
 				<TransactionsTable
 					currentMonth={currentMonth}
 					currency={currency}
