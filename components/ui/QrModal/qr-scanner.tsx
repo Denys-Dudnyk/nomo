@@ -1,16 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { QrReader } from 'react-qr-reader'
+import { useState } from 'react'
+import { Scanner, IDetectedBarcode } from '@yudiel/react-qr-scanner'
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog'
-// import { useToast } from '@/components/ui/use-toast'
-import { Button } from '@/components/ui/button'
-import { FlipHorizontal } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
 interface QRScannerProps {
@@ -20,14 +17,14 @@ interface QRScannerProps {
 }
 
 export function QRScanner({ isOpen, onClose, onSuccess }: QRScannerProps) {
-	const [scanning, setScanning] = useState(false)
-	// const [facingMode, setFacingMode] = useState<'environment' | 'user'>(
-	// 	'environment'
-	// )
 	const { toast } = useToast()
+	const [scanning, setScanning] = useState(false)
 
-	const handleScan = async (result: any) => {
-		if (result && !scanning) {
+	const handleScan = async (detectedCodes: IDetectedBarcode[]) => {
+		// Берем первый найденный QR-код из массива
+		const data = detectedCodes[0]?.rawValue
+
+		if (data && !scanning) {
 			setScanning(true)
 			try {
 				const response = await fetch('/api/verify-qr', {
@@ -35,13 +32,13 @@ export function QRScanner({ isOpen, onClose, onSuccess }: QRScannerProps) {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({ qrData: result?.text }),
+					body: JSON.stringify({ qrData: data }),
 				})
 
-				const data = await response.json()
+				const result = await response.json()
 
 				if (!response.ok) {
-					throw new Error(data.error)
+					throw new Error(result.error || 'Failed to verify QR code')
 				}
 
 				toast({
@@ -63,37 +60,24 @@ export function QRScanner({ isOpen, onClose, onSuccess }: QRScannerProps) {
 		}
 	}
 
-	// const toggleCamera = () => {
-	// 	setFacingMode(prev => (prev === 'environment' ? 'user' : 'environment'))
-	// }
-
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className='sm:max-w-md bg-[#1C1C1C] border-gray-800'>
-				<DialogHeader className='flex flex-row items-center justify-between'>
+				<DialogHeader>
 					<DialogTitle className='text-white'>Scan QR Code</DialogTitle>
-					{/* <Button
-						variant='ghost'
-						size='icon'
-						onClick={toggleCamera}
-						className='text-white'
-					>
-						<FlipHorizontal className='h-4 w-4' />
-					</Button> */}
 				</DialogHeader>
-				<div className='w-full aspect-square bg-transparent flex items-center justify-center'>
-					<QrReader
-						onResult={handleScan}
-						constraints={{ facingMode: 'user' }}
-						containerStyle={{
-							width: '100%',
-							height: '100%',
-							position: 'relative',
-						}}
-						videoStyle={{
-							width: '100%',
-							height: '100%',
-						}}
+				<div className='aspect-square bg-transparent flex items-center justify-center w-full h-full'>
+					<Scanner
+						onScan={handleScan} // Адаптировано под массив IDetectedBarcode[]
+						onError={error =>
+							toast({
+								title: 'Camera Error',
+								// @ts-ignore
+								description: error?.message || 'Failed to access camera',
+								variant: 'destructive',
+							})
+						}
+						// styles={ }
 					/>
 				</div>
 			</DialogContent>
