@@ -28,11 +28,11 @@ export async function POST(request: Request) {
 			console.log('Parsed QR data:', { userId, timestamp, signature })
 
 			// Verify that the QR code belongs to a valid user
-			const { data: qrOwner, error: ownerError } = await supabase
-				.from('user_profiles')
-				.select('id')
-				.eq('id', userId)
-				.single()
+			// const { data: qrOwner, error: ownerError } = await supabase
+			// 	.from('user_profiles')
+			// 	.select('user_id')
+			// 	.eq('qr_code_id', userId)
+			// 	.single()
 
 			const { data: qrTransaction, error: qrError } = await supabase
 				.from('transactions')
@@ -40,13 +40,13 @@ export async function POST(request: Request) {
 				.eq('qr_code_id', userId)
 				.single()
 
-			if (ownerError || !qrOwner) {
-				console.error('Invalid QR code owner:', ownerError)
-				return NextResponse.json(
-					{ error: 'Invalid QR code owner' },
-					{ status: 400 }
-				)
-			}
+			// if (ownerError || !qrOwner) {
+			// 	console.error('Invalid QR code owner:', ownerError)
+			// 	return NextResponse.json(
+			// 		{ error: 'Invalid QR code owner' },
+			// 		{ status: 400 }
+			// 	)
+			// }
 
 			const qrOwnerId = qrTransaction?.user_id
 
