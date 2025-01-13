@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { format } from 'date-fns'
+import { uk } from 'date-fns/locale'
 
 export async function POST(request: Request) {
 	try {
@@ -72,13 +74,18 @@ export async function POST(request: Request) {
 				)
 			}
 
+			const now = new Date()
+
+			const formattedDate = format(now, 'dd MMM.', { locale: uk }) // Например: 05 Трав.
+			const formattedTime = format(now, 'HH:mm') // Например: 03:46
+
 			// Create new transaction for the QR code owner
 			const { data: transaction, error: transactionError } = await supabase
 				.from('transactions')
 				.insert([
 					{
 						user_id: id, // Use QR owner's ID instead of scanner's ID
-						description: 'QR Code Verification',
+						description: 'Hyatt Regency',
 						status: 'success',
 						amount: 150,
 						savings_percent: 28.67,
@@ -87,7 +94,8 @@ export async function POST(request: Request) {
 						qr_code_id: userId,
 						qr_signature: signature,
 						scanned_by: user.id, // Store who scanned the QR code
-						scanned_at: new Date().toISOString(),
+						scanned_date: formattedDate,
+						scanned_time: formattedTime,
 					},
 				])
 				.select()

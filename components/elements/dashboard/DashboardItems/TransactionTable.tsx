@@ -285,7 +285,7 @@ export default function TransactionsTable({
 											<div className='flex flex-col'>
 												{tx.description}
 												<div className='text-[11px] font-normal text-[#919191]'>
-													{tx.created_at}
+													{tx.scanned_at}
 												</div>
 											</div>
 										</div>
@@ -316,7 +316,7 @@ export default function TransactionsTable({
 											<div className='bg-accent text-[#fff] py-[1px] px-[11px] text-[11px] font-semibold leading-[18px] rounded-[7px] '>
 												28,67%
 											</div>
-											<div>{tx.cashback} UAH</div>
+											<div>{tx.savings_amount} UAH</div>
 										</div>
 									</TableCell>
 									<TableCell>₴ {tx.balance.toLocaleString()}</TableCell>
