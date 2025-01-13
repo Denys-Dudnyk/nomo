@@ -25,12 +25,15 @@ export default function NavigationCards({
 
 	const [showQRCode, setShowQRCode] = useState(false)
 	const [qrCodeId, setQrCodeId] = useState<string | null>(null)
+
 	const [isVerified, setIsVerified] = useState(false)
 
 	useEffect(() => {
 		const fetchQRCode = async () => {
 			try {
 				const qrId = await getUserQRCode(user.id)
+				const id = user.id
+
 				setQrCodeId(qrId)
 				const verified = await isQRCodeVerified(qrId)
 				setIsVerified(verified)

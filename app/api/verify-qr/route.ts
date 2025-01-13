@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 		const { qrData } = await request.json()
 		console.log('Request QR data:', qrData)
 
-		// Get current user
+		// Get current user (scanner)
 		const {
 			data: { user },
 			error: userError,
@@ -27,11 +27,34 @@ export async function POST(request: Request) {
 			const { userId, timestamp, signature } = JSON.parse(qrData)
 			console.log('Parsed QR data:', { userId, timestamp, signature })
 
+			// Verify that the QR code belongs to a valid user
+			const { data: qrOwner, error: ownerError } = await supabase
+				.from('user_profiles')
+				.select('id')
+				.eq('id', userId)
+				.single()
+
+			const { data: qrTransaction, error: qrError } = await supabase
+				.from('transactions')
+				.select('user_id')
+				.eq('qr_code_id', userId)
+				.single()
+
+			if (ownerError || !qrOwner) {
+				console.error('Invalid QR code owner:', ownerError)
+				return NextResponse.json(
+					{ error: 'Invalid QR code owner' },
+					{ status: 400 }
+				)
+			}
+
+			const qrOwnerId = qrTransaction?.user_id
+
 			// Check if QR code has already been used
 			const { data: existingTransaction, error: fetchError } = await supabase
 				.from('transactions')
 				.select('id')
-				.eq('user_id', userId)
+				.eq('user_id', userId) // Check against QR owner's ID
 				.eq('qr_signature', signature)
 				.maybeSingle()
 
@@ -48,20 +71,21 @@ export async function POST(request: Request) {
 				)
 			}
 
-			// Create new transaction
+			// Create new transaction for the QR code owner
 			const { data: transaction, error: transactionError } = await supabase
 				.from('transactions')
 				.insert([
 					{
-						user_id: user.id,
+						user_id: qrOwnerId, // Use QR owner's ID instead of scanner's ID
 						description: 'QR Code Verification',
 						status: 'success',
-						amount: 150, // Example amount
+						amount: 150,
 						savings_percent: 28.67,
 						savings_amount: 40,
 						balance: 40,
-						qr_code_id: userId,
 						qr_signature: signature,
+						scanned_by: user.id, // Store who scanned the QR code
+						scanned_at: new Date().toISOString(),
 					},
 				])
 				.select()
