@@ -7,7 +7,11 @@ import { Button } from '@/components/ui/button'
 import { UserProfile } from '@/types/database'
 import { useEffect, useState } from 'react'
 import SettingsModal from '@/components/ui/settings-modal'
-import { getUserQRCode, isQRCodeVerified } from '@/app/actions/qr-code'
+import {
+	getUserQRCode,
+	getUserQRCodeId,
+	isQRCodeVerified,
+} from '@/app/actions/qr-code'
 import { User } from '@supabase/supabase-js'
 import { QRCodeModal } from '@/components/ui/QrModal/qr-code-modal'
 
@@ -25,6 +29,7 @@ export default function NavigationCards({
 
 	const [showQRCode, setShowQRCode] = useState(false)
 	const [qrCodeId, setQrCodeId] = useState<string | null>(null)
+	const [id, setId] = useState<string | null>(null)
 
 	const [isVerified, setIsVerified] = useState(false)
 
@@ -32,9 +37,11 @@ export default function NavigationCards({
 		const fetchQRCode = async () => {
 			try {
 				const qrId = await getUserQRCode(user.id)
-				const id = user.id
-
 				setQrCodeId(qrId)
+				const id = await getUserQRCodeId(qrId)
+
+				setId(id)
+
 				const verified = await isQRCodeVerified(qrId)
 				setIsVerified(verified)
 			} catch (error) {
@@ -115,6 +122,7 @@ export default function NavigationCards({
 					onClose={() => setShowQRCode(false)}
 					qrValue={qrCodeId}
 					isVerified={isVerified}
+					id={id ?? ''}
 				/>
 			)}
 		</>

@@ -6,17 +6,20 @@ import { cn } from '@/lib/utils'
 import { ScanButton } from './scan-button'
 
 interface QRCodeOverlayProps {
+	id: string
 	userId: string
 	isVerified?: boolean
 	size?: number
 }
 
 export function QRCodeOverlay({
+	id,
 	userId,
 	isVerified = false,
 	size = 256,
 }: QRCodeOverlayProps) {
 	const qrData = JSON.stringify({
+		id,
 		userId,
 		timestamp: Date.now(),
 		signature: `${userId}-${Date.now()}-${Math.random()

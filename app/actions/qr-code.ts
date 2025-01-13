@@ -18,6 +18,21 @@ export async function getUserQRCode(userId: string) {
 	return data.qr_code_id
 }
 
+export async function getUserQRCodeId(qr_code_id: string) {
+	const cookieStore = cookies()
+	//@ts-ignore
+	const supabase = await createClient(cookieStore)
+
+	const { data, error } = await supabase
+		.from('user_profiles')
+		.select('user_id')
+		.eq('qr_code_id', qr_code_id)
+		.single()
+
+	if (error) throw error
+	return data.user_id
+}
+
 export async function verifyQRCode(qrCodeId: string) {
 	const cookieStore = cookies()
 	//@ts-ignore

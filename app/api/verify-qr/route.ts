@@ -24,8 +24,8 @@ export async function POST(request: Request) {
 
 		// Verify QR data format
 		try {
-			const { userId, timestamp, signature } = JSON.parse(qrData)
-			console.log('Parsed QR data:', { userId, timestamp, signature })
+			const { userId, timestamp, signature, id } = JSON.parse(qrData)
+			console.log('Parsed QR data:', { userId, timestamp, signature, id })
 
 			// Verify that the QR code belongs to a valid user
 			// const { data: qrOwner, error: ownerError } = await supabase
@@ -34,11 +34,11 @@ export async function POST(request: Request) {
 			// 	.eq('qr_code_id', userId)
 			// 	.single()
 
-			const { data: qrTransaction, error: qrError } = await supabase
-				.from('transactions')
-				.select('user_id')
-				.eq('qr_code_id', userId)
-				.single()
+			// const { data: qrTransaction, error: qrError } = await supabase
+			// 	.from('user_profiles')
+			// 	.select('user_id')
+			// 	.eq('qr_code_id', userId)
+			// 	.single()
 
 			// if (ownerError || !qrOwner) {
 			// 	console.error('Invalid QR code owner:', ownerError)
@@ -48,13 +48,14 @@ export async function POST(request: Request) {
 			// 	)
 			// }
 
-			const qrOwnerId = qrTransaction?.user_id
+			// const qrOwnerId = qrTransaction?.user_id
+			// console.log(`id : ${qrOwnerId}`)
 
 			// Check if QR code has already been used
 			const { data: existingTransaction, error: fetchError } = await supabase
 				.from('transactions')
 				.select('id')
-				.eq('user_id', userId) // Check against QR owner's ID
+				.eq('user_id', id) // Check against QR owner's ID
 				.eq('qr_signature', signature)
 				.maybeSingle()
 
@@ -76,7 +77,7 @@ export async function POST(request: Request) {
 				.from('transactions')
 				.insert([
 					{
-						user_id: qrOwnerId, // Use QR owner's ID instead of scanner's ID
+						user_id: id, // Use QR owner's ID instead of scanner's ID
 						description: 'QR Code Verification',
 						status: 'success',
 						amount: 150,

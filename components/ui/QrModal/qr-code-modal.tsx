@@ -12,11 +12,13 @@ interface QRCodeModalProps {
 	isOpen: boolean
 	onClose: () => void
 	qrValue: string
+	id: string
 	isVerified: boolean
 }
 
 export function QRCodeModal({
 	isOpen,
+	id,
 	onClose,
 	qrValue,
 	isVerified,
@@ -28,7 +30,12 @@ export function QRCodeModal({
 					<DialogTitle className='text-white'>Your QR Code</DialogTitle>
 				</DialogHeader>
 				<div className='flex items-center justify-center p-6'>
-					<QRCodeOverlay userId={qrValue} isVerified={isVerified} size={256} />
+					<QRCodeOverlay
+						userId={qrValue}
+						isVerified={isVerified}
+						size={256}
+						id={id}
+					/>
 				</div>
 			</DialogContent>
 		</Dialog>
