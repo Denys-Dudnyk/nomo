@@ -280,12 +280,12 @@ export default function TransactionsTable({
 														: 'bg-[#214D40]'
 												}  rounded-[7px] w-10 h-10  text-center  text-[11px] font-semibold`}
 											>
-												<div>{tx.date}</div>
+												<div>{tx.scanned_date}</div>
 											</div>
 											<div className='flex flex-col'>
 												{tx.description}
 												<div className='text-[11px] font-normal text-[#919191]'>
-													{tx.scanned_at}
+													{tx.scanned_time}
 												</div>
 											</div>
 										</div>

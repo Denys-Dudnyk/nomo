@@ -76,7 +76,7 @@ export async function POST(request: Request) {
 
 			const now = new Date()
 
-			const formattedDate = format(now, 'dd MMM.', { locale: uk }) // Например: 05 Трав.
+			const formattedDate = format(now, 'dd MMMM.', { locale: uk }) // Например: 05 Трав.
 			const formattedTime = format(now, 'HH:mm') // Например: 03:46
 
 			// Create new transaction for the QR code owner
