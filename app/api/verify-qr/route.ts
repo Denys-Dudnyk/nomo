@@ -84,6 +84,7 @@ export async function POST(request: Request) {
 						savings_percent: 28.67,
 						savings_amount: 40,
 						balance: 40,
+						qr_code_id: userId,
 						qr_signature: signature,
 						scanned_by: user.id, // Store who scanned the QR code
 						scanned_at: new Date().toISOString(),
