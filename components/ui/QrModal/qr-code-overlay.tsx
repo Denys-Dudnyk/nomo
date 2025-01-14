@@ -16,7 +16,7 @@ export function QRCodeOverlay({
 	id,
 	userId,
 	isVerified = false,
-	size = 256,
+	size = 300,
 }: QRCodeOverlayProps) {
 	const qrData = JSON.stringify({
 		id,
@@ -32,9 +32,17 @@ export function QRCodeOverlay({
 				<QRCodeSVG
 					value={qrData}
 					size={size}
-					level='H'
-					includeMargin
-					className='bg-white p-2 rounded-lg'
+					level='L'
+					// includeMargin
+					className=' p-2 rounded-lg'
+					imageSettings={{
+						src: '/qr-img.svg',
+						width: 37,
+						height: 37,
+						excavate: true,
+					}}
+					bgColor='transparent'
+					fgColor='#fff'
 				/>
 				<div
 					className='absolute inset-0 flex items-center justify-center'
@@ -47,14 +55,16 @@ export function QRCodeOverlay({
 					<QRCodeSVG
 						value={qrData}
 						size={size}
-						level='H'
-						includeMargin
-						className='bg-white p-2 rounded-lg'
+						level='L'
+						marginSize={40}
+						className='p-2 rounded-lg'
+						bgColor='transparent'
+						fgColor='#fff'
 					/>
 				</div>
-				<div className='absolute inset-0 flex items-center justify-center'>
-					<span className='text-4xl font-bold text-[#ff6b00]'>N</span>
-				</div>
+				{/* <div className='absolute inset-0 flex items-center justify-center'>
+					<span className='text-4xl font-bold text-accent'>N</span>
+				</div> */}
 			</div>
 			<div
 				className={cn(
@@ -64,7 +74,6 @@ export function QRCodeOverlay({
 			>
 				<Check className='w-6 h-6 text-white' />
 			</div>
-			<ScanButton />
 		</div>
 	)
 }

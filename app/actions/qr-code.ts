@@ -70,7 +70,7 @@ export async function isQRCodeVerified(qrCodeId: string) {
 		.select('id')
 		.eq('user_id', user.id)
 		.eq('qr_code_id', qrCodeId)
-		.eq('status', 'completed')
+		.eq('status', 'success')
 		.limit(1)
 
 	if (error) throw error

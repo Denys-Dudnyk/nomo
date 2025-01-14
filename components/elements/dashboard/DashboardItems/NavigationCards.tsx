@@ -1,7 +1,14 @@
 'use client'
 
 import { Card } from '@/components/ui/card'
-import { QrCode, UserPlus, Database, Wallet, Settings } from 'lucide-react'
+import {
+	QrCode,
+	UserPlus,
+	Database,
+	Wallet,
+	Settings,
+	Briefcase,
+} from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { UserProfile } from '@/types/database'
@@ -14,6 +21,8 @@ import {
 } from '@/app/actions/qr-code'
 import { User } from '@supabase/supabase-js'
 import { QRCodeModal } from '@/components/ui/QrModal/qr-code-modal'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface NavigationCardsProps {
 	userProfile?: UserProfile | null
@@ -32,6 +41,7 @@ export default function NavigationCards({
 	const [id, setId] = useState<string | null>(null)
 
 	const [isVerified, setIsVerified] = useState(false)
+	const router = useRouter()
 
 	useEffect(() => {
 		const fetchQRCode = async () => {
@@ -52,10 +62,29 @@ export default function NavigationCards({
 		fetchQRCode()
 	}, [user.id])
 
+	const handleNavigateToNInwest = () => {
+		router.push('/dashboard/n-invest')
+	}
+
+	const handleNavigateToNRefer = () => {
+		router.push('/dashboard/refer')
+	}
+
+	const handleNavigateToNUB = () => {
+		router.push('/dashboard/balance')
+	}
+
 	return (
 		<>
 			<div className='flex justify-between gap-[10px]'>
-				<div className='order-last sm:order-first'>
+				<div className='order-last sm:order-first space-y-[32px]'>
+					<Link href='/dashboard/settings' passHref>
+						<Settings className='text-[#919191] h-[32px] w-[32px]  cursor-pointer hover:text-white transition-colors' />
+					</Link>
+					<Link href='/portfolio' passHref>
+						<Briefcase className='text-[#919191] mt-8 h-[32px] w-[32px] cursor-pointer hover:text-white transition-colors' />
+					</Link>
+
 					{isAdmin && (
 						<button
 							className='text-accent hover:text-accenthover transition-colors'
@@ -73,6 +102,7 @@ export default function NavigationCards({
 					<Card
 						className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
 						style={{ width: '100%', maxWidth: '386px', height: '214px' }}
+						onClick={handleNavigateToNInwest}
 					>
 						<h3 className='font-light text-[#FFFFFF] text-[19px]'>N-Inwest</h3>
 					</Card>
@@ -90,6 +120,7 @@ export default function NavigationCards({
 						<Card
 							className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
 							style={{ width: '100%', maxWidth: '185px', height: '103px' }}
+							onClick={handleNavigateToNRefer}
 						>
 							<h3 className='font-medium text-gray-200'>Запросити друга</h3>
 						</Card>
@@ -104,6 +135,7 @@ export default function NavigationCards({
 						<Card
 							className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
 							style={{ width: '100%', maxWidth: '185px', height: '103px' }}
+							onClick={handleNavigateToNUB}
 						>
 							<h3 className='font-medium text-gray-200'>Баланс</h3>
 						</Card>

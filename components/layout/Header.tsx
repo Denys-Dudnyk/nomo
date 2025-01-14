@@ -26,6 +26,10 @@ const Header = () => {
 	const wePage = navigation === '/we' ? 'absolute' : ''
 	const mainPageHeader = navigation === '/' ? 'bg-header' : 'bg-[#0f0f0f]'
 	const wePageHeader = navigation === '/we' ? 'bg-header' : 'bg-[#0f0f0f]'
+	const companiesHeader =
+		navigation === '/dashboard/companies' ? 'bg-[#212121]' : 'bg-[#0f0f0f]'
+	const usersHeader =
+		navigation === '/dashboard/users' ? 'bg-[#212121]' : 'bg-[#0f0f0f]'
 
 	const [showDev, setShowDev] = useState(false)
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -100,7 +104,7 @@ const Header = () => {
 		<>
 			<header className={`${mainPage} ${wePage} w-full z-[3]`}>
 				<div
-					className={`flex justify-between items-center px-[33px] sm:px-[34px] md:px-10 lg:px-20 py-[14px] sm:py-[21px] ${mainPageHeader} ${wePageHeader}`}
+					className={`flex justify-between items-center px-[33px] sm:px-[34px] md:px-10 lg:px-20 py-[14px] sm:py-[21px] ${mainPageHeader} ${wePageHeader} ${companiesHeader} ${usersHeader}`}
 				>
 					<div>
 						<Link href={'/'}>

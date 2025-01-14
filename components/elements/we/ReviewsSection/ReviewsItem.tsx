@@ -19,7 +19,7 @@ export const ReviewsItem = ({
 	return (
 		<div className='bg-white rounded-3xl review-shadow pt-[26px] pb-[52px]  flex flex-col items-center w-full mx-auto max-w-[362px] h-full xl:max-h-[488px]'>
 			<img
-				src={avatar}
+				src={'/dashboard/user.svg'}
 				alt={`${name} ${surname}`}
 				className='w-[90px] h-[90px] rounded-full object-cover'
 			/>

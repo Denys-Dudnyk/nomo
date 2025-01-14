@@ -25,9 +25,11 @@ export function QRCodeModal({
 }: QRCodeModalProps) {
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent className='sm:max-w-md bg-[#1C1C1C] border-gray-800'>
+			<DialogContent className='sm:max-w-md bg-[#0f0f0f] border-gray-800'>
 				<DialogHeader>
-					<DialogTitle className='text-white'>Your QR Code</DialogTitle>
+					<DialogTitle className='text-[#fff] text-center'>
+						Your QR Code
+					</DialogTitle>
 				</DialogHeader>
 				<div className='flex items-center justify-center p-6'>
 					<QRCodeOverlay

@@ -1,9 +1,9 @@
 import { User } from '@supabase/supabase-js'
 import { UserProfile } from '@/types/database'
-import { Settings } from 'lucide-react'
 import Image from 'next/image'
 import NavigationCards from './NavigationCards'
 import CardPreview from './CardPreview'
+import Link from 'next/link'
 
 interface UserHeaderProps {
 	user: User

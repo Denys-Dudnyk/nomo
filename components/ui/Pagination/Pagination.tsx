@@ -21,7 +21,7 @@ const Pagination = ({
 			<button
 				onClick={() => handlePageChange(currentPage - 1)}
 				disabled={currentPage === 1}
-				className='flex items-center text-[20px]  gap-[14px] py-[5px] text-[#0f0f0f] hover:text-accenthover disabled:text-[#ABABAB] leading-[126%] tracking-[-4%]'
+				className='flex items-center text-[20px]  gap-[14px] py-[5px] text-[#ABABAb] hover:text-accenthover disabled:text-[#ABABAB] leading-[126%] tracking-[-4%]'
 			>
 				<Image
 					src={'/cashback/chevron-left.svg'}
@@ -38,8 +38,8 @@ const Pagination = ({
 					onClick={() => handlePageChange(page)}
 					className={`w-[40px] h-[35px] rounded-[7px] text-[25px] leading-[126%] tracking-[-4%]  font-light ${
 						currentPage === page
-							? ' text-[#0f0f0f] bg-[#EBEBEB] '
-							: 'text-[#0f0f0f] hover:text-accenthover '
+							? '  text-[#0f0f0f] bg-[#EBEBEB] '
+							: 'text-[#ABABAb] hover:text-accenthover '
 					}`}
 				>
 					{page}
@@ -49,15 +49,15 @@ const Pagination = ({
 			<button
 				onClick={() => handlePageChange(currentPage + 1)}
 				disabled={currentPage === totalPages}
-				className='flex items-center text-[20px] gap-[14px] py-[5px] text-[#0f0f0f] hover:text-accenthover disabled:text-[#ABABAB] leading-[126%] tracking-[-4%]'
+				className='flex items-center text-[20px] gap-[14px] py-[5px] text-[#ABABAb] hover:text-accenthover disabled:text-[#ABABAB] leading-[126%] tracking-[-4%]'
 			>
 				НАСТУПНА
 				<Image
-					src={'/cashback/chevron-right.svg'}
+					src={'/cashback/chevron-left.svg'}
 					alt=''
 					width={24}
 					height={24}
-					className='disabled:stroke-[#ABABAB]'
+					className='disabled:stroke-[#ABABAB] text-[#ABABAB] rotate-180'
 				/>
 			</button>
 		</div>

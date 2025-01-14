@@ -149,6 +149,21 @@ export default function TransactionsTable({
 				const data = await getTransactions(userId)
 				setTransactions(data)
 				setLoading(false)
+
+				const subscription = supabase
+					.channel('realtime:transactions')
+					.on(
+						'postgres_changes',
+						{ event: 'INSERT', schema: 'public', table: 'transactions' },
+						payload => {
+							setTransactions(prev => [payload.new, ...prev])
+						}
+					)
+					.subscribe()
+
+				return () => {
+					supabase.removeChannel(subscription)
+				}
 			} catch (err) {
 				setError('Failed to load transactions')
 				setLoading(false)
@@ -159,7 +174,11 @@ export default function TransactionsTable({
 	}, [])
 
 	if (loading) {
-		return <div>Loading...</div>
+		return (
+			<div className=' text-white flex items-center justify-center'>
+				<div className='animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-white'></div>
+			</div>
+		)
 	}
 
 	if (error) {

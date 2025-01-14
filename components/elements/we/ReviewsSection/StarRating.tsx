@@ -8,7 +8,7 @@ interface StarRatingProps {
 export const StarRating = ({ rating }: StarRatingProps) => {
 	return (
 		<div className='flex gap-1 '>
-			{[...Array(5)].map((_, index) => (
+			{[...Array(rating)].map((_, index) => (
 				<Image
 					src={'/we/star.svg'}
 					alt=''
@@ -16,7 +16,7 @@ export const StarRating = ({ rating }: StarRatingProps) => {
 					height={29}
 					key={index}
 					className={` ${
-						index < rating ? 'fill-accent text-accent' : 'text-gray-300'
+						index < rating ? 'text-gray-300' : 'fill-accent text-accent'
 					}`}
 				/>
 			))}

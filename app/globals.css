@@ -97,6 +97,9 @@ body {
 	box-shadow: 2px 2px 4px 0 rgba(255, 255, 255, 0.3),
 		-2px -2px 4px 0 rgba(255, 255, 255, 0.3);
 }
+.shadow-admin {
+	box-shadow: 6px 6px 13px 0 rgba(17, 19, 24, 0.25);
+}
 
 .bg {
 	background: linear-gradient(#d0ddfd, #f5f8ff);
