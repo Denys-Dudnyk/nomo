@@ -26,7 +26,59 @@
 		"altFacebook": "Facebook",
 		"altInstagram": "Instagram",
 		"altTelegram": "Telegram",
-		"altX": "Red social X"
+		"altX": "Red social X",
+
+		"sections": {
+			"gettingStarted": {
+				"title": "Comenzar",
+				"freePlans": "Planes gratuitos",
+				"forBusiness": "Para negocios",
+				"forBlogger": "Para bloggers",
+				"forMedia": "Para medios",
+				"getRecommendation": "Obtener recomendación",
+				"demoRequest": "Solicitar demo",
+				"contactSales": "Contactar con ventas"
+			},
+			"solutions": {
+				"title": "Soluciones",
+				"applicationServices": "Servicios de aplicaciones",
+				"networkServices": "Servicios de red",
+				"developerServices": "Servicios para desarrolladores",
+				"softwareDevelopment": "Desarrollo de software",
+				"cashback": "Reembolso",
+				"crmSystems": "Sistemas CRM",
+				"legalServices": "Servicios legales",
+				"accountingServices": "Servicios de contabilidad"
+			},
+			"community": {
+				"title": "Comunidad",
+				"communityCenter": "Centro comunitario",
+				"nomoProject": "Proyecto Nomo",
+				"newBitcoin": "Nuevo Bitcoin",
+				"nInvest": "N-invest"
+			},
+			"support": {
+				"title": "Soporte",
+				"supportCenter": "Centro de soporte",
+				"trustAndSafety": "Confianza y seguridad"
+			},
+			"company": {
+				"title": "Empresa",
+				"aboutCompany": "Sobre la empresa",
+				"ourTeam": "Nuestro equipo",
+				"investorRelations": "Relaciones con inversores",
+				"career": "Carrera",
+				"diversity": "Diversidad, equidad e inclusión",
+				"networkMap": "Mapa de red",
+				"becomePartner": "Conviértete en socio"
+			}
+		},
+		"legal": {
+			"privacyPolicy": "Política de privacidad",
+			"termsOfUse": "Términos de uso",
+			"cookieSettings": "Configuración de cookies",
+			"trademark": "Marca registrada"
+		}
 	},
 	"mainpage": {
 		"hero": {

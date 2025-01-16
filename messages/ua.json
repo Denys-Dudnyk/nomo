@@ -26,7 +26,60 @@
 		"altFacebook": "Facebook",
 		"altInstagram": "Instagram",
 		"altTelegram": "Telegram",
-		"altX": "Соціальна мережа X"
+		"altX": "Соціальна мережа X",
+
+		"sections": {
+			"gettingStarted": {
+				"title": "Початок роботи",
+				"freePlans": "Безкоштовні плани",
+				"forBusiness": "Для Бізнесу",
+				"forBlogger": "Для Блогера",
+				"forMedia": "Для Медіа",
+				"getRecommendation": "Отримати рекомендацію",
+				"demoRequest": "Запит на демонстрацію",
+				"contactSales": "Зверніться до відділу продажів"
+			},
+			"solutions": {
+				"title": "Рішення",
+				"applicationServices": "Прикладні послуги",
+				"networkServices": "Мережеві служби",
+				"developerServices": "Послуги розробника",
+				"softwareDevelopment": "Розробка ПЗ",
+				"cashback": "Кешбеки",
+				"crmSystems": "CRM-системи",
+				"legalServices": "Юридичні послуги",
+				"accountingServices": "Бухгалтерські послуги"
+			},
+			"community": {
+				"title": "Спільнота",
+				"communityCenter": "Осередок спільноти",
+				"nomoProject": "Проект Nomo",
+				"newBitcoin": "Новий Біткоін",
+				"nInvest": "N-invest"
+			},
+			"support": {
+				"title": "Підтримка",
+				"supportCenter": "Центр підтримки",
+				"trustAndSafety": "Довіра та безпека"
+			},
+			"company": {
+				"title": "Компанія",
+				"aboutCompany": "Про Компанію",
+				"ourTeam": "Наша команда",
+				"investorRelations": "Відносини з інвесторами",
+				"career": "Карєра",
+				"diversity": "Різноманітність, справедливість та залучення",
+				"networkMap": "Карта мережі",
+				"becomePartner": "Стати партнером"
+			}
+		},
+
+		"legal": {
+			"privacyPolicy": "Політика конфіденційності",
+			"termsOfUse": "Умови використання",
+			"cookieSettings": "Налаштування файлів cookie",
+			"trademark": "Торгова марка"
+		}
 	},
 	"mainpage": {
 		"hero": {

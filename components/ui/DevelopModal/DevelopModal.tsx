@@ -28,7 +28,7 @@ export default function DevelopModal({
 	return (
 		<>
 			<Dialog open={isOpen} onOpenChange={onClose}>
-				<DialogContent className='sm:max-w-[628px] max-h-[528px]  text-white '>
+				<DialogContent className='w-[100%] sm:max-w-[628px] max-h-[528px]  text-white '>
 					<DialogHeader>
 						<DialogTitle className='text-2xl font-bold text-center'></DialogTitle>
 					</DialogHeader>
@@ -40,13 +40,13 @@ export default function DevelopModal({
 							height={220}
 							className='mb-[45px]'
 						/>
-						<h2 className='text-[38px] font-extrabold leading-[135%] mb-[45px] text-black'>
+						<h2 className='text-[24px] sm:text-[38px] font-extrabold leading-[135%] mb-[45px] text-black'>
 							Упссс... У розробці
 						</h2>
 
 						<Link
 							href='/'
-							className='text-accent px-[60px] py-[14px] leading-[24.2px] text-[26px] font-bold underline hover:text-accenthover transition-colors mb-[79px]'
+							className='text-accent px-5 sm:px-[60px] py-5 sm:py-[14px] leading-[24.2px] text-[18px] sm:text-[26px] font-bold underline hover:text-accenthover transition-colors mb-[79px] text-center'
 						>
 							Повернутися на головну сторінку
 						</Link>

@@ -26,7 +26,60 @@
 		"altFacebook": "Facebook",
 		"altInstagram": "Instagram",
 		"altTelegram": "Telegram",
-		"altX": "Sieć społecznościowa X"
+		"altX": "Sieć społecznościowa X",
+
+		"sections": {
+			"gettingStarted": {
+				"title": "Rozpocznij",
+				"freePlans": "Darmowe plany",
+				"forBusiness": "Dla biznesu",
+				"forBlogger": "Dla blogerów",
+				"forMedia": "Dla mediów",
+				"getRecommendation": "Otrzymaj rekomendację",
+				"demoRequest": "Poproś o demo",
+				"contactSales": "Skontaktuj się z działem sprzedaży"
+			},
+			"solutions": {
+				"title": "Rozwiązania",
+				"applicationServices": "Usługi aplikacyjne",
+				"networkServices": "Usługi sieciowe",
+				"developerServices": "Usługi programistyczne",
+				"softwareDevelopment": "Rozwój oprogramowania",
+				"cashback": "Cashback",
+				"crmSystems": "Systemy CRM",
+				"legalServices": "Usługi prawne",
+				"accountingServices": "Usługi księgowe"
+			},
+			"community": {
+				"title": "Społeczność",
+				"communityCenter": "Centrum społeczności",
+				"nomoProject": "Projekt Nomo",
+				"newBitcoin": "Nowy Bitcoin",
+				"nInvest": "N-invest"
+			},
+			"support": {
+				"title": "Wsparcie",
+				"supportCenter": "Centrum pomocy",
+				"trustAndSafety": "Zaufanie i bezpieczeństwo"
+			},
+			"company": {
+				"title": "Firma",
+				"aboutCompany": "O firmie",
+				"ourTeam": "Nasz zespół",
+				"investorRelations": "Relacje inwestorskie",
+				"career": "Kariera",
+				"diversity": "Różnorodność, sprawiedliwość i integracja",
+				"networkMap": "Mapa sieci",
+				"becomePartner": "Zostań partnerem"
+			}
+		},
+
+		"legal": {
+			"privacyPolicy": "Polityka prywatności",
+			"termsOfUse": "Warunki użytkowania",
+			"cookieSettings": "Ustawienia plików cookie",
+			"trademark": "Znak towarowy"
+		}
 	},
 	"mainpage": {
 		"hero": {

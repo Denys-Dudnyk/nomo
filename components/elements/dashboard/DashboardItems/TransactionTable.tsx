@@ -122,9 +122,9 @@ export default function TransactionsTable({
 	onCurrencyChange,
 }: TransactionsTableProps) {
 	const today = new Date()
-	const formattedDate = ` ${today.getDate()}.${
+	const formattedDate = `${String(today.getDate()).padStart(2, '0')}.${String(
 		today.getMonth() + 1
-	}.${today.getFullYear()}`
+	).padStart(2, '0')}.${today.getFullYear()}`
 
 	const formatNCOIN = (value: number) => value.toFixed(8)
 	const formatUAH = (value: number) => `${value} UAH`
@@ -193,8 +193,7 @@ export default function TransactionsTable({
 						Транзакції
 					</h2>
 					<div className='text-[#919191] font-normal text-[14px] leading-[18px]'>
-						Сьогодні
-						{formattedDate}
+						Сьогодні {formattedDate}
 					</div>
 				</div>
 				<div className='flex gap-[32px] max-h-[38px] mb-[240px] md:mb-24 lg:mb-12 flex-col lg:flex-row '>
@@ -363,7 +362,7 @@ export default function TransactionsTable({
 							<Button
 								key={i}
 								className={`bg-transparent text-[#919191] hover:bg-transparent ${
-									page === 2 ? 'text-[#FF8A00]' : 'border-gray-700'
+									page === 1 ? 'text-[#FF8A00]' : 'border-gray-700'
 								} `}
 							>
 								{page}
