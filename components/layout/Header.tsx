@@ -110,14 +110,19 @@ const Header = () => {
 						<Link href={'/'}>
 							<Image
 								src={'/header/logo.svg'}
-								alt='Логотип Nomo'
+								alt='NomoCashback'
 								width={82.5}
 								height={83.5}
 								className='w-[82.5px] h-[83.5px] sm:w-[82.5px] sm:h-[83.5px]'
 							/>
 						</Link>
 					</div>
-					{!isMobile && <Navbar isResettingPassword={isResettingPassword} />}
+					{!isMobile && (
+						<Navbar
+							isResettingPassword={isResettingPassword}
+							closeMenu={() => setIsMenuOpen(false)}
+						/>
+					)}
 					<div className='flex items-center gap-[10px]'>
 						{!isResettingPassword && isAuthenticated ? (
 							<button
@@ -167,7 +172,7 @@ const Header = () => {
 							<Link href={'/'} onClick={() => setIsMenuOpen(false)}>
 								<Image
 									src={'/header/logo.svg'}
-									alt='Логотип Nomo'
+									alt='NomoCashback'
 									width={82.5}
 									height={83.5}
 									className='w-[82.5px] h-[83.5px] sm:w-[82.5px] sm:h-[83.5px]'
@@ -177,7 +182,10 @@ const Header = () => {
 								<Menu size={40} />
 							</button>
 						</div>
-						<Navbar isResettingPassword={isResettingPassword} />
+						<Navbar
+							isResettingPassword={isResettingPassword}
+							closeMenu={() => setIsMenuOpen(false)}
+						/>
 						<div className='mt-10'>
 							{/* <button
 								className='flex items-center gap-2 text-[24px] font-normal mb-4'

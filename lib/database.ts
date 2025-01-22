@@ -41,3 +41,22 @@ export async function getUserProfile(userId: string) {
 
 	return data
 }
+
+export async function getPartnerProfile(userId: string) {
+	const cookieStore = cookies()
+	// @ts-ignore
+	const supabase = await createClient(cookieStore)
+
+	const { data, error } = await supabase
+		.from('partner_profiles')
+		.select('*')
+		.eq('user_id', userId)
+		.single()
+
+	if (error) {
+		console.error('Error fetching user profile:', error)
+		throw error
+	}
+
+	return data
+}

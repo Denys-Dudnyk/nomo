@@ -101,7 +101,7 @@
 				"main": "Ncoin ",
 				"text": "— stale doskonalimy kryptowalutę i dodajemy innowacyjne funkcje, które upraszczają transakcje finansowe i oferują dodatkowe korzyści użytkownikom. Wydanie zaplanowane na ",
 				"date": "01.02.2025",
-				"img": "/main/project-img1.png",
+				"img": "/main/project-img1.jpg",
 				"objectFit": "cover"
 			},
 			"item2": {
@@ -331,7 +331,9 @@
 			"forgotPassword": "Zapomniałeś hasła?",
 			"notWithUs": "Jeszcze z nami?",
 			"register": "Zarejestruj się",
-			"or": "Lub"
+			"or": "Lub",
+			"userRole": "Użytkownik",
+			"partnerRole": "Partner"
 		},
 		"register": {
 			"register": "Rejestracja",
@@ -342,7 +344,10 @@
 			"referralCodePlaceholder": "Twój kod polecający",
 			"registerButton": "Zarejestruj się",
 			"alreadyHaveAccount": "Masz już konto?",
-			"login": "Zaloguj się"
+			"login": "Zaloguj się",
+			"userRole": "Użytkownik",
+			"partnerRole": "Partner",
+			"edrpouPlaceholder": "ЄДРПОУ"
 		},
 		"forgot": {
 			"title": "Zapomniałeś hasła?",

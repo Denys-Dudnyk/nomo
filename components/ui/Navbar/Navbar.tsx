@@ -16,14 +16,17 @@ const navItems = [
 
 interface NavbarProps {
 	isResettingPassword?: boolean
+	closeMenu: () => void
 }
 
-const Navbar = ({ isResettingPassword = false }: NavbarProps) => {
+const Navbar = ({ isResettingPassword = false, closeMenu }: NavbarProps) => {
 	const pathname = usePathname()
 	const router = useRouter()
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
 	const supabase = createClient()
 	const t = useTranslations('header')
+
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
 
 	useEffect(() => {
 		const checkAuth = async () => {
@@ -54,6 +57,10 @@ const Navbar = ({ isResettingPassword = false }: NavbarProps) => {
 		if (isResettingPassword) {
 			e.preventDefault()
 			router.push('/reset-password')
+		}
+
+		if (closeMenu) {
+			closeMenu() // Закрываем меню
 		}
 	}
 

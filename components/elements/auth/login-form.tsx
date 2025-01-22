@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import DevelopModal from '@/components/ui/DevelopModal/DevelopModal'
 import { useTranslations } from 'next-intl'
+import { UserRole } from './register-form'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function LoginForm() {
 	const [email, setEmail] = useState('')
@@ -21,11 +23,19 @@ export default function LoginForm() {
 	const [showDev, setShowDev] = useState(false)
 	const [resetEmail, setResetEmail] = useState('')
 	const [showVerification, setShowVerification] = useState(false)
-
+	const [role, setRole] = useState<UserRole>('user')
 	const supabase = createClient()
 
 	// Загружаем переводы
 	const t = useTranslations('auth.login')
+
+	const handleRoleChange = (newRole: UserRole) => {
+		setRole(newRole)
+		setError(null)
+		// Reset form when switching roles
+		setEmail('')
+		setPassword('')
+	}
 
 	const handleEmailLogin = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -40,7 +50,11 @@ export default function LoginForm() {
 
 			if (error) throw error
 
-			router.push('/dashboard')
+			if (role === 'partner') {
+				router.push('/partners')
+			} else {
+				router.push('/dashboard')
+			}
 		} catch (error) {
 			setError(error instanceof Error ? error.message : 'An error occurred')
 		} finally {
@@ -76,6 +90,35 @@ export default function LoginForm() {
 				<h1 className='text-[31px] font-bold text-center mb-[18px]'>
 					{t('loginButton')}
 				</h1>
+
+				<Tabs
+					value={role}
+					onValueChange={value => handleRoleChange(value as UserRole)}
+					className='mb-6'
+				>
+					<TabsList className='grid w-full grid-cols-2 bg-transparent'>
+						<TabsTrigger
+							value='user'
+							className={`py-2 rounded-none border-b-2 ${
+								role === 'user'
+									? 'border-accent text-accent'
+									: 'border-transparent text-[#fff]'
+							}`}
+						>
+							{t('userRole')}
+						</TabsTrigger>
+						<TabsTrigger
+							value='partner'
+							className={`py-2 rounded-none border-b-2 ${
+								role === 'partner'
+									? 'border-accent text-accent'
+									: 'border-transparent text-[#fff]'
+							}`}
+						>
+							{t('partnerRole')}
+						</TabsTrigger>
+					</TabsList>
+				</Tabs>
 
 				<button
 					onClick={openDevelopModal}

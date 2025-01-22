@@ -74,6 +74,10 @@ export default function NavigationCards({
 		router.push('/dashboard/balance')
 	}
 
+	const handleNavigateData = () => {
+		router.push('/company/c_profile')
+	}
+
 	return (
 		<>
 			<div className='flex justify-between gap-[10px]'>
@@ -128,6 +132,7 @@ export default function NavigationCards({
 						<Card
 							className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
 							style={{ width: '100%', maxWidth: '185px', height: '103px' }}
+							onClick={handleNavigateData}
 						>
 							<h3 className='font-medium text-gray-200'>Дані</h3>
 						</Card>

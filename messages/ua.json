@@ -101,7 +101,7 @@
 				"main": "Ncoin ",
 				"text": "— постійно працюємо над вдосконаленням криптовалюти та додаванням нових інноваційних функцій, які полегшують ваші фінансові операції та забезпечують додаткові переваги для користувачів. Реліз запланований на ",
 				"date": "01.02.2025р",
-				"img": "/main/project-img1.png",
+				"img": "/main/project-img1.jpg",
 				"objectFit": "cover"
 			},
 			"item2": {
@@ -332,7 +332,9 @@
 			"forgotPassword": "Забули пароль?",
 			"notWithUs": "Ще не з нами?",
 			"register": "Зареєструватися",
-			"or": "Або"
+			"or": "Або",
+			"userRole": "Користувач",
+			"partnerRole": "Партнер"
 		},
 		"register": {
 			"register": "Реєстрація",
@@ -343,7 +345,10 @@
 			"referralCodePlaceholder": "Ваш реферал",
 			"registerButton": "Зареєструватися",
 			"alreadyHaveAccount": "Вже є аккаунт?",
-			"login": "Увійти"
+			"login": "Увійти",
+			"userRole": "Користувач",
+			"partnerRole": "Партнер",
+			"edrpouPlaceholder": "ЄДРПОУ"
 		},
 		"forgot": {
 			"title": "Забули пароль?",

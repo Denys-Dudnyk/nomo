@@ -100,7 +100,7 @@
 				"main": "Ncoin ",
 				"text": "— siempre estamos mejorando la criptomoneda y añadiendo nuevas características innovadoras que facilitan tus transacciones financieras y proporcionan beneficios adicionales a los usuarios. El lanzamiento está programado para ",
 				"date": "01.02.2025",
-				"img": "/main/project-img1.png",
+				"img": "/main/project-img1.jpg",
 				"objectFit": "cover"
 			},
 			"item2": {
@@ -330,7 +330,9 @@
 			"forgotPassword": "¿Olvidaste tu contraseña?",
 			"notWithUs": "¿Aún no estás con nosotros?",
 			"register": "Registrarse",
-			"or": "O"
+			"or": "O",
+			"userRole": "Usuario",
+			"partnerRole": "Socio"
 		},
 		"register": {
 			"register": "Registro",
@@ -341,7 +343,10 @@
 			"referralCodePlaceholder": "Tu código de referido",
 			"registerButton": "Registrarse",
 			"alreadyHaveAccount": "¿Ya tienes una cuenta?",
-			"login": "Iniciar sesión"
+			"login": "Iniciar sesión",
+			"userRole": "Usuario",
+			"partnerRole": "Socio",
+			"edrpouPlaceholder": "ЄДРПОУ"
 		},
 		"forgot": {
 			"title": "¿Olvidaste tu contraseña?",

@@ -101,7 +101,7 @@
 				"main": "Ncoin ",
 				"text": "— constantly improving the cryptocurrency and adding innovative features to simplify your financial transactions and provide additional benefits to users. The release is scheduled for ",
 				"date": "01.02.2025",
-				"img": "/main/project-img1.png",
+				"img": "/main/project-img1.jpg",
 				"objectFit": "cover"
 			},
 			"item2": {
@@ -331,7 +331,9 @@
 			"forgotPassword": "Forgot password?",
 			"notWithUs": "Not with us?",
 			"register": "Register",
-			"or": "Or"
+			"or": "Or",
+			"userRole": "User",
+			"partnerRole": "Partner"
 		},
 		"register": {
 			"register": "Register",
@@ -342,7 +344,10 @@
 			"referralCodePlaceholder": "Your Referral Code",
 			"registerButton": "Sign Up",
 			"alreadyHaveAccount": "Already have an account?",
-			"login": "Log In"
+			"login": "Log In",
+			"userRole": "User",
+			"partnerRole": "Partner",
+			"edrpouPlaceholder": "ЄДРПОУ"
 		},
 		"forgot": {
 			"title": "Forgot Password?",

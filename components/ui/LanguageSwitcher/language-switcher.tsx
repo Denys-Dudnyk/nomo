@@ -48,7 +48,7 @@ export default function LanguageSwitcher({
 					{/* <LanguagesIcon className='h-6 w-6 text-slate-600 transition-colors' /> */}
 					<Image
 						src={'/header/language.svg'}
-						alt='Логотип Nomo'
+						alt='NomoCashback'
 						width={42}
 						height={42}
 						className='w-8 h-8 sm:w-[42px] sm:h-[42px]'

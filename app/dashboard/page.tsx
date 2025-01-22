@@ -1,6 +1,6 @@
 import BrandLogo from '@/components/elements/auth/brandlogo'
 import Dashboard from '@/components/elements/dashboard/Dashboard'
-import { getUserProfile } from '@/lib/database'
+import { getPartnerProfile, getUserProfile } from '@/lib/database'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 

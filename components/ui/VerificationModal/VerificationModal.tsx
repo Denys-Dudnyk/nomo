@@ -13,12 +13,14 @@ import BrandLogo from '@/components/elements/auth/brandlogo'
 import Image from 'next/image'
 import { LuLoader } from 'react-icons/lu'
 import { useTranslations } from 'next-intl'
+import { UserRole } from '@/components/elements/auth/register-form'
 
 interface VerificationModalProps {
 	email: string
 	isOpen: boolean
 	onClose: () => void
 	type: 'signup' | 'reset'
+	role: UserRole
 }
 
 export default function VerificationModal({
@@ -26,13 +28,13 @@ export default function VerificationModal({
 	isOpen,
 	onClose,
 	type,
+	role,
 }: VerificationModalProps) {
 	const [code, setCode] = useState(['', '', '', '', '', ''])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const router = useRouter()
-		const t = useTranslations('auth.verifcode')
-	
+	const t = useTranslations('auth.verifcode')
 
 	const supabase = createClient()
 
@@ -97,8 +99,14 @@ export default function VerificationModal({
 				onClose()
 			} else {
 				// For signup, allow normal flow
-				router.push('/dashboard')
-				onClose()
+
+				if (role === 'partner') {
+					router.push('/partners')
+					onClose()
+				} else {
+					router.push('/dashboard')
+					onClose()
+				}
 			}
 		} catch (error) {
 			setError(error instanceof Error ? error.message : 'An error occurred')
