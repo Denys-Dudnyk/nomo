@@ -63,7 +63,7 @@ export default function VerifyEmail() {
 						<p className='text-red-500 mb-4'>{error}</p>
 						<Button
 							onClick={() => router.push('/dashboard/profile')}
-							className='bg-[#FF8A00] hover:bg-[#FF8A00]/90'
+							className='bg-[#FF8A00] hover:bg-[#FF8A00]/90 p-3'
 						>
 							Повернутися до профілю
 						</Button>
