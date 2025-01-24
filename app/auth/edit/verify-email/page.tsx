@@ -6,47 +6,43 @@ import { createClient } from '@/lib/supabase/client'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { toast } from 'react-hot-toast'
 
 export default function VerifyEmail() {
 	const [error, setError] = useState<string | null>(null)
 	const [isLoading, setIsLoading] = useState(true)
 	const router = useRouter()
 	const searchParams = useSearchParams()
+	const supabase = createClient()
 
 	useEffect(() => {
 		async function verifyEmail() {
 			try {
-				const token = searchParams.get('token')
-				const email = searchParams.get('email')
+				const token_hash = searchParams.get('token_hash')
 				const type = searchParams.get('type')
 
-				if (!token || !email || type !== 'email_change') {
+				if (!token_hash || type !== 'email_change') {
 					throw new Error('Невірне посилання для підтвердження')
 				}
 
-				const response = await fetch('/api/verify-email', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						token,
-						email,
-						type,
-					}),
+				// Verify the token - this is the only operation needed
+				const { error: verificationError } = await supabase.auth.verifyOtp({
+					token_hash,
+					type: 'email_change',
 				})
 
-				const result = await response.json()
+				if (verificationError) throw verificationError
 
-				if (!response.ok) {
-					throw new Error(result.error || 'Что-то пошло не так')
-				}
+				setIsLoading(false)
+				toast.success('Email успішно підтверджено')
 
-				toast.success('Email успешно подтвержден!')
-				setTimeout(() => router.push('/dashboard/profile'), 2000)
+				// Simple redirect without reload
+				setTimeout(() => {
+					router.push('/dashboard/profile')
+				}, 2000)
 			} catch (err) {
 				console.error('Verification error:', err)
-				setError(err instanceof Error ? err.message : 'Ошибка подтверждения')
-			} finally {
+				setError(err instanceof Error ? err.message : 'Помилка верифікації')
 				setIsLoading(false)
 			}
 		}

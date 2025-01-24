@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Globe, Edit2, Check, X, KeyRound } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { FaShareAlt } from 'react-icons/fa'
 import { createClient } from '@/lib/supabase/client'
-import { toast } from 'sonner'
+import { toast } from 'react-hot-toast'
 import {
 	Dialog,
 	DialogContent,
@@ -54,7 +54,7 @@ function PasswordChangeDialog() {
 
 	const handlePasswordChange = async () => {
 		if (password !== confirmPassword) {
-			// toast.error('Паролі не співпадають')
+			toast.error('Паролі не співпадають')
 			return
 		}
 
@@ -66,14 +66,14 @@ function PasswordChangeDialog() {
 
 			if (error) throw error
 
-			//toast.success('Пароль успішно змінено')
+			toast.success('Пароль успішно змінено')
 			setPassword('')
 			setConfirmPassword('')
 		} catch (error) {
 			console.error('Error updating password:', error)
-			// toast.error(
-			// 	error instanceof Error ? error.message : 'Помилка зміни паролю'
-			// )
+			toast.error(
+				error instanceof Error ? error.message : 'Помилка зміни паролю'
+			)
 		} finally {
 			setLoading(false)
 		}
@@ -139,14 +139,6 @@ export default function CompanyProfile({
 		setEditMode(prev => ({ ...prev, [field]: true }))
 	}
 
-	const handleCancel = (field: EditableField) => {
-		setEditMode(prev => ({ ...prev, [field]: false }))
-		setFormData(prev => ({
-			...prev,
-			[field]: profile[field],
-		}))
-	}
-
 	const handleChange = (field: EditableField, value: string) => {
 		setFormData(prev => ({ ...prev, [field]: value }))
 	}
@@ -166,26 +158,21 @@ export default function CompanyProfile({
 					throw new Error('Новий email співпадає з поточним')
 				}
 
-				// Update email through Auth API with redirectTo
-				const { data, error: authError } = await supabase.auth.updateUser(
-					{
-						email: formData[field],
-					}
-					// {
-					// 	emailRedirectTo: `${window.location.origin}/auth/edit/verify-email?next=/dashboard/profile`,
-					// }
-				)
+				// Get the current URL for the redirect
+				const redirectTo = `${window.location.origin}/auth/edit/verify-email`
+
+				// Update email through Auth API
+				const { error: authError } = await supabase.auth.updateUser({
+					email: formData[field],
+				})
 
 				if (authError) throw authError
 
-				// Check if the update was successful
-				if (data?.user) {
-					toast.success(
-						'На вашу нову пошту відправлено лист для підтвердження. Будь ласка, перейдіть за посиланням у листі для завершення зміни email.',
-						{ duration: 6000 }
-					)
-					setEditMode(prev => ({ ...prev, [field]: false }))
-				}
+				toast.success(
+					'На вашу поточну та нову пошту відправлено лист для підтвердження. Будь ласка, перейдіть за посиланням у листі для завершення зміни email, та підтвердіть на обох поштах.',
+					{ duration: 10000 }
+				)
+				setEditMode(prev => ({ ...prev, [field]: false }))
 				return
 			}
 
@@ -217,6 +204,42 @@ export default function CompanyProfile({
 		}
 	}
 
+	const handleCancel = async (field: EditableField) => {
+		if (field === 'email') {
+			// Get current email from auth session when canceling email edit
+			const {
+				data: { session },
+			} = await supabase.auth.getSession()
+			setFormData(prev => ({
+				...prev,
+				[field]: session?.user?.email || prev[field],
+			}))
+		} else {
+			// For other fields, restore from profile data
+			setFormData(prev => ({
+				...prev,
+				[field]: profile[field],
+			}))
+		}
+		setEditMode(prev => ({ ...prev, [field]: false }))
+	}
+
+	useEffect(() => {
+		async function getCurrentEmail() {
+			const {
+				data: { session },
+			} = await supabase.auth.getSession()
+			if (session?.user?.email) {
+				setFormData(prev => ({
+					...prev,
+					email: session.user.email || '',
+				}))
+			}
+		}
+
+		getCurrentEmail()
+	}, [])
+
 	const renderField = (field: EditableField, label: string, type = 'text') => (
 		<div>
 			{label && <div className='text-[#6D7380] text-sm mb-2'>{label}</div>}
@@ -231,30 +254,27 @@ export default function CompanyProfile({
 				{editMode[field] ? (
 					<div className='absolute right-2 top-1/2 -translate-y-1/2 flex gap-2'>
 						<Button
-							variant='ghost'
 							size='icon'
 							onClick={() => handleSave(field)}
 							disabled={loading[field]}
-							className='text-green-500 hover:text-green-400'
+							className='text-green-500 hover:text-green-400 bg-[#2C2F36]'
 						>
 							<Check className='h-4 w-4' />
 						</Button>
 						<Button
-							variant='ghost'
 							size='icon'
 							onClick={() => handleCancel(field)}
 							disabled={loading[field]}
-							className='text-red-500 hover:text-red-400'
+							className='text-red-500 hover:text-red-400 bg-[#2C2F36]'
 						>
 							<X className='h-4 w-4' />
 						</Button>
 					</div>
 				) : (
 					<Button
-						variant='ghost'
 						size='icon'
 						onClick={() => handleEdit(field)}
-						className='absolute right-2 top-1/2 -translate-y-1/2 text-[#6D7380] hover:text-white'
+						className='absolute right-2 top-1/2 -translate-y-1/2 text-[#6D7380] bg-transparent  hover:bg-[#2C2F36] hover:text-white'
 					>
 						<Edit2 className='h-4 w-4' />
 					</Button>
@@ -264,7 +284,7 @@ export default function CompanyProfile({
 	)
 
 	return (
-		<div className='min-h-screen bg-black p-16'>
+		<div className='min-h-screen bg-black p-0 sm:p-16'>
 			<main className='max-w-[1440px] mx-auto px-4 py-6'>
 				<Card className='bg-[#1C1E22] border-0 rounded-xl mb-4'>
 					<div className='p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4'>
@@ -295,6 +315,12 @@ export default function CompanyProfile({
 											<div className='text-white text-md'>
 												{profile.user_id}
 											</div>
+										</div>
+										<div className='block items-center'>
+											<div className='text-[#6D7380] text-xs mr-2'>
+												Рахунок:
+											</div>
+											<div className='text-white text-md'>497994402</div>
 										</div>
 									</div>
 								</div>

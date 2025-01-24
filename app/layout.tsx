@@ -7,7 +7,8 @@ import Head from 'next/head'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import { Analytics } from '@vercel/analytics/next'
-import { Toaster } from 'sonner'
+// import { Toaster } from 'sonner'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({
 	subsets: ['cyrillic'],
@@ -28,6 +29,7 @@ export default async function RootLayout({
 
 	// Providing all messages to the client
 	// side is the easiest way to get started
+
 	const messages = await getMessages()
 	return (
 		<html lang={locale}>
@@ -43,7 +45,23 @@ export default async function RootLayout({
 					<Header />
 					{children}
 					<Footer />
-					<Toaster />
+					<Toaster
+						position='top-center'
+						toastOptions={{
+							style: {
+								background: '#1f1f1f',
+								color: '#fff',
+								maxWidth: '600px',
+								width: '100%',
+							},
+							success: {
+								iconTheme: {
+									primary: '#ff8d2a',
+									secondary: '#1f1f1f',
+								},
+							},
+						}}
+					/>
 				</NextIntlClientProvider>
 				<Analytics />
 			</body>
