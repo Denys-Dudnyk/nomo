@@ -75,7 +75,7 @@ export default function NavigationCards({
 	}
 
 	const handleNavigateData = () => {
-		router.push('/company/c_profile')
+		router.push('/dashboard/profile')
 	}
 
 	return (

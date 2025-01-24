@@ -19,6 +19,11 @@ export async function middleware(request: NextRequest) {
 		},
 	})
 
+	// Allow access to email verification routes without authentication
+	if (request.nextUrl.pathname.startsWith('/auth/edit/verify-email')) {
+		return NextResponse
+	}
+
 	// Handle CORS preflight requests
 	if (request.method === 'OPTIONS') {
 		return new NextResponse(null, {

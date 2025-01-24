@@ -7,6 +7,7 @@ import Head from 'next/head'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import { Analytics } from '@vercel/analytics/next'
+import { Toaster } from 'sonner'
 
 const inter = Inter({
 	subsets: ['cyrillic'],
@@ -42,6 +43,7 @@ export default async function RootLayout({
 					<Header />
 					{children}
 					<Footer />
+					<Toaster />
 				</NextIntlClientProvider>
 				<Analytics />
 			</body>
