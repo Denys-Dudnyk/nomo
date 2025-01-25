@@ -16,7 +16,7 @@ export function UserCard({ user }: UserCardProps) {
 					</div>
 				</div>
 				<Link
-					href={`/dashboard/users/${user.id}`}
+					href={`/dashboard/users/${user.user_id}`}
 					className='text-accent hover:text-accenthover text-sm'
 				>
 					Детальніше

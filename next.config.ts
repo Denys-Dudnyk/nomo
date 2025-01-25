@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
 				pathname: '/storage/v1/object/public/company-images/**',
 				// search: '',
 			},
+			{
+				protocol: 'https',
+				hostname: 'nndgocwwteltezwmynvh.supabase.co',
+				pathname: '/storage/v1/object/public/user-image/**', // Добавлено новое хранилище
+			},
 		],
 	},
 }

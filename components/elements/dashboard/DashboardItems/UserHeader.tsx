@@ -14,13 +14,14 @@ export default function UserHeader({ user, profile }: UserHeaderProps) {
 	return (
 		<div className='flex items-center justify-between mb-[35px] gap-4 flex-col md:flex-row'>
 			<div className='flex items-center gap-6 flex-col mr-[21px]'>
-				<div className='relative h-[150px] w-[150px]'>
+				<div className=' h-[150px] max-h-[150px] w-[150px]'>
 					<Image
-						src={user.user_metadata.avatar_url || '/dashboard/user.svg'}
+						src={profile.profile_image || '/dashboard/user.svg'}
 						alt='Profile'
-						className='rounded-full'
-						fill
-						sizes='64px'
+						className='rounded-full  object-cover max-h-[150px]'
+						width={150}
+						height={150}
+						// sizes='64px'
 					/>
 				</div>
 				<h2 className='text-[19px] font-medium text-accent'>

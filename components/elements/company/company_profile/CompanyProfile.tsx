@@ -8,14 +8,8 @@ import { Card } from '@/components/ui/card'
 import { FaShareAlt } from 'react-icons/fa'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'react-hot-toast'
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
+import { motion } from 'framer-motion'
+import PasswordChangeDialog from './PasswordChangeDialog'
 
 interface BaseProfile {
 	user_id: string
@@ -24,6 +18,7 @@ interface BaseProfile {
 	full_name: string
 	edrpou: string
 	company_name?: string
+	profile_image?: string
 }
 
 interface UserProfile extends BaseProfile {
@@ -44,79 +39,6 @@ type EditableField = keyof Omit<
 interface CompanyProfileProps {
 	profile: UserProfile | PartnerProfile
 	profileType: 'user' | 'partner'
-}
-
-function PasswordChangeDialog() {
-	const [loading, setLoading] = useState(false)
-	const [password, setPassword] = useState('')
-	const [confirmPassword, setConfirmPassword] = useState('')
-	const supabase = createClient()
-
-	const handlePasswordChange = async () => {
-		if (password !== confirmPassword) {
-			toast.error('Паролі не співпадають')
-			return
-		}
-
-		setLoading(true)
-		try {
-			const { error } = await supabase.auth.updateUser({
-				password: password,
-			})
-
-			if (error) throw error
-
-			toast.success('Пароль успішно змінено')
-			setPassword('')
-			setConfirmPassword('')
-		} catch (error) {
-			console.error('Error updating password:', error)
-			toast.error(
-				error instanceof Error ? error.message : 'Помилка зміни паролю'
-			)
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button className='w-full border-[#2C2F36] text-white hover:bg-[#2C2F36] p-3'>
-					<KeyRound className='mr-2 h-4 w-4 ' />
-					Змінити пароль
-				</Button>
-			</DialogTrigger>
-			<DialogContent className='bg-[#1C1E22] border-[#2C2F36] text-white'>
-				<DialogHeader>
-					<DialogTitle>Зміна паролю</DialogTitle>
-				</DialogHeader>
-				<div className='space-y-4 pt-4'>
-					<Input
-						type='password'
-						placeholder='Новий пароль'
-						value={password}
-						onChange={e => setPassword(e.target.value)}
-						className='bg-transparent border-[#2C2F36] text-white rounded-lg'
-					/>
-					<Input
-						type='password'
-						placeholder='Підтвердіть пароль'
-						value={confirmPassword}
-						onChange={e => setConfirmPassword(e.target.value)}
-						className='bg-transparent border-[#2C2F36] text-white rounded-lg'
-					/>
-					<Button
-						onClick={handlePasswordChange}
-						disabled={loading}
-						className='w-full bg-[#FF8A00] hover:bg-[#FF8A00]/90 text-white p-3'
-					>
-						{loading ? 'Збереження...' : 'Зберегти'}
-					</Button>
-				</div>
-			</DialogContent>
-		</Dialog>
-	)
 }
 
 export default function CompanyProfile({
@@ -240,6 +162,127 @@ export default function CompanyProfile({
 		getCurrentEmail()
 	}, [])
 
+	const [profileImage, setProfileImage] = useState(profile.profile_image || '')
+	const [previewImage, setPreviewImage] = useState<string | null>(null)
+	const [imageLoading, setImageLoading] = useState(false)
+
+	const handleImageUpload = async (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const file = event.target.files?.[0]
+		if (!file) return
+
+		setImageLoading(true)
+
+		try {
+			// Check file size (max 5MB)
+			const fileSize = file.size / 1024 / 1024
+			if (fileSize > 5) {
+				throw new Error('Файл занадто великий. Максимальний розмір: 5MB')
+			}
+
+			// Check file type
+			if (!file.type.startsWith('image/')) {
+				throw new Error('Дозволені тільки зображення')
+			}
+
+			// Get current session and check authorization
+			const {
+				data: { session },
+				error: sessionError,
+			} = await supabase.auth.getSession()
+			if (sessionError) throw sessionError
+			if (!session?.user) throw new Error('Необхідно авторизуватися')
+
+			const userId = session.user.id
+			const bucketName = 'user-image'
+
+			// Create metadata for the file
+			const fileMetadata = {
+				owner: userId,
+				createdAt: new Date().toISOString(),
+				contentType: file.type,
+				size: file.size,
+			}
+
+			// 1. First, list all existing files for this user
+			const { data: existingFiles, error: listError } = await supabase.storage
+				.from(bucketName)
+				.list(userId, {
+					limit: 100,
+					offset: 0,
+					sortBy: { column: 'name', order: 'asc' },
+				})
+
+			if (listError) throw listError
+
+			// 2. Delete all existing files if any exist
+			if (existingFiles && existingFiles.length > 0) {
+				const filesToDelete = existingFiles.map(
+					file => `${userId}/${file.name}`
+				)
+				const { error: deleteError } = await supabase.storage
+					.from(bucketName)
+					.remove(filesToDelete)
+
+				if (deleteError) {
+					console.error('Error deleting old files:', deleteError)
+					throw deleteError
+				}
+			}
+
+			// 3. Upload new file with a clean name and metadata
+			const folderName = formData.full_name.replace(/\s+/g, '_')
+			const fileExt = file.name.split('.').pop()
+			const fileName = `${folderName}/${userId}-${Date.now()}${fileExt}`
+
+			const { error: uploadError } = await supabase.storage
+				.from(bucketName)
+				.upload(fileName, file, {
+					cacheControl: '3600',
+					upsert: true,
+					contentType: file.type,
+					duplex: 'half',
+					metadata: fileMetadata,
+				})
+
+			if (uploadError) throw uploadError
+
+			// 4. Get the public URL
+			const { data: publicUrlData } = supabase.storage
+				.from(bucketName)
+				.getPublicUrl(fileName)
+
+			if (!publicUrlData?.publicUrl) {
+				throw new Error('Не вдалося отримати публічний URL')
+			}
+
+			// 5. Update profile in database
+			const table =
+				profileType === 'partner' ? 'partner_profiles' : 'user_profiles'
+			const { error: updateError } = await supabase
+				.from(table)
+				.update({
+					profile_image: publicUrlData.publicUrl,
+					updated_at: new Date().toISOString(),
+				})
+				.eq('user_id', userId)
+
+			if (updateError) throw updateError
+
+			// 6. Update local state
+			setProfileImage(publicUrlData.publicUrl)
+			toast.success('Фото профілю успішно оновлено!')
+		} catch (error) {
+			console.error('Помилка при завантаженні фото профілю:', error)
+			toast.error(
+				error instanceof Error ? error.message : 'Помилка завантаження фото'
+			)
+		} finally {
+			setImageLoading(false)
+		}
+	}
+
 	const renderField = (field: EditableField, label: string, type = 'text') => (
 		<div>
 			{label && <div className='text-[#6D7380] text-sm mb-2'>{label}</div>}
@@ -290,11 +333,44 @@ export default function CompanyProfile({
 					<div className='p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4'>
 						<div className='flex items-center gap-4'>
 							<div className='relative'>
-								<div className='w-12 h-12 rounded-full bg-[#2C2F36] flex items-center justify-center'>
-									<img
-										src='/cashback/item.svg'
-										alt='Profile'
-										className='w-full h-full rounded-full object-cover'
+								<div className='w-20 h-20 rounded-full bg-[#2C2F36] flex items-center justify-center overflow-hidden'>
+									{previewImage ? (
+										<motion.img
+											src={previewImage}
+											alt='Preview'
+											className='w-full h-full rounded-full object-cover'
+											initial={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											transition={{ duration: 0.3 }}
+										/>
+									) : (
+										<img
+											src={profileImage || '/dashboard/user.svg'}
+											alt='Profile'
+											className='w-full h-full rounded-full object-cover'
+										/>
+									)}
+								</div>
+								<div className='absolute -bottom-3 right-0 bg-[#2C2F36] w-8 h-8 rounded-full hover:bg-[#444B55]'>
+									<label
+										htmlFor='upload-profile-image'
+										className='cursor-pointer  text-sm text-white '
+									>
+										<Image
+											src={'/dashboard/icon-edit.svg'}
+											alt='Edit Profile'
+											width={28}
+											height={28}
+											className='absolute bottom-0 right-[1px]'
+										/>
+									</label>
+									<input
+										id='upload-profile-image'
+										type='file'
+										accept='image/*'
+										className='hidden'
+										onChange={handleImageUpload}
+										disabled={imageLoading}
 									/>
 								</div>
 							</div>
