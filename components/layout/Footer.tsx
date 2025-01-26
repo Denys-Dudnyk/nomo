@@ -56,7 +56,7 @@ const Footer = () => {
 			title: t('sections.company.title'),
 			links: [
 				{ text: t('sections.company.aboutCompany'), href: '' },
-				{ text: t('sections.company.ourTeam'), href: '' },
+				{ text: t('sections.company.ourTeam'), href: '/team' },
 				{ text: t('sections.company.investorRelations'), href: '' },
 				{ text: t('sections.company.career'), href: '' },
 				{ text: t('sections.company.diversity'), href: '' },
@@ -92,8 +92,14 @@ const Footer = () => {
 									{section.links.map(link => (
 										<li key={link.text}>
 											<Link
-												onClick={openDevelopModal}
-												href={link.href}
+												key={link.text}
+												onClick={e => {
+													if (!link.href) {
+														e.preventDefault() // предотвращаем переход по пустому href
+														openDevelopModal()
+													}
+												}}
+												href={link.href || '#'}
 												className='text-[fff] hover:text-accent transition-all text-[18px] font-normal'
 											>
 												{link.text}
@@ -108,9 +114,14 @@ const Footer = () => {
 							{socialLinks.map(social => (
 								<Link
 									key={social.alt}
-									href={social.href}
+									onClick={e => {
+										if (!social.href) {
+											e.preventDefault() // предотвращаем переход по пустому href
+											openDevelopModal()
+										}
+									}}
+									href={social.href || '#'}
 									className='hover:opacity-80 transition-opacity'
-									onClick={openDevelopModal}
 								>
 									<Image
 										src={social.icon || '/placeholder.svg'}

@@ -327,11 +327,11 @@ export default function CompanyProfile({
 	)
 
 	return (
-		<div className='min-h-screen bg-black p-0 sm:p-16'>
+		<div className=' bg-black p-0 sm:p-16'>
 			<main className='max-w-[1440px] mx-auto px-4 py-6'>
 				<Card className='bg-[#1C1E22] border-0 rounded-xl mb-4'>
 					<div className='p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4'>
-						<div className='flex items-center gap-4'>
+						<div className='flex items-center flex-col sm:flex-row gap-5 sm:gap-4'>
 							<div className='relative'>
 								<div className='w-20 h-20 rounded-full bg-[#2C2F36] flex items-center justify-center overflow-hidden'>
 									{previewImage ? (
@@ -378,17 +378,17 @@ export default function CompanyProfile({
 								<div className='flex flex-col sm:flex-row gap-4 sm:gap-12'>
 									<div className='flex flex-col sm:flex-row gap-1 sm:gap-8'>
 										<div className='block items-center'>
-											<h2 className='text-white text-base font-normal mb-1'>
+											<h2 className='text-[#fff] text-base text-center  sm:text-left font-normal mb-1'>
 												{profileType === 'user'
 													? (formData as UserProfile).full_name
 													: (formData as PartnerProfile).company_name ||
 													  'Компанія'}
 											</h2>
-											<FaShareAlt className='text-white' />
+											<FaShareAlt className='text-[#fff]' />
 										</div>
 										<div className='block items-center'>
 											<div className='text-[#6D7380] text-xs mr-2'>UID:</div>
-											<div className='text-white text-md'>
+											<div className='text-[#fff] text-md'>
 												{profile.user_id}
 											</div>
 										</div>
@@ -396,7 +396,7 @@ export default function CompanyProfile({
 											<div className='text-[#6D7380] text-xs mr-2'>
 												Рахунок:
 											</div>
-											<div className='text-white text-md'>497994402</div>
+											<div className='text-[#fff] text-md'>497994402</div>
 										</div>
 									</div>
 								</div>
@@ -407,7 +407,7 @@ export default function CompanyProfile({
 
 				<Card className='bg-[#1C1E22] border-0 rounded-xl'>
 					<div className='p-4 md:p-6'>
-						<h3 className='text-white text-base font-normal mb-6'>
+						<h3 className='text-[#fff] text-base font-normal mb-6'>
 							{profileType === 'partner' ? 'Дані компанії' : 'Особисті дані'}
 						</h3>
 						<div className='space-y-6'>

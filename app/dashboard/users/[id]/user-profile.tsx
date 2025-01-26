@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import CompanyProfile from '@/components/elements/company/company_profile/CompanyProfile'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 interface UserProfileProps {
 	profile: any
@@ -12,6 +13,7 @@ interface UserProfileProps {
 }
 
 export default function UserProfile({ profile, isAdmin }: UserProfileProps) {
+	const router = useRouter()
 	const [loading, setLoading] = useState({
 		transactions: false,
 		income: false,
@@ -19,16 +21,8 @@ export default function UserProfile({ profile, isAdmin }: UserProfileProps) {
 	})
 	const supabase = createClient()
 
-	const handleTransactions = async () => {
-		setLoading(prev => ({ ...prev, transactions: true }))
-		try {
-			// Implement transactions view logic
-			toast.success('Транзакції завантажено')
-		} catch (error) {
-			toast.error('Помилка завантаження транзакцій')
-		} finally {
-			setLoading(prev => ({ ...prev, transactions: false }))
-		}
+	const handleTransactions = () => {
+		router.push(`/dashboard/users/${profile.user_id}/transactions`)
 	}
 
 	const handleIncome = async () => {
@@ -60,19 +54,19 @@ export default function UserProfile({ profile, isAdmin }: UserProfileProps) {
 			<CompanyProfile profile={profile} profileType='user' />
 
 			{isAdmin && (
-				<div className='flex flex-col gap-[45px] max-w-[1440px] mx-auto px-4 '>
-					<div className='grid grid-cols-1 gap-[150px] md:grid-cols-2 '>
+				<div className='flex flex-col gap-5 sm:gap-[45px] w-full max-w-[1440px] mx-auto p-5 sm:px-20 '>
+					<div className='grid grid-cols-1 gap-5 sm:gap-[150px] md:grid-cols-2 '>
 						<Button
 							onClick={handleTransactions}
 							disabled={loading.transactions}
-							className='bg-[#FF8A00] hover:bg-[#FF8A00]/90 text-[#fff] h-auto py-5 font-semibold text-[20px]'
+							className='bg-[#FF8A00] hover:bg-[#FF8A00]/90 text-[#fff] h-auto py-5 font-semibold text-[16px] sm:text-[20px]'
 						>
 							Транзакції Користувача
 						</Button>
 						<Button
 							onClick={handleIncome}
 							disabled={loading.income}
-							className='bg-[#FF8A00] hover:bg-[#FF8A00]/90 text-[#fff] h-auto py-5 font-semibold text-[20px]'
+							className='bg-[#FF8A00] hover:bg-[#FF8A00]/90 text-[#fff] h-auto py-5 font-semibold text-[16px] sm:text-[20px]'
 						>
 							Дохід Від Користувача
 						</Button>
@@ -80,7 +74,7 @@ export default function UserProfile({ profile, isAdmin }: UserProfileProps) {
 					<Button
 						onClick={handleReferral}
 						disabled={loading.referral}
-						className='bg-[#FF8A00] hover:bg-[#FF8A00]/90 text-[#fff] h-auto py-5 font-semibold text-[20px]'
+						className='bg-[#FF8A00] hover:bg-[#FF8A00]/90 text-[#fff] h-auto py-5 font-semibold text-[16px] sm:text-[20px] text-wrap'
 					>
 						Референальний Обігдохід користувача
 					</Button>

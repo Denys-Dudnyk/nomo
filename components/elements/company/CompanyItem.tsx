@@ -100,18 +100,11 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 					<Breadcrumb className='text-white text-sm md:text-base'>
 						<BreadcrumbList>
 							<BreadcrumbItem>
-								<BreadcrumbLink href='/' style={{ fontSize: '12px' }}>
-									Головна
+								<BreadcrumbLink href='/cashback' style={{ fontSize: '12px' }}>
+									Кешбек
 								</BreadcrumbLink>
 							</BreadcrumbItem>
-							<BreadcrumbSeparator>
-								<Slash />
-							</BreadcrumbSeparator>
-							<BreadcrumbItem>
-								<BreadcrumbLink href='/companies' style={{ fontSize: '12px' }}>
-									Компанії
-								</BreadcrumbLink>
-							</BreadcrumbItem>
+
 							<BreadcrumbSeparator>
 								<Slash />
 							</BreadcrumbSeparator>
@@ -126,7 +119,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 							</BreadcrumbItem>
 						</BreadcrumbList>
 						<h3 className=' md:text-2xl font-bold text-white mt-2'>
-							Карточка-превью Компанії
+							Картка Компанії
 						</h3>
 					</Breadcrumb>
 
@@ -189,7 +182,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 							)}
 
 							<Button className='bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 w-full md:w-auto'>
-								Contact Us
+								Зв'яжіться з нами
 							</Button>
 						</div>
 					</div>
@@ -207,23 +200,26 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 									: 'text-gray-400 hover:text-gray-300'
 							)}
 						>
-							About Company
+							Про компанію
 						</button>
-						<button
-							onClick={() => setActiveTab('catalog')}
-							className={cn(
-								'pb-4 px-2 transition-colors',
-								activeTab === 'catalog'
-									? 'border-b-2 border-orange-500 text-white'
-									: 'text-gray-400 hover:text-gray-300'
-							)}
-						>
-							Catalog
-						</button>
+
+						{company.catalogue_enabled === true && (
+							<button
+								onClick={() => setActiveTab('catalog')}
+								className={cn(
+									'pb-4 px-2 transition-colors',
+									activeTab === 'catalog'
+										? 'border-b-2 border-orange-500 text-white'
+										: 'text-gray-400 hover:text-gray-300'
+								)}
+							>
+								Каталог
+							</button>
+						)}
 					</div>
 					<div>
 						<Button className='bg-gray-700 hover:bg-gray-600 text-white px-4 py-2'>
-							My Promocode
+							Мій промокод
 						</Button>
 					</div>
 				</div>
@@ -231,7 +227,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 				{/* Content */}
 				<div className='py-8'>
 					{activeTab === 'about' && (
-						<div className='space-y-8 max-w-3xl'>
+						<div className='space-y-8 w-full'>
 							{/* Description */}
 							<p className='text-gray-300 leading-relaxed'>
 								{company.description}
@@ -239,7 +235,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 
 							{/* Advantages */}
 							<div className='bg-[#252525] rounded-xl p-6'>
-								<h2 className='text-xl font-bold mb-6'>Advantages</h2>
+								<h2 className='text-xl font-bold mb-6'>Переваги</h2>
 								<div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
 									{company.advantages.map((advantage, index) => {
 										const IconComponent = getRandomIcon()
@@ -250,7 +246,6 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 												</div>
 												<span>{advantage}</span>
 											</div>
-		
 										)
 									})}
 								</div>
@@ -258,7 +253,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 
 							{/* Contacts */}
 							<div className='bg-[#252525] rounded-xl p-6'>
-								<h2 className='text-xl font-bold mb-6'>Contacts</h2>
+								<h2 className='text-xl font-bold mb-6'>Контакти</h2>
 								<div className='space-y-4'>
 									{[
 										{ icon: MapPin, value: company.contacts.address },
@@ -296,7 +291,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 						>
 							<X className='h-6 w-6' />
 						</Button>
-						<h2 className='text-xl font-bold mb-4'>QR Code</h2>
+						<h2 className='text-xl font-bold mb-4'>QR-код</h2>
 						<div className='bg-white p-4 rounded-lg'>
 							<QrCode className='h-48 w-48 text-black' />
 						</div>

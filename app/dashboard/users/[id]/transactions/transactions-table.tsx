@@ -11,13 +11,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import {
-	Filter,
-	Download,
-	ChevronLeft,
-	ChevronRight,
-	CalendarRange,
-} from 'lucide-react'
+import { Filter, ChevronLeft, ChevronRight, CalendarRange } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import {
 	Select,
@@ -27,24 +21,18 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import Image from 'next/image'
-import { getTransactions } from '@/app/actions/transactions'
-// import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/client'
 
 interface TransactionsTableProps {
+	userId: string
 	currentMonth: string
 	currency: string
-	onMonthChange: (month: string) => void
-	onCurrencyChange: (currency: string) => void
+	onMonthChange?: (month: string) => void
+	onCurrencyChange?: (currency: string) => void
 }
 
-const today = new Date()
-const formattedDate = `${today.getDate()}/${
-	today.getMonth() + 1
-}/${today.getFullYear()}`
-console.log(formattedDate)
-
 export default function TransactionsTable({
+	userId,
 	currentMonth,
 	currency,
 	onMonthChange,
@@ -55,35 +43,38 @@ export default function TransactionsTable({
 		today.getMonth() + 1
 	).padStart(2, '0')}.${today.getFullYear()}`
 
-	const formatNCOIN = (value: number) => value.toFixed(8)
-	const formatUAH = (value: number) => `${value} UAH`
-	const formatPercent = (value: number) => `${value.toFixed(2)}%`
-
 	const [transactions, setTransactions] = useState<any[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
 
-	// Fetch transactions when the component mounts
 	useEffect(() => {
 		const fetchTransactions = async () => {
 			try {
-				// Assuming you have a way to get the current userId
-				// const cookieStore = cookies()
-				// @ts-ignore
-				const supabase = await createClient()
-				const {
-					data: { user },
-				} = await supabase.auth.getUser()
-				const userId = String(user?.id) // Replace with real user ID
-				const data = await getTransactions(userId)
-				setTransactions(data)
+				const supabase = createClient()
+
+				// Get transactions for specific user
+				const { data, error } = await supabase
+					.from('transactions')
+					.select('*')
+					.eq('user_id', userId)
+					.order('created_at', { ascending: false })
+
+				if (error) throw error
+
+				setTransactions(data || [])
 				setLoading(false)
 
+				// Set up real-time subscription
 				const subscription = supabase
 					.channel('realtime:transactions')
 					.on(
 						'postgres_changes',
-						{ event: 'INSERT', schema: 'public', table: 'transactions' },
+						{
+							event: 'INSERT',
+							schema: 'public',
+							table: 'transactions',
+							filter: `user_id=eq.${userId}`,
+						},
 						payload => {
 							setTransactions(prev => [payload.new, ...prev])
 						}
@@ -100,18 +91,18 @@ export default function TransactionsTable({
 		}
 
 		fetchTransactions()
-	}, [])
+	}, [userId])
 
 	if (loading) {
 		return (
-			<div className=' text-white flex items-center justify-center'>
+			<div className='text-white flex items-center justify-center'>
 				<div className='animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-white'></div>
 			</div>
 		)
 	}
 
 	if (error) {
-		return <div>{error}</div>
+		return <div className='text-red-500'>{error}</div>
 	}
 
 	return (
@@ -125,60 +116,46 @@ export default function TransactionsTable({
 						Сьогодні {formattedDate}
 					</div>
 				</div>
-				<div className='flex gap-[32px] max-h-[38px] mb-[240px] md:mb-24 lg:mb-12 flex-col lg:flex-row '>
+
+				<div className='flex gap-[32px] max-h-[38px] mb-[240px] md:mb-24 lg:mb-12 flex-col lg:flex-row'>
 					<div className='flex items-center gap-16 grid-filter'>
 						<Input
 							type='text'
 							placeholder='Останні транзакції'
 							className='bg-[#1E2128] border-[0.5px] border-[#919191] rounded-[7px] px-6 py-[10px] placeholder:text-[14px] h-full'
 						/>
-						<Button className='bg-[#1E2128] text-[#919191]  text-[14px] leading-[18px] font-normal px-6 py-[7px] h-[43px] lg:h-full flex gap-[12px]'>
+						<Button className='bg-[#1E2128] text-[#919191] text-[14px] leading-[18px] font-normal px-6 py-[7px] h-[43px] lg:h-full flex gap-[12px]'>
 							<Filter className='h-6 w-6' />
 							<div>Фільтри</div>
 						</Button>
 					</div>
-					<div className='flex  md:items-center flex-col md:flex-row md:justify-between lg:justify-center gap-[32px] h-full md:h-auto'>
+
+					<div className='flex md:items-center flex-col md:flex-row md:justify-between lg:justify-center gap-[32px] h-full md:h-auto'>
 						<Button className='bg-[#1E2128] px-[12px] py-[10px] text-[14px] leading-[18px] font-normal h-full text-[#919191] flex gap-7'>
 							{currentMonth}
-							<CalendarRange className={'w-4 h-4'} />
+							<CalendarRange className='w-4 h-4' />
 						</Button>
-						<Select>
-							{/* {currency} */}
 
+						<Select>
 							<SelectTrigger className='border-none bg-[#1E2128] px-[12px] py-[10px] text-[14px] leading-[18px] font-normal text-[#919191] flex gap-7 w-auto h-[38px] md:h-full'>
 								<Image
-									src={'/dashboard/uah.svg'}
+									src='/dashboard/uah.svg'
 									alt='UAH'
 									width={24}
 									height={24}
 								/>
-								<SelectValue placeholder={`${currency}`} />
+								<SelectValue placeholder={currency} />
 							</SelectTrigger>
 							<SelectContent className='bg-[#1E2128] text-[#919191] border-none'>
-								<SelectItem
-									className='bg-[#1E2128] text-[#919191]'
-									value='light'
-								>
-									{currency}
-								</SelectItem>
-								<SelectItem
-									className='bg-[#1E2128] text-[#919191]'
-									value='dark'
-								>
-									{currency}
-								</SelectItem>
-								<SelectItem
-									className='bg-[#1E2128] text-[#919191]'
-									value='system'
-								>
-									{currency}
+								<SelectItem value='UAH' className='bg-[#1E2128] text-[#919191]'>
+									UAH
 								</SelectItem>
 							</SelectContent>
 						</Select>
 
 						<Button className='bg-[#1E2128] px-[21px] py-[7px] text-[14px] leading-[18px] font-normal h-full text-[#919191] flex gap-[15px]'>
 							<Image
-								src={'/dashboard/export.svg'}
+								src='/dashboard/export.svg'
 								alt='Export'
 								width={24}
 								height={24}
@@ -218,14 +195,14 @@ export default function TransactionsTable({
 									key={tx.id}
 									className='border-[#242424] text-[#fff] text-[14px] font-normal leading-[18px]'
 								>
-									<TableCell className=''>
-										<div className='flex items-center gap-2 '>
+									<TableCell>
+										<div className='flex items-center gap-2'>
 											<div
 												className={`${
-													tx.status === 'Успішно'
+													tx.status === 'success'
 														? 'bg-[#542A30]'
 														: 'bg-[#214D40]'
-												}  rounded-[7px] w-10 h-10  text-center  text-[11px] font-semibold`}
+												} rounded-[7px] w-10 h-10 text-center text-[11px] font-semibold`}
 											>
 												<div>{tx.scanned_date}</div>
 											</div>
@@ -260,7 +237,7 @@ export default function TransactionsTable({
 									<TableCell>{tx.amount} UAH</TableCell>
 									<TableCell>
 										<div className='flex items-center gap-9'>
-											<div className='bg-accent text-[#fff] py-[1px] px-[11px] text-[11px] font-semibold leading-[18px] rounded-[7px] '>
+											<div className='bg-accent text-[#fff] py-[1px] px-[11px] text-[11px] font-semibold leading-[18px] rounded-[7px]'>
 												28,67%
 											</div>
 											<div>{tx.savings_amount} UAH</div>
@@ -292,7 +269,7 @@ export default function TransactionsTable({
 								key={i}
 								className={`bg-transparent text-[#919191] hover:bg-transparent ${
 									page === 1 ? 'text-[#FF8A00]' : 'border-gray-700'
-								} `}
+								}`}
 							>
 								{page}
 							</Button>
@@ -300,7 +277,7 @@ export default function TransactionsTable({
 					</div>
 					<Button
 						variant='outline'
-						className=' border-[#1E2128] px-[7.5px] py-[10px] text-accent bg-transparent'
+						className='border-[#1E2128] px-[7.5px] py-[10px] text-accent bg-transparent'
 					>
 						Далі
 						<ChevronRight className='h-4 w-4 ml-2' />

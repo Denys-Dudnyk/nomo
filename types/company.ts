@@ -18,6 +18,20 @@ export interface Company {
 	}
 	created_at: string
 	updated_at: string
+	// New fields
+	short_name?: string | null
+	business_category?: string | null
+	legal_address?: string | null
+	physical_address?: string | null
+	edrpou?: string | null
+	tax_scheme?: string | null
+	tax_group?: string | null
+	certificate?: string | null
+	vat_enabled?: boolean
+	base_discount?: number
+	additional_discount?: number
+	bonus_discount?: number
+	catalogue_enabled?: boolean
 }
 
 export type CompanyFormData = Omit<Company, 'id' | 'created_at' | 'updated_at'>

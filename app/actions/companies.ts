@@ -7,16 +7,16 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 
 // Helper function to convert database response to frontend model
-function convertDatabaseToCompany(data: CompanyDatabase): Company {
-	return {
-		...data,
-		description: data.description ?? '',
-		logo_url: data.logo_url ?? '',
-		banner_url: data.banner_url ?? '',
-		location: data.location ?? '',
-		promocode: data.promocode ?? '',
-	}
-}
+// function convertDatabaseToCompany(data: CompanyDatabase): Company {
+// 	return {
+// 		...data,
+// 		description: data.description ?? '',
+// 		logo_url: data.logo_url ?? '',
+// 		banner_url: data.banner_url ?? '',
+// 		location: data.location ?? '',
+// 		promocode: data.promocode ?? '',
+// 	}
+// }
 
 export async function getCompanies() {
 	const cookieStore = cookies()

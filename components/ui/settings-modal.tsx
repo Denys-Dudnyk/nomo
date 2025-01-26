@@ -29,7 +29,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 			title: 'Дашборд',
 			// href: '/admin/dashboard',
 			subMenu: [
-				{ href: '', text: 'Огляд показників' },
+				{ href: '/dashboard/companies/analysis', text: 'Огляд показників' },
 				{ href: '', text: 'Ключові метрики' },
 				{ href: '', text: 'Тренди та статистика' },
 				{ href: '', text: 'Список останніх активностей' },

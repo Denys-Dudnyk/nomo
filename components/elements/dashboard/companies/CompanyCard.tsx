@@ -18,7 +18,7 @@ export function CompanyCard({ company }: CompanyCardProps) {
 					</div>
 				</div>
 				<Link
-					href={`/dashboard/companies/${company.id}`}
+					href={`/dashboard/companies/${company.id}/settings`}
 					className='text-accent hover:text-accenthover text-sm'
 				>
 					Детальніше
