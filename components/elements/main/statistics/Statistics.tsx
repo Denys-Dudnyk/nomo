@@ -30,13 +30,10 @@ const Statistics = () => {
 					{t('subtitle')}
 				</h3>
 				<div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-[70px]'>
-					<StatsCard title={t('cards.visits')} data={mockData.visits} />
-					<StatsCard title={t('cards.users')} data={mockData.users} />
-					<StatsCard
-						title={t('cards.transactions')}
-						data={mockData.transactions}
-					/>
-					<StatsCard title={t('cards.crypto')} data={mockData.crypto} />
+					<StatsCard title={t('cards.visits')} type='visits' />
+					<StatsCard title={t('cards.users')} type='users' />
+					<StatsCard title={t('cards.transactions')} type='transactions' />
+					<StatsCard title={t('cards.crypto')} type='crypto' />
 				</div>
 			</div>
 		</section>

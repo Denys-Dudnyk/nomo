@@ -9,42 +9,65 @@ import {
 	Tooltip,
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-
-interface DataPoint {
-	value: number
-	compareValue: number
-	month: string
-}
+import { useState, useEffect } from 'react'
+import { format } from 'date-fns'
+import { uk } from 'date-fns/locale'
+import { createClient } from '@/lib/supabase/client'
 
 interface StatsCardProps {
 	title: string
-	data: DataPoint[]
+	type: 'visits' | 'users' | 'transactions' | 'crypto'
 }
 
-const StatsCard = ({ title, data }: StatsCardProps) => {
+interface StatData {
+	date: string
+	visits: number
+	registered_users: number
+}
+
+const StatsCard = ({ title, type }: StatsCardProps) => {
 	const [activeTimeframe, setActiveTimeframe] = useState<
 		'12m' | '30d' | '7d' | '24h'
 	>('12m')
+	const [data, setData] = useState<StatData[]>([])
+	const [loading, setLoading] = useState(true)
 
-	const formatMonth = (month: string) => {
-		return month.charAt(0).toUpperCase() + month.slice(1).replace('.', '')
-	}
+	useEffect(() => {
+		const fetchData = async () => {
+			setLoading(true)
+			const supabase = createClient()
 
-	const t = useTranslations('mainpage.statistics')
+			try {
+				const { data: statsData, error } = await supabase
+					.from('statistics')
+					.select('*')
+					.order('date', { ascending: true })
 
-	const getFilteredData = () => {
-		switch (activeTimeframe) {
-			case '30d':
-				return data.slice(-1)
-			case '7d':
-				return data.slice(-1)
-			case '24h':
-				return data.slice(-1)
-			default:
-				return data
+				if (error) throw error
+
+				setData(statsData || [])
+			} catch (error) {
+				console.error('Error fetching statistics:', error)
+			} finally {
+				setLoading(false)
+			}
 		}
+
+		fetchData()
+	}, [])
+
+	const formatChartData = () => {
+		if (!data.length) return []
+
+		return data.map(item => ({
+			month: format(new Date(item.date), 'MMM', { locale: uk }),
+			value: type === 'visits' ? item.visits : item.registered_users,
+			forecast:
+				type === 'visits' || type === 'users'
+					? (type === 'visits' ? item.visits : item.registered_users) *
+					  (1 + Math.random() * 0.2)
+					: 0,
+		}))
 	}
 
 	return (
@@ -56,117 +79,135 @@ const StatsCard = ({ title, data }: StatsCardProps) => {
 				<div className='flex text-[10px] sm:text-[15px] font-normal leading-[18.15px] px-2 sm:px-0 items-center sm:items-start justify-center sm:justify-start'>
 					<button
 						onClick={() => setActiveTimeframe('12m')}
-						className={`border border-[#919191] rounded-tl-[10px] rounded-bl-[10px]  px-3 py-[14px] ${
+						className={`border border-[#919191] rounded-tl-[10px] rounded-bl-[10px] px-3 py-[14px] ${
 							activeTimeframe === '12m' ? 'text-accent' : 'text-[#919191]'
 						}`}
 					>
-						{t('days.12m')}
+						12М
 					</button>
 					<button
 						onClick={() => setActiveTimeframe('30d')}
-						className={`border border-[#919191] hover:bg-white/10 px-5  py-[14px]   transition-colors  ${
+						className={`border border-[#919191] px-5 py-[14px] ${
 							activeTimeframe === '30d' ? 'text-accent' : 'text-[#919191]'
 						}`}
 					>
-						{t('days.30d')}
+						30Д
 					</button>
 					<button
 						onClick={() => setActiveTimeframe('7d')}
-						className={`border border-[#919191] hover:bg-white/10 px-5  py-[14px]  transition-colors text-[#919191] ${
+						className={`border border-[#919191] px-5 py-[14px] ${
 							activeTimeframe === '7d' ? 'text-accent' : 'text-[#919191]'
 						}`}
 					>
-						{t('days.7d')}
+						7Д
 					</button>
 					<button
 						onClick={() => setActiveTimeframe('24h')}
-						className={`border border-[#919191] hover:bg-white/10 px-5  py-[14px] rounded-tr-[10px] rounded-br-[10px]  transition-colors text-[#919191] ${
+						className={`border border-[#919191] rounded-tr-[10px] rounded-br-[10px] px-5 py-[14px] ${
 							activeTimeframe === '24h' ? 'text-accent' : 'text-[#919191]'
 						}`}
 					>
-						{t('days.24h')}
+						24Г
 					</button>
 				</div>
 			</CardHeader>
 			<CardContent>
 				<div className='h-[200px] mt-4'>
-					<ResponsiveContainer width='100%' height='100%'>
-						<AreaChart
-							data={getFilteredData()}
-							margin={{ top: 0, right: 28, left: 0, bottom: 0 }}
-						>
-							<defs>
-								<linearGradient id='colorGradient' x1='0' y1='0' x2='0' y2='1'>
-									<stop offset='0%' stopColor='#EAD0FFCC' stopOpacity={'80%'} />
-									<stop
-										offset='100%'
-										stopColor='#EAD0FFCC'
-										stopOpacity={'1%'}
-									/>
-								</linearGradient>
-								<linearGradient
-									id='compareGradient'
-									x1='0'
-									y1='0'
-									x2='0'
-									y2='1'
-								>
-									<stop offset='0%' stopColor='#A595FFCC' stopOpacity={'80%'} />
-									<stop
-										offset='100%'
-										stopColor='#C1B6FF03'
-										stopOpacity={'1%'}
-									/>
-								</linearGradient>
-							</defs>
-							<XAxis
-								dataKey='month'
-								tick={{ fill: '#9CA3AF' }}
-								axisLine={false}
-								tickLine={false}
-								dy={5}
-								// minTickGap={-40}
-								tickFormatter={formatMonth}
-								fontSize={13}
-							/>
-							<YAxis
-								domain={[40000, 60000]}
-								tickFormatter={value => `${value / 1000}k`}
-								tick={{ fill: '#9CA3AF' }}
-								axisLine={false}
-								tickLine={false}
-								className=''
-								tickMargin={14}
-								tickCount={3}
-							/>
-							<Tooltip
-								contentStyle={{
-									backgroundColor: '#1F2937',
-									border: 'none',
-									borderRadius: '0.5rem',
-									color: 'white',
-								}}
-								formatter={(value: number) => [
-									`${(value / 1000).toFixed(1)}k`,
-									'Значення',
-								]}
-							/>
-							<Area
-								type='monotone'
-								dataKey='value'
-								stroke='#EAD0FF'
-								strokeWidth={3}
-								fill='url(#colorGradient)'
-							/>
-							<Area
-								type='monotone'
-								dataKey='compareValue'
-								stroke='#A595FF'
-								strokeWidth={3}
-								fill='url(#compareGradient)'
-							/>
-						</AreaChart>
-					</ResponsiveContainer>
+					{loading ? (
+						<div className='flex items-center justify-center h-full text-[#919191]'>
+							Завантаження...
+						</div>
+					) : (
+						<ResponsiveContainer width='100%' height='100%'>
+							<AreaChart
+								data={formatChartData()}
+								margin={{ top: 0, right: 28, left: 0, bottom: 0 }}
+							>
+								<defs>
+									<linearGradient
+										id='colorGradient'
+										x1='0'
+										y1='0'
+										x2='0'
+										y2='1'
+									>
+										<stop
+											offset='0%'
+											stopColor='#EAD0FFCC'
+											stopOpacity={'80%'}
+										/>
+										<stop
+											offset='100%'
+											stopColor='#EAD0FFCC'
+											stopOpacity={'1%'}
+										/>
+									</linearGradient>
+									<linearGradient
+										id='realDataGradient'
+										x1='0'
+										y1='0'
+										x2='0'
+										y2='1'
+									>
+										<stop offset='0%' stopColor='#FF8A00' stopOpacity={'80%'} />
+										<stop
+											offset='100%'
+											stopColor='#FF8A00'
+											stopOpacity={'1%'}
+										/>
+									</linearGradient>
+								</defs>
+								<XAxis
+									dataKey='month'
+									tick={{ fill: '#9CA3AF' }}
+									axisLine={false}
+									tickLine={false}
+									dy={5}
+									fontSize={13}
+								/>
+								<YAxis
+									tickFormatter={value => `${(value / 1000).toFixed(1)}k`}
+									tick={{ fill: '#9CA3AF' }}
+									axisLine={false}
+									tickLine={false}
+									tickMargin={14}
+									tickCount={3}
+								/>
+								<Tooltip
+									contentStyle={{
+										backgroundColor: '#1F2937',
+										border: 'none',
+										borderRadius: '0.5rem',
+										color: 'white',
+									}}
+									formatter={(value: number, name: string) => [
+										`${(value / 1000).toFixed(1)}k`,
+										name === 'value' ? 'Реальні дані' : 'Прогноз',
+									]}
+								/>
+								{(type === 'visits' || type === 'users') && (
+									<>
+										<Area
+											type='monotone'
+											dataKey='forecast'
+											stroke='#EAD0FF'
+											strokeWidth={3}
+											fill='url(#colorGradient)'
+											name='Прогноз'
+										/>
+										<Area
+											type='monotone'
+											dataKey='value'
+											stroke='#FF8A00'
+											strokeWidth={3}
+											fill='url(#realDataGradient)'
+											name='Реальні дані'
+										/>
+									</>
+								)}
+							</AreaChart>
+						</ResponsiveContainer>
+					)}
 				</div>
 			</CardContent>
 		</Card>

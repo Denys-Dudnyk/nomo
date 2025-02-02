@@ -9,6 +9,7 @@ import { getLocale, getMessages } from 'next-intl/server'
 import { Analytics } from '@vercel/analytics/next'
 // import { Toaster } from 'sonner'
 import { Toaster } from 'react-hot-toast'
+import { UmamiScript } from '@/components/analytics/UmamiScript'
 
 const inter = Inter({
 	subsets: ['cyrillic'],
@@ -44,6 +45,7 @@ export default async function RootLayout({
 				<NextIntlClientProvider messages={messages}>
 					<Header />
 					{children}
+					<UmamiScript />
 					<Footer />
 					<Toaster
 						position='top-center'
