@@ -7,7 +7,7 @@ import Statistics from './statistics/Statistics'
 
 const MainPage = () => {
 	return (
-		<main className={''}>
+		<main>
 			<Hero />
 			<ProductOverview />
 			<Projects bgColor='bg-[#0f0f0f]' />
