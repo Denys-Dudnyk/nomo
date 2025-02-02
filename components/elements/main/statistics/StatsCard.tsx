@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import { uk } from 'date-fns/locale'
 import { createClient } from '@/lib/supabase/client'
+import { umamiClient } from '@/lib/services/umami'
 
 interface StatsCardProps {
 	title: string
@@ -35,17 +36,47 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			setLoading(true)
-			const supabase = createClient()
+			const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID || ''
 
 			try {
-				const { data: statsData, error } = await supabase
+				// Get data for the selected timeframe
+				const now = new Date()
+				const days = getTimeframeDays(activeTimeframe)
+				const startAt = new Date(
+					now.getTime() - days * 24 * 60 * 60 * 1000
+				).getTime()
+				const endAt = now.getTime()
+
+				// Fetch data from Umami
+				const stats = await umamiClient.getWebsiteStats(websiteId, {
+					startAt,
+					endAt,
+					// unit: getTimeframeUnit(activeTimeframe), // Ensure correct unit (day, month, hour)
+				})
+
+				// Check if the data structure is correct
+				if (!stats.data?.visitors || !Array.isArray(stats.data.visitors)) {
+					console.error('Invalid data format from Umami:', stats.data?.visitors)
+					return
+				}
+
+				// Fetch registered users data from Supabase
+				const supabase = createClient()
+				const { data: supabaseStats, error: supabaseError } = await supabase
 					.from('statistics')
 					.select('*')
 					.order('date', { ascending: true })
 
-				if (error) throw error
+				if (supabaseError) throw supabaseError
 
-				setData(statsData || [])
+				// Combine the data
+				const combinedData = stats.data.visitors.map((item, index) => ({
+					date: format(new Date(item.date), 'yyyy-MM-dd'),
+					visits: item.value,
+					registered_users: supabaseStats?.[index]?.registered_users || 0,
+				}))
+
+				setData(combinedData)
 			} catch (error) {
 				console.error('Error fetching statistics:', error)
 			} finally {
@@ -54,7 +85,7 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 		}
 
 		fetchData()
-	}, [])
+	}, [activeTimeframe])
 
 	const formatChartData = () => {
 		if (!data.length) return []
@@ -68,6 +99,34 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 					  (1 + Math.random() * 0.2)
 					: 0,
 		}))
+	}
+
+	function getTimeframeDays(timeframe: '12m' | '30d' | '7d' | '24h'): number {
+		switch (timeframe) {
+			case '12m':
+				return 365
+			case '30d':
+				return 30
+			case '7d':
+				return 7
+			case '24h':
+				return 1
+			default:
+				return 30
+		}
+	}
+
+	function getTimeframeUnit(
+		timeframe: '12m' | '30d' | '7d' | '24h'
+	): 'hour' | 'day' | 'month' {
+		switch (timeframe) {
+			case '12m':
+				return 'month'
+			case '24h':
+				return 'hour'
+			default:
+				return 'day'
+		}
 	}
 
 	return (

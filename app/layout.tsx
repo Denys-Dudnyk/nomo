@@ -39,6 +39,11 @@ export default async function RootLayout({
 					name='google-site-verification'
 					content='aW3Xlc5OqSPPscmVbpQrK3HXEbZ1_PLsVa-TMf-Ian4'
 				/>
+				<script
+					defer
+					src='https://cloud.umami.is/script.js'
+					data-website-id='df605b01-6889-4d62-8805-e02c4962edfe'
+				></script>
 			</Head>
 
 			<body className={`${inter.className} antialiased`}>
