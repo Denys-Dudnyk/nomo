@@ -23,11 +23,11 @@ export function ScanButton() {
 				Scan QR Code
 			</Button>
 
-			<QRScanner
+			{/* <QRScanner
 				isOpen={showScanner}
 				onClose={() => setShowScanner(false)}
-				onSuccess={handleSuccess}
-			/>
+				// onSuccess={handleSuccess}
+			/> */}
 		</>
 	)
 }

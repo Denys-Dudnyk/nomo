@@ -51,6 +51,7 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 				const stats = await umamiClient.getWebsiteStats(websiteId, {
 					startAt,
 					endAt,
+
 					// unit: getTimeframeUnit(activeTimeframe), // Ensure correct unit (day, month, hour)
 				})
 

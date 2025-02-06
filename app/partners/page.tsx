@@ -1,4 +1,5 @@
 import BrandLogo from '@/components/elements/auth/brandlogo'
+import Business from '@/components/elements/business/Business'
 import Dashboard from '@/components/elements/dashboard/Dashboard'
 import PartnersDashboard from '@/components/elements/partners/Dashboard'
 import { getPartnerProfile, getUserProfile } from '@/lib/database'
@@ -36,7 +37,7 @@ export default async function PartnersPage() {
 
 		return (
 			<div className='min-h-screen bg-[#0f0f0f] text-white'>
-				<PartnersDashboard session={session} profile={profile} />
+				<Business session={session} profile={profile} />
 			</div>
 		)
 	} catch (error) {

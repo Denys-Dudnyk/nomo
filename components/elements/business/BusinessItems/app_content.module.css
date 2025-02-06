@@ -1,0 +1,9 @@
+.content * {
+    @apply border-border;
+  }
+  
+  .content {
+    @apply bg-background text-foreground;
+  }
+  
+  

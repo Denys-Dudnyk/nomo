@@ -10,7 +10,7 @@ export async function POST(request: Request) {
 		// @ts-ignore
 		const supabase = await createClient(cookieStore)
 
-		const { qrData } = await request.json()
+		const { qrData, transactionData } = await request.json()
 		console.log('Request QR data:', qrData)
 
 		// Get current user (scanner)
@@ -85,9 +85,9 @@ export async function POST(request: Request) {
 				.insert([
 					{
 						user_id: id, // Use QR owner's ID instead of scanner's ID
-						description: 'Hyatt Regency',
+						description: transactionData.description,
 						status: 'success',
-						amount: 150,
+						amount: transactionData.amount,
 						savings_percent: 28.67,
 						savings_amount: 40,
 						balance: 40,

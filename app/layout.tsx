@@ -10,6 +10,8 @@ import { Analytics } from '@vercel/analytics/next'
 // import { Toaster } from 'sonner'
 import { Toaster } from 'react-hot-toast'
 import { UmamiScript } from '@/components/analytics/UmamiScript'
+import ConditionalHeader from '@/components/layout/ConditionalHeader'
+import ConditionalFooter from '@/components/layout/ConditionalFooter'
 
 const inter = Inter({
 	subsets: ['cyrillic'],
@@ -48,10 +50,10 @@ export default async function RootLayout({
 
 			<body className={`${inter.className} antialiased`}>
 				<NextIntlClientProvider messages={messages}>
-					<Header />
+					<ConditionalHeader />
 					{children}
 					<UmamiScript />
-					<Footer />
+					<ConditionalFooter />
 					<Toaster
 						position='top-center'
 						toastOptions={{
