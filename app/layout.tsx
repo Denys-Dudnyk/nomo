@@ -12,6 +12,7 @@ import { Toaster } from 'react-hot-toast'
 import { UmamiScript } from '@/components/analytics/UmamiScript'
 import ConditionalHeader from '@/components/layout/ConditionalHeader'
 import ConditionalFooter from '@/components/layout/ConditionalFooter'
+import Script from 'next/script'
 
 const inter = Inter({
 	subsets: ['cyrillic'],
@@ -74,6 +75,7 @@ export default async function RootLayout({
 				</NextIntlClientProvider>
 				<Analytics />
 			</body>
+			<Script src='https://scripts.simpleanalyticscdn.com/latest.js' />
 		</html>
 	)
 }
