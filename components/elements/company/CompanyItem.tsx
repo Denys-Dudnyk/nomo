@@ -43,6 +43,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { getStorageUrl } from '@/lib/supabase/storage'
 import { useIsAdmin } from '@/hooks/useIsAdmin'
+import { useTranslations } from 'next-intl'
 
 interface CompanyItemProps {
 	company: Company
@@ -65,6 +66,7 @@ const iconList: LucideIcon[] = [
 	ShoppingBag,
 ]
 export default function CompanyItem({ company }: CompanyItemProps) {
+	const t = useTranslations('cashback')
 	const [activeTab, setActiveTab] = useState('about')
 	const [showQRCode, setShowQRCode] = useState(false)
 
@@ -101,7 +103,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 						<BreadcrumbList>
 							<BreadcrumbItem>
 								<BreadcrumbLink href='/cashback' style={{ fontSize: '12px' }}>
-									Кешбек
+									{t('cashback2')}
 								</BreadcrumbLink>
 							</BreadcrumbItem>
 
@@ -119,7 +121,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 							</BreadcrumbItem>
 						</BreadcrumbList>
 						<h3 className=' md:text-2xl font-bold text-white mt-2'>
-							Картка Компанії
+							{t('company_card')}
 						</h3>
 					</Breadcrumb>
 
@@ -141,7 +143,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 								/>
 								{company.is_active && (
 									<span className='absolute bottom-0 right-0 bg-green-500 text-white text-xs px-2 py-1 rounded-full'>
-										Active
+										{t('active')}
 									</span>
 								)}
 							</div>
@@ -182,7 +184,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 							)}
 
 							<Button className='bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 w-full md:w-auto'>
-								Зв'яжіться з нами
+								{t('contact_us')}
 							</Button>
 						</div>
 					</div>
@@ -200,7 +202,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 									: 'text-gray-400 hover:text-gray-300'
 							)}
 						>
-							Про компанію
+							{t('about_company')}
 						</button>
 
 						{company.catalogue_enabled === true && (
@@ -213,13 +215,13 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 										: 'text-gray-400 hover:text-gray-300'
 								)}
 							>
-								Каталог
+								{t('catalog')}
 							</button>
 						)}
 					</div>
 					<div>
 						<Button className='bg-gray-700 hover:bg-gray-600 text-white px-4 py-2'>
-							Мій промокод
+							{t('promocode')}
 						</Button>
 					</div>
 				</div>
@@ -235,7 +237,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 
 							{/* Advantages */}
 							<div className='bg-[#252525] rounded-xl p-6'>
-								<h2 className='text-xl font-bold mb-6'>Переваги</h2>
+								<h2 className='text-xl font-bold mb-6'>{t('advantages')}</h2>
 								<div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
 									{company.advantages.map((advantage, index) => {
 										const IconComponent = getRandomIcon()
@@ -253,7 +255,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 
 							{/* Contacts */}
 							<div className='bg-[#252525] rounded-xl p-6'>
-								<h2 className='text-xl font-bold mb-6'>Контакти</h2>
+								<h2 className='text-xl font-bold mb-6'>{t('contacts')}</h2>
 								<div className='space-y-4'>
 									{[
 										{ icon: MapPin, value: company.contacts.address },
@@ -291,7 +293,7 @@ export default function CompanyItem({ company }: CompanyItemProps) {
 						>
 							<X className='h-6 w-6' />
 						</Button>
-						<h2 className='text-xl font-bold mb-4'>QR-код</h2>
+						<h2 className='text-xl font-bold mb-4'>{t('qr')}</h2>
 						<div className='bg-white p-4 rounded-lg'>
 							<QrCode className='h-48 w-48 text-black' />
 						</div>

@@ -82,8 +82,17 @@ export default function NavigationCards({
 		<>
 			<div className='flex justify-between gap-[10px]'>
 				<div className='order-last sm:order-first space-y-[32px]'>
+					<Link href={''} passHref>
+						<Image
+							src={'/dashboard/fbook.svg'}
+							width={32}
+							height={32}
+							className=' cursor-pointer hover:text-white transition-colors'
+							alt=''
+						/>
+					</Link>
 					<Link href='/dashboard/settings' passHref>
-						<Settings className='text-[#919191] h-[32px] w-[32px]  cursor-pointer hover:text-white transition-colors' />
+						<Settings className='text-[#919191] mt-8 h-[32px] w-[32px]  cursor-pointer hover:text-white transition-colors' />
 					</Link>
 					<Link href='/portfolio' passHref>
 						<Briefcase className='text-[#919191] mt-8 h-[32px] w-[32px] cursor-pointer hover:text-white transition-colors' />
@@ -105,25 +114,25 @@ export default function NavigationCards({
 					{/* Первая карточка N-Inwest */}
 					<Card
 						className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
-						style={{ width: '100%', maxWidth: '386px', height: '214px' }}
+						style={{ width: '100%', maxWidth: '386px', height: '228px' }}
 						onClick={handleNavigateToNInwest}
 					>
 						<h3 className='font-light text-[#FFFFFF] text-[19px]'>N-Inwest</h3>
 					</Card>
 
 					{/* Остальные карточки */}
-					<div className='grid grid-cols-2 gap-4 sm:gap-[10px] col-span-1 sm:col-span-2'>
+					<div className='grid grid-cols-2 gap-4 col-span-1 sm:col-span-2'>
 						<button onClick={() => setShowQRCode(true)}>
 							<Card
 								className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
-								style={{ width: '100%', maxWidth: '185px', height: '103px' }}
+								style={{ width: '100%', maxWidth: '185px', height: '105px' }}
 							>
 								<h3 className='font-medium text-gray-200'>QR-код</h3>
 							</Card>
 						</button>
 						<Card
 							className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
-							style={{ width: '100%', maxWidth: '185px', height: '103px' }}
+							style={{ width: '100%', maxWidth: '185px', height: '105px' }}
 							onClick={handleNavigateToNRefer}
 						>
 							<h3 className='font-medium text-gray-200'>Запросити друга</h3>
@@ -131,7 +140,7 @@ export default function NavigationCards({
 
 						<Card
 							className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
-							style={{ width: '100%', maxWidth: '185px', height: '103px' }}
+							style={{ width: '100%', maxWidth: '185px', height: '105px' }}
 							onClick={handleNavigateData}
 						>
 							<h3 className='font-medium text-gray-200'>Дані</h3>
@@ -139,7 +148,7 @@ export default function NavigationCards({
 
 						<Card
 							className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
-							style={{ width: '100%', maxWidth: '185px', height: '103px' }}
+							style={{ width: '100%', maxWidth: '185px', height: '105px' }}
 							onClick={handleNavigateToNUB}
 						>
 							<h3 className='font-medium text-gray-200'>Баланс</h3>

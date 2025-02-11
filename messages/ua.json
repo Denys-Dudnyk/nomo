@@ -389,5 +389,38 @@
 		"buy": "Придбати",
 		"task": "Завдання",
 		"no_task": "Немає завдань."
+	},
+
+	"cashback": {
+		"best": "Найкращі пропозиції",
+		"cashback": "КЕШБЕК",
+		"filtres": "Фільтри",
+		"cashback2": "Кешбек",
+		"prev_page": "ПОПЕРЕДНЯ",
+		"next_page": "НАСТУПНА",
+		"active": "Активна",
+		"company_card": "Картка Компанії",
+		"contact_us": "Зв'яжіться з нами",
+		"about_company": "Про компанію",
+		"catalog": "Каталог",
+		"promocode": "Мій промокод",
+		"advantages": "Переваги",
+		"contacts": "Контакти",
+		"qr": "QR-код",
+		"categories": "Категорії",
+		"sorting_options": "Опції сортування",
+		"offers": "Пропозиції",
+		"electronic": "Електроніка",
+		"clothing": "Одяг",
+		"travel": "Подорожі",
+		"beauty_health": "Краса та здоров'я",
+		"games_entertainment": "Ігри та розваги",
+		"by_max_cashback": "За максимальним кешбеком",
+		"by_min_cashback": "За мінімальним кешбеком",
+		"by_new_companies": "За новими компаніями",
+		"new": "Нові",
+		"hits": "Хіти",
+		"cancel": "Скасувати",
+		"apply": "Застосувати"
 	}
 }

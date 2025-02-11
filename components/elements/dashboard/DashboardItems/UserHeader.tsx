@@ -4,6 +4,7 @@ import Image from 'next/image'
 import NavigationCards from './NavigationCards'
 import CardPreview from './CardPreview'
 import Link from 'next/link'
+import InvestmentCard from './InvestmentCard'
 
 interface UserHeaderProps {
 	user: User
@@ -34,7 +35,9 @@ export default function UserHeader({ user, profile }: UserHeaderProps) {
 				<NavigationCards userProfile={profile} user={user} />
 			</div>
 			<div className='flex justify-end card-h'>
-				<CardPreview cardHolder={profile?.full_name} />
+				{/* <CardPreview cardHolder={profile?.full_name} /> */}
+
+				<InvestmentCard />
 			</div>
 		</div>
 	)

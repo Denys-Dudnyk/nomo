@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import CardPreview from './CardPreview'
 import { UserProfile } from '@/types/database'
 import { useMediaQuery } from 'react-responsive'
+import InvestmentCard from './InvestmentCard'
 
 interface NavigationCardsProps {
 	balance: number
@@ -80,7 +81,8 @@ const Balance: FC<NavigationCardsProps> = ({ balance, profile }) => {
 			</div>
 			{isMobile && (
 				<div className='flex justify-center items-center'>
-					<CardPreview cardHolder={profile?.full_name} />
+					{/* <CardPreview cardHolder={profile?.full_name} /> */}
+					<InvestmentCard />
 				</div>
 			)}
 		</>

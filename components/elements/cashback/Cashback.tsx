@@ -19,10 +19,12 @@ import { UserProfile } from '@/types/database'
 import { getUserProfile } from '@/lib/database'
 import { createClient } from '@/lib/supabase/server'
 import { useIsAdmin } from '@/hooks/useIsAdmin'
+import { useTranslations } from 'next-intl'
 
 const ITEMS_PER_PAGE = 15
 
 const Cashback = ({ initialCompanies }: { initialCompanies: Company[] }) => {
+	const t = useTranslations('cashback')
 	const [currentPage, setCurrentPage] = useState(1)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
@@ -73,7 +75,7 @@ const Cashback = ({ initialCompanies }: { initialCompanies: Company[] }) => {
 
 					<div className='mb-16'>
 						<h2 className='text-2xl sm:text-3xl font-bold text-gray-800 mb-6'>
-							Найкращі пропозиції
+							{t('best')}
 						</h2>
 						<div className='bg-[#fff] rounded-xl  p-4 sm:p-6'>
 							<div className='overflow-hidden'>
@@ -88,7 +90,7 @@ const Cashback = ({ initialCompanies }: { initialCompanies: Company[] }) => {
 					<div className='mb-12'>
 						<div className='flex flex-col md:flex-row justify-between items-center mb-8'>
 							<h1 className='text-3xl sm:text-4xl font-bold text-gray-800 mb-4 md:mb-0'>
-								КЕШБЕК
+								{t('cashback')}
 							</h1>
 							<div className='flex items-center space-x-4'>
 								<Button
@@ -97,7 +99,7 @@ const Cashback = ({ initialCompanies }: { initialCompanies: Company[] }) => {
 									onClick={handleOpenFilterModal}
 								>
 									<Filter size={20} />
-									<span>Фільтри</span>
+									<span>{t('filtres')}</span>
 								</Button>
 							</div>
 						</div>
@@ -119,7 +121,6 @@ const Cashback = ({ initialCompanies }: { initialCompanies: Company[] }) => {
 								</motion.div>
 							))}
 
-							{/* Кнопка для создания доступна только администраторам */}
 							{isAdmin && (
 								<Card className='min-h-[250px] w-full flex justify-center items-center border-dashed border-2 border-gray-300 hover:border-accent transition-colors duration-300 self-center'>
 									<CardContent className='flex flex-col items-center justify-center p-4 space-y-4'>

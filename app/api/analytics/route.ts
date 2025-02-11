@@ -1,64 +1,57 @@
 import { NextResponse } from 'next/server'
+import { simpleAnalyticsClient } from '@/lib/services/simple-analytics'
 
 export async function GET(request: Request) {
 	try {
 		const { searchParams } = new URL(request.url)
 		const startAt = searchParams.get('startAt')
 		const endAt = searchParams.get('endAt')
-		const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
-		const apiKey = process.env.UMAMI_API_KEY
-		const host = process.env.NEXT_PUBLIC_UMAMI_HOST?.replace('/share', '') // Убираем /share из URL
 
-		// Логируем параметры (кроме apiKey)
-		console.log('Request parameters:', {
-			startAt,
-			endAt,
-			websiteId,
-			host,
-		})
-
-		if (!websiteId || !startAt || !endAt || !apiKey || !host) {
-			throw new Error(
-				`Missing parameters: ${[
-					!websiteId && 'websiteId',
-					!startAt && 'startAt',
-					!endAt && 'endAt',
-					!apiKey && 'apiKey',
-					!host && 'host',
-				]
-					.filter(Boolean)
-					.join(', ')}`
+		if (!startAt || !endAt) {
+			return NextResponse.json(
+				{ error: 'Missing required parameters' },
+				{ status: 400 }
 			)
 		}
 
-		// Используем правильный API endpoint
-		const url = `${host}/api/website/${websiteId}/stats`
-		console.log('Requesting URL:', url)
-
-		const response = await fetch(url, {
-			headers: {
-				Authorization: `Bearer ${apiKey}`,
-				Accept: 'application/json',
-			},
-			next: { revalidate: 60 },
+		console.log('Fetching stats with params:', {
+			startAt: new Date(Number.parseInt(startAt)).toISOString(),
+			endAt: new Date(Number.parseInt(endAt)).toISOString(),
 		})
 
-		// Логируем статус ответа
-		console.log('Response status:', response.status)
+		const stats = await simpleAnalyticsClient.getStats(
+			new Date(Number.parseInt(startAt)),
+			new Date(Number.parseInt(endAt))
+		)
 
-		if (!response.ok) {
-			const errorText = await response.text()
-			console.error('Error response:', errorText)
-			throw new Error(`API returned ${response.status}: ${errorText}`)
+		console.log('Received stats:', stats)
+
+		// Проверяем, что у нас есть данные
+		if (!stats.visitors.length || !stats.dates.length) {
+			console.log('No data received from Simple Analytics')
+			// Возвращаем пустые массивы, но с правильной структурой
+			return NextResponse.json({
+				data: {
+					visitors: [],
+					dates: [],
+				},
+			})
 		}
 
-		const data = await response.json()
-		return NextResponse.json(data)
+		return NextResponse.json({
+			data: stats,
+			debug: {
+				timeframe: {
+					start: new Date(Number.parseInt(startAt)).toISOString(),
+					end: new Date(Number.parseInt(endAt)).toISOString(),
+				},
+			},
+		})
 	} catch (error) {
-		console.error('Full error:', error)
+		console.error('Analytics API error:', error)
 		return NextResponse.json(
 			{
-				error: 'Failed to fetch analytics',
+				error: 'Failed to fetch analytics data',
 				details: error instanceof Error ? error.message : 'Unknown error',
 			},
 			{ status: 500 }

@@ -10,125 +10,181 @@ import {
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useState, useEffect } from 'react'
-import { format } from 'date-fns'
+import { format, subDays, subMonths, subHours } from 'date-fns'
 import { uk } from 'date-fns/locale'
-import { createClient } from '@/lib/supabase/client'
-import { umamiClient } from '@/lib/services/umami'
+import { getUsers } from '@/app/actions/users'
+import { useTranslations } from 'next-intl'
 
 interface StatsCardProps {
 	title: string
 	type: 'visits' | 'users' | 'transactions' | 'crypto'
 }
 
-interface StatData {
+interface ChartData {
 	date: string
-	visits: number
-	registered_users: number
+	value: number
+	forecast: number
 }
 
 const StatsCard = ({ title, type }: StatsCardProps) => {
 	const [activeTimeframe, setActiveTimeframe] = useState<
 		'12m' | '30d' | '7d' | '24h'
-	>('12m')
-	const [data, setData] = useState<StatData[]>([])
+	>('7d')
+	const [data, setData] = useState<ChartData[]>([])
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
 		const fetchData = async () => {
-			setLoading(true)
-			const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID || ''
+			if (type === 'users') {
+				try {
+					const users = await getUsers()
+					const usersByDate = users.reduce(
+						(acc: { [key: string]: number }, user) => {
+							const date = new Date(user.created_at).toISOString().split('T')[0]
+							acc[date] = (acc[date] || 0) + 1
+							return acc
+						},
+						{}
+					)
 
-			try {
-				// Get data for the selected timeframe
-				const now = new Date()
-				const days = getTimeframeDays(activeTimeframe)
-				const startAt = new Date(
-					now.getTime() - days * 24 * 60 * 60 * 1000
-				).getTime()
-				const endAt = now.getTime()
+					// Получаем даты в зависимости от выбранного периода
+					const now = new Date()
+					let start: Date
+					switch (activeTimeframe) {
+						case '12m':
+							start = subMonths(now, 12)
+							break
+						case '30d':
+							start = subDays(now, 30)
+							break
+						case '7d':
+							start = subDays(now, 7)
+							break
+						case '24h':
+							start = subHours(now, 24)
+							break
+						default:
+							start = subMonths(now, 1)
+					}
 
-				// Fetch data from Umami
-				const stats = await umamiClient.getWebsiteStats(websiteId, {
-					startAt,
-					endAt,
+					// Создаем массив дат
+					const dates: string[] = []
+					let currentDate = start
+					while (currentDate <= now) {
+						dates.push(currentDate.toISOString().split('T')[0])
+						currentDate = new Date(
+							currentDate.setDate(currentDate.getDate() + 1)
+						)
+					}
 
-					// unit: getTimeframeUnit(activeTimeframe), // Ensure correct unit (day, month, hour)
-				})
+					// Формируем данные для графика
+					const chartData = dates.map(date => {
+						const value = usersByDate[date] || 0
+						return {
+							date: format(new Date(date), 'dd MMM', { locale: uk }),
+							value,
+							forecast: Math.round(value * (1.2 + Math.random() * 0.3)), // прогноз 120-150% от реального значения
+						}
+					})
 
-				// Check if the data structure is correct
-				if (!stats.data?.visitors || !Array.isArray(stats.data.visitors)) {
-					console.error('Invalid data format from Umami:', stats.data?.visitors)
-					return
+					setData(chartData)
+				} catch (error) {
+					console.error('Error fetching users:', error)
+					setData([
+						{
+							date: format(new Date(), 'dd MMM', { locale: uk }),
+							value: 0,
+							forecast: 0,
+						},
+					])
 				}
-
-				// Fetch registered users data from Supabase
-				const supabase = createClient()
-				const { data: supabaseStats, error: supabaseError } = await supabase
-					.from('statistics')
-					.select('*')
-					.order('date', { ascending: true })
-
-				if (supabaseError) throw supabaseError
-
-				// Combine the data
-				const combinedData = stats.data.visitors.map((item, index) => ({
-					date: format(new Date(item.date), 'yyyy-MM-dd'),
-					visits: item.value,
-					registered_users: supabaseStats?.[index]?.registered_users || 0,
-				}))
-
-				setData(combinedData)
-			} catch (error) {
-				console.error('Error fetching statistics:', error)
-			} finally {
 				setLoading(false)
+				return
 			}
+
+			if (type === 'visits') {
+				setLoading(true)
+				try {
+					const now = new Date()
+					let start: Date
+
+					switch (activeTimeframe) {
+						case '12m':
+							start = subMonths(now, 12)
+							break
+						case '30d':
+							start = subDays(now, 30)
+							break
+						case '7d':
+							start = subDays(now, 7)
+							break
+						case '24h':
+							start = subHours(now, 24)
+							break
+						default:
+							start = subMonths(now, 1)
+					}
+
+					const response = await fetch(
+						`/api/analytics?startAt=${start.getTime()}&endAt=${now.getTime()}`
+					)
+					const result = await response.json()
+					console.log('API Response:', result)
+
+					if (!result.data?.visitors || !result.data?.dates) {
+						throw new Error('Invalid data format received')
+					}
+
+					// Transform the data and add forecast
+					const chartData: ChartData[] = result.data.dates.map(
+						(date: string, index: number) => {
+							const visitors = result.data.visitors[index]
+							const forecastMultiplier = 1.2 + Math.random() * 0.3
+							return {
+								date: format(new Date(date), 'dd MMM', { locale: uk }),
+								value: visitors,
+								forecast: Math.round(visitors * forecastMultiplier),
+							}
+						}
+					)
+
+					console.log('Transformed chart data:', chartData)
+					setData(chartData)
+				} catch (error) {
+					console.error('Error fetching statistics:', error)
+					setData([
+						{
+							date: format(new Date(), 'dd MMM', { locale: uk }),
+							value: 40,
+							forecast: 50,
+						},
+					])
+				} finally {
+					setLoading(false)
+				}
+				return
+			}
+
+			// Mock data for other types
+			const mockData = Array.from({ length: 12 }, (_, i) => ({
+				date: format(subMonths(new Date(), 11 - i), 'LLL', { locale: uk }),
+				value: 40000 + Math.random() * 20000,
+				forecast: 45000 + Math.random() * 20000,
+			}))
+			setData(mockData)
+			setLoading(false)
 		}
 
 		fetchData()
-	}, [activeTimeframe])
+	}, [activeTimeframe, type])
 
-	const formatChartData = () => {
-		if (!data.length) return []
+	// Find max value for Y axis scale
+	const maxValue = Math.max(
+		...data.map(item => Math.max(item.value, item.forecast))
+	)
+	const yAxisMax = Math.ceil(maxValue * 1.2) // Add 20% padding
 
-		return data.map(item => ({
-			month: format(new Date(item.date), 'MMM', { locale: uk }),
-			value: type === 'visits' ? item.visits : item.registered_users,
-			forecast:
-				type === 'visits' || type === 'users'
-					? (type === 'visits' ? item.visits : item.registered_users) *
-					  (1 + Math.random() * 0.2)
-					: 0,
-		}))
-	}
-
-	function getTimeframeDays(timeframe: '12m' | '30d' | '7d' | '24h'): number {
-		switch (timeframe) {
-			case '12m':
-				return 365
-			case '30d':
-				return 30
-			case '7d':
-				return 7
-			case '24h':
-				return 1
-			default:
-				return 30
-		}
-	}
-
-	function getTimeframeUnit(
-		timeframe: '12m' | '30d' | '7d' | '24h'
-	): 'hour' | 'day' | 'month' {
-		switch (timeframe) {
-			case '12m':
-				return 'month'
-			case '24h':
-				return 'hour'
-			default:
-				return 'day'
-		}
-	}
+	const t = useTranslations('mainpage.statistics')
 
 	return (
 		<Card className='bg-[#0F0F0F] text-white border-none'>
@@ -140,131 +196,110 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 					<button
 						onClick={() => setActiveTimeframe('12m')}
 						className={`border border-[#919191] rounded-tl-[10px] rounded-bl-[10px] px-3 py-[14px] ${
-							activeTimeframe === '12m' ? 'text-accent' : 'text-[#919191]'
+							activeTimeframe === '12m' ? 'text-[#FF8A00]' : 'text-[#919191]'
 						}`}
 					>
-						12М
+						{t('days.12m')}
 					</button>
 					<button
 						onClick={() => setActiveTimeframe('30d')}
 						className={`border border-[#919191] px-5 py-[14px] ${
-							activeTimeframe === '30d' ? 'text-accent' : 'text-[#919191]'
+							activeTimeframe === '30d' ? 'text-[#FF8A00]' : 'text-[#919191]'
 						}`}
 					>
-						30Д
+						{t('days.30d')}
 					</button>
 					<button
 						onClick={() => setActiveTimeframe('7d')}
 						className={`border border-[#919191] px-5 py-[14px] ${
-							activeTimeframe === '7d' ? 'text-accent' : 'text-[#919191]'
+							activeTimeframe === '7d' ? 'text-[#FF8A00]' : 'text-[#919191]'
 						}`}
 					>
-						7Д
+						{t('days.7d')}
 					</button>
 					<button
 						onClick={() => setActiveTimeframe('24h')}
 						className={`border border-[#919191] rounded-tr-[10px] rounded-br-[10px] px-5 py-[14px] ${
-							activeTimeframe === '24h' ? 'text-accent' : 'text-[#919191]'
+							activeTimeframe === '24h' ? 'text-[#FF8A00]' : 'text-[#919191]'
 						}`}
 					>
-						24Г
+						{t('days.24h')}
 					</button>
 				</div>
 			</CardHeader>
 			<CardContent>
-				<div className='h-[200px] mt-4'>
+				<div className='h-[300px] mt-4'>
 					{loading ? (
 						<div className='flex items-center justify-center h-full text-[#919191]'>
 							Завантаження...
 						</div>
+					) : data.length === 0 ? (
+						<div className='flex items-center justify-center h-full text-[#919191]'>
+							Немає даних для відображення
+						</div>
 					) : (
 						<ResponsiveContainer width='100%' height='100%'>
 							<AreaChart
-								data={formatChartData()}
-								margin={{ top: 0, right: 28, left: 0, bottom: 0 }}
+								data={data}
+								margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
 							>
 								<defs>
-									<linearGradient
-										id='colorGradient'
-										x1='0'
-										y1='0'
-										x2='0'
-										y2='1'
-									>
-										<stop
-											offset='0%'
-											stopColor='#EAD0FFCC'
-											stopOpacity={'80%'}
-										/>
-										<stop
-											offset='100%'
-											stopColor='#EAD0FFCC'
-											stopOpacity={'1%'}
-										/>
+									<linearGradient id='colorValue' x1='0' y1='0' x2='0' y2='1'>
+										<stop offset='5%' stopColor='#A595FF' stopOpacity={0.3} />
+										<stop offset='95%' stopColor='#A595FF' stopOpacity={0} />
 									</linearGradient>
 									<linearGradient
-										id='realDataGradient'
+										id='colorForecast'
 										x1='0'
 										y1='0'
 										x2='0'
 										y2='1'
 									>
-										<stop offset='0%' stopColor='#FF8A00' stopOpacity={'80%'} />
-										<stop
-											offset='100%'
-											stopColor='#FF8A00'
-											stopOpacity={'1%'}
-										/>
+										<stop offset='5%' stopColor='#EAD0FF' stopOpacity={0.3} />
+										<stop offset='95%' stopColor='#EAD0FF' stopOpacity={0} />
 									</linearGradient>
 								</defs>
 								<XAxis
-									dataKey='month'
-									tick={{ fill: '#9CA3AF' }}
+									dataKey='date'
+									tick={{ fill: '#919191' }}
 									axisLine={false}
 									tickLine={false}
-									dy={5}
-									fontSize={13}
+									tickMargin={25}
+									// padding={{ right: 20 }}
 								/>
 								<YAxis
-									tickFormatter={value => `${(value / 1000).toFixed(1)}k`}
-									tick={{ fill: '#9CA3AF' }}
+									domain={[0, yAxisMax]}
+									tick={{ fill: '#919191' }}
 									axisLine={false}
 									tickLine={false}
-									tickMargin={14}
-									tickCount={3}
+									width={60}
+									tickMargin={15}
 								/>
 								<Tooltip
 									contentStyle={{
 										backgroundColor: '#1F2937',
 										border: 'none',
-										borderRadius: '0.5rem',
+										borderRadius: '8px',
 										color: 'white',
 									}}
-									formatter={(value: number, name: string) => [
-										`${(value / 1000).toFixed(1)}k`,
-										name === 'value' ? 'Реальні дані' : 'Прогноз',
-									]}
 								/>
-								{(type === 'visits' || type === 'users') && (
-									<>
-										<Area
-											type='monotone'
-											dataKey='forecast'
-											stroke='#EAD0FF'
-											strokeWidth={3}
-											fill='url(#colorGradient)'
-											name='Прогноз'
-										/>
-										<Area
-											type='monotone'
-											dataKey='value'
-											stroke='#FF8A00'
-											strokeWidth={3}
-											fill='url(#realDataGradient)'
-											name='Реальні дані'
-										/>
-									</>
-								)}
+
+								<Area
+									type='monotone'
+									dataKey='forecast'
+									stroke='#EAD0FF'
+									strokeWidth={2}
+									fill='url(#colorForecast)'
+									name='Прогноз'
+								/>
+								<Area
+									type='monotone'
+									dataKey='value'
+									stroke='#A595FF'
+									strokeWidth={2}
+									fill='url(#colorValue)'
+									name='Реальні дані'
+								/>
 							</AreaChart>
 						</ResponsiveContainer>
 					)}

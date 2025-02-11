@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 interface PaginationProps {
@@ -16,6 +17,8 @@ const Pagination = ({
 		onPageChange(page)
 	}
 
+	const t = useTranslations('cashback')
+
 	return (
 		<div className='flex items-center justify-center space-x-2 mt-8 gap-[18px] mb-[50px] flex-wrap'>
 			<button
@@ -29,7 +32,7 @@ const Pagination = ({
 					width={24}
 					height={24}
 				/>
-				ПОПЕРЕДНЯ
+				{t('prev_page')}
 			</button>
 
 			{Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
@@ -51,7 +54,7 @@ const Pagination = ({
 				disabled={currentPage === totalPages}
 				className='flex items-center text-[20px] gap-[14px] py-[5px] text-[#ABABAb] hover:text-accenthover disabled:text-[#ABABAB] leading-[126%] tracking-[-4%]'
 			>
-				НАСТУПНА
+				{t('next_page')}
 				<Image
 					src={'/cashback/chevron-left.svg'}
 					alt=''
