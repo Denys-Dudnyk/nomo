@@ -420,5 +420,48 @@
 		"hits": "Hity",
 		"cancel": "Anuluj",
 		"apply": "Zastosuj"
+	},
+
+	"dashboard": {
+		"n_inwest": "N-Inwest",
+		"qr_code": "Kod QR",
+		"invite_friend": "Zaproś przyjaciela",
+		"data": "Dane",
+		"balance": "Bilans",
+		"accrued": "Naliczono",
+		"info_accrued": "Informacje o naliczonych środkach",
+		"accumulated_funds": "Nagromadzone środki",
+		"free_funds": "Dostępne środki",
+		"invest": "Inwestuj",
+		"motivationalPhrases": {
+			"0": "Nie powinieneś być lepszy od innych, powinieneś być lepszy od siebie sprzed wczoraj.",
+			"1": "Wszystkie trudności są okazją do stania się silniejszym.",
+			"2": "Jeśli chcesz osiągnąć coś wielkiego, przygotuj się na ogromne wysiłki.",
+			"3": "Nie czekaj na idealne warunki – one nigdy nie będą idealne. Zacznij teraz!",
+			"4": "Zwycięstwo nie przychodzi do tych, którzy czekają, lecz do tych, którzy działają.",
+			"5": "Jesteś zdolny do więcej, niż myślisz.",
+			"6": "Uwierz w swoje możliwości, nawet gdy inni w ciebie nie wierzą.",
+			"7": "Nie bój się błędów — to one są krokami do sukcesu.",
+			"8": "Twój sukces zależy od tego, jak bardzo chcesz osiągnąć swój cel.",
+			"9": "Nigdy się nie poddawaj, bo to w najciemniejszych momentach świeci najjaśniejsze światło."
+		},
+		"balanceLabel": "Bilans:",
+		"transactions": "Transakcje",
+		"today": "Dzisiaj",
+		"recentTransactions": "Ostatnie transakcje",
+		"filters": "Filtry",
+		"export": "Eksport",
+		"table": {
+			"description": "Opis",
+			"status": "Status",
+			"amount": "Kwota",
+			"savingsPercent": "% Oszczędności, UAH",
+			"balance": "Bilans, UAH",
+			"ncoinsAccrued": "% Naliczone, NCOIN"
+		},
+		"pagination": {
+			"previous": "Poprzednia",
+			"next": "Następna"
+		}
 	}
 }

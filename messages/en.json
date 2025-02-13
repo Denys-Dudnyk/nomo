@@ -420,5 +420,47 @@
 		"hits": "Hits",
 		"cancel": "Cancel",
 		"apply": "Apply"
+	},
+	"dashboard": {
+		"n_inwest": "N-Inwest",
+		"qr_code": "QR Code",
+		"invite_friend": "Invite a Friend",
+		"data": "Data",
+		"balance": "Balance",
+		"accrued": "Accrued",
+		"info_accrued": "Information about Accrued Funds",
+		"accumulated_funds": "Accumulated Funds",
+		"free_funds": "Free Funds",
+		"invest": "Invest",
+		"motivationalPhrases": {
+			"0": "You should not be better than others; you should be better than you were yesterday.",
+			"1": "All difficulties are opportunities to become stronger.",
+			"2": "If you want to achieve something great, be prepared for great efforts.",
+			"3": "Don't wait for perfect conditions – they will never be perfect. Start now!",
+			"4": "Victory does not come to those who wait, but to those who act.",
+			"5": "You are capable of more than you think.",
+			"6": "Believe in your abilities, even when others doubt you.",
+			"7": "Don't be afraid of mistakes — they are your steps toward success.",
+			"8": "Your success depends on how badly you want to achieve your goal.",
+			"9": "Never give up, for it is in the darkest moments that the brightest light shines."
+		},
+		"balanceLabel": "Balance:",
+		"transactions": "Transactions",
+		"today": "Today",
+		"recentTransactions": "Recent Transactions",
+		"filters": "Filters",
+		"export": "Export",
+		"table": {
+			"description": "Description",
+			"status": "Status",
+			"amount": "Amount",
+			"savingsPercent": "% Savings, UAH",
+			"balance": "Balance, UAH",
+			"ncoinsAccrued": "% Accrued, NCOIN"
+		},
+		"pagination": {
+			"previous": "Previous",
+			"next": "Next"
+		}
 	}
 }

@@ -419,5 +419,47 @@
 		"hits": "Éxitos",
 		"cancel": "Cancelar",
 		"apply": "Aplicar"
+	},
+	"dashboard": {
+		"n_inwest": "N-Inwest",
+		"qr_code": "Código QR",
+		"invite_friend": "Invitar a un amigo",
+		"data": "Datos",
+		"balance": "Balance",
+		"accrued": "Acumulado",
+		"info_accrued": "Información sobre los fondos acumulados",
+		"accumulated_funds": "Fondos acumulados",
+		"free_funds": "Fondos disponibles",
+		"invest": "Invertir",
+		"motivationalPhrases": {
+			"0": "No debes ser mejor que los demás; debes ser mejor que tú mismo ayer.",
+			"1": "Todas las dificultades son una oportunidad para volverte más fuerte.",
+			"2": "Si quieres lograr algo grandioso, prepárate para grandes esfuerzos.",
+			"3": "No esperes condiciones perfectas, nunca serán perfectas. ¡Empieza ahora!",
+			"4": "La victoria no llega a quienes esperan, sino a quienes actúan.",
+			"5": "Eres capaz de más de lo que crees.",
+			"6": "Cree en tus habilidades, incluso cuando otros dudan de ti.",
+			"7": "No temas los errores — son tus pasos hacia el éxito.",
+			"8": "Tu éxito depende de lo fuerte que deseas alcanzar tu meta.",
+			"9": "Nunca te rindas, porque es en los momentos más oscuros cuando brilla la luz más intensa."
+		},
+		"balanceLabel": "Balance:",
+		"transactions": "Transacciones",
+		"today": "Hoy",
+		"recentTransactions": "Transacciones recientes",
+		"filters": "Filtros",
+		"export": "Exportar",
+		"table": {
+			"description": "Descripción",
+			"status": "Estado",
+			"amount": "Monto",
+			"savingsPercent": "% Ahorro, UAH",
+			"balance": "Balance, UAH",
+			"ncoinsAccrued": "% Acumulado, NCOIN"
+		},
+		"pagination": {
+			"previous": "Anterior",
+			"next": "Siguiente"
+		}
 	}
 }

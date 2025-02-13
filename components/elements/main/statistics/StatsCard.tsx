@@ -38,6 +38,7 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 			if (type === 'users') {
 				try {
 					const users = await getUsers()
+					// Рахуємо кількість користувачів за датами (кількість нових реєстрацій у кожен день)
 					const usersByDate = users.reduce(
 						(acc: { [key: string]: number }, user) => {
 							const date = new Date(user.created_at).toISOString().split('T')[0]
@@ -47,7 +48,7 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 						{}
 					)
 
-					// Получаем даты в зависимости от выбранного периода
+					// Визначаємо діапазон дат залежно від вибраного періоду
 					const now = new Date()
 					let start: Date
 					switch (activeTimeframe) {
@@ -67,7 +68,7 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 							start = subMonths(now, 1)
 					}
 
-					// Создаем массив дат
+					// Створюємо масив дат (у форматі YYYY-MM-DD) від start до now
 					const dates: string[] = []
 					let currentDate = start
 					while (currentDate <= now) {
@@ -77,13 +78,17 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 						)
 					}
 
-					// Формируем данные для графика
+					// Рахуємо накопичувальну суму
+					let cumulative = 0
 					const chartData = dates.map(date => {
-						const value = usersByDate[date] || 0
+						// Кількість реєстрацій у конкретний день
+						const daily = usersByDate[date] || 0
+						// Додаємо до накопичувальної суми
+						cumulative += daily
 						return {
 							date: format(new Date(date), 'dd MMM', { locale: uk }),
-							value,
-							forecast: Math.round(value * (1.2 + Math.random() * 0.3)), // прогноз 120-150% от реального значения
+							value: cumulative,
+							forecast: Math.round(cumulative * (1.2 + Math.random() * 0.3)), // прогноз 120-150% від накопиченої кількості
 						}
 					})
 
@@ -135,7 +140,7 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 						throw new Error('Invalid data format received')
 					}
 
-					// Transform the data and add forecast
+					// Перетворюємо дані і додаємо прогноз
 					const chartData: ChartData[] = result.data.dates.map(
 						(date: string, index: number) => {
 							const visitors = result.data.visitors[index]
@@ -165,7 +170,7 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 				return
 			}
 
-			// Mock data for other types
+			// Mock дані для інших типів (transactions, crypto)
 			const mockData = Array.from({ length: 12 }, (_, i) => ({
 				date: format(subMonths(new Date(), 11 - i), 'LLL', { locale: uk }),
 				value: 40000 + Math.random() * 20000,
@@ -178,11 +183,11 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 		fetchData()
 	}, [activeTimeframe, type])
 
-	// Find max value for Y axis scale
+	// Обчислюємо максимальне значення для шкали осі Y
 	const maxValue = Math.max(
 		...data.map(item => Math.max(item.value, item.forecast))
 	)
-	const yAxisMax = Math.ceil(maxValue * 1.2) // Add 20% padding
+	const yAxisMax = Math.ceil(maxValue * 1.2) // додаємо 20% запасу
 
 	const t = useTranslations('mainpage.statistics')
 
@@ -265,7 +270,6 @@ const StatsCard = ({ title, type }: StatsCardProps) => {
 									axisLine={false}
 									tickLine={false}
 									tickMargin={25}
-									// padding={{ right: 20 }}
 								/>
 								<YAxis
 									domain={[0, yAxisMax]}

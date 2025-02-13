@@ -30,6 +30,7 @@ import Image from 'next/image'
 import { getTransactions } from '@/app/actions/transactions'
 // import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/client'
+import { useTranslations } from 'next-intl'
 
 interface TransactionsTableProps {
 	currentMonth: string
@@ -62,6 +63,8 @@ export default function TransactionsTable({
 	const [transactions, setTransactions] = useState<any[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
+
+	const t = useTranslations('dashboard')
 
 	// Fetch transactions when the component mounts
 	useEffect(() => {
@@ -119,32 +122,30 @@ export default function TransactionsTable({
 			<div className='p-6'>
 				<div className='flex justify-between items-center mb-6 gap-4 sm:gap-0'>
 					<h2 className='text-[20px] sm:text-[25px] font-light text-[#fff]'>
-						Транзакції
+						{t('transactions')}
 					</h2>
 					<div className='text-[#919191] font-normal text-[14px] leading-[18px]'>
-						Сьогодні {formattedDate}
+						{t('today')} {formattedDate}
 					</div>
 				</div>
-				<div className='flex gap-[32px] max-h-[38px] mb-[240px] md:mb-24 lg:mb-12 flex-col lg:flex-row '>
+				<div className='flex gap-[32px] max-h-[38px] mb-[240px] md:mb-24 lg:mb-12 flex-col lg:flex-row'>
 					<div className='flex items-center gap-16 grid-filter'>
 						<Input
 							type='text'
-							placeholder='Останні транзакції'
+							placeholder={t('recentTransactions')}
 							className='bg-[#1E2128] border-[0.5px] border-[#919191] rounded-[7px] px-6 py-[10px] placeholder:text-[14px] h-full'
 						/>
-						<Button className='bg-[#1E2128] text-[#919191]  text-[14px] leading-[18px] font-normal px-6 py-[7px] h-[43px] lg:h-full flex gap-[12px]'>
+						<Button className='bg-[#1E2128] text-[#919191] text-[14px] leading-[18px] font-normal px-6 py-[7px] h-[43px] lg:h-full flex gap-[12px]'>
 							<Filter className='h-6 w-6' />
-							<div>Фільтри</div>
+							<div>{t('filters')}</div>
 						</Button>
 					</div>
-					<div className='flex  md:items-center flex-col md:flex-row md:justify-between lg:justify-center gap-[32px] h-full md:h-auto'>
+					<div className='flex md:items-center flex-col md:flex-row md:justify-between lg:justify-center gap-[32px] h-full md:h-auto'>
 						<Button className='bg-[#1E2128] px-[12px] py-[10px] text-[14px] leading-[18px] font-normal h-full text-[#919191] flex gap-7'>
 							{currentMonth}
-							<CalendarRange className={'w-4 h-4'} />
+							<CalendarRange className='w-4 h-4' />
 						</Button>
 						<Select>
-							{/* {currency} */}
-
 							<SelectTrigger className='border-none bg-[#1E2128] px-[12px] py-[10px] text-[14px] leading-[18px] font-normal text-[#919191] flex gap-7 w-auto h-[38px] md:h-full'>
 								<Image
 									src={'/dashboard/uah.svg'}
@@ -179,11 +180,11 @@ export default function TransactionsTable({
 						<Button className='bg-[#1E2128] px-[21px] py-[7px] text-[14px] leading-[18px] font-normal h-full text-[#919191] flex gap-[15px]'>
 							<Image
 								src={'/dashboard/export.svg'}
-								alt='Export'
+								alt={t('export')}
 								width={24}
 								height={24}
 							/>
-							<div>Експорт</div>
+							<div>{t('export')}</div>
 						</Button>
 					</div>
 				</div>
@@ -193,22 +194,22 @@ export default function TransactionsTable({
 						<TableHeader>
 							<TableRow className='border-[#242424] text-[#919191] px-6'>
 								<TableHead className='border-[#242424] text-[#919191]'>
-									Опис
+									{t('table.description')}
 								</TableHead>
 								<TableHead className='border-[#242424] text-[#919191]'>
-									Статус
+									{t('table.status')}
 								</TableHead>
 								<TableHead className='border-[#242424] text-[#919191]'>
-									Сума
+									{t('table.amount')}
 								</TableHead>
 								<TableHead className='border-[#242424] text-[#919191]'>
-									% Заощадження, UAH
+									{t('table.savingsPercent')}
 								</TableHead>
 								<TableHead className='border-[#242424] text-[#919191]'>
-									Залишок, UAH
+									{t('table.balance')}
 								</TableHead>
 								<TableHead className='border-[#242424] text-[#919191]'>
-									%Нараховано, NCOIN
+									{t('table.ncoinsAccrued')}
 								</TableHead>
 							</TableRow>
 						</TableHeader>
@@ -218,14 +219,14 @@ export default function TransactionsTable({
 									key={tx.id}
 									className='border-[#242424] text-[#fff] text-[14px] font-normal leading-[18px]'
 								>
-									<TableCell className=''>
-										<div className='flex items-center gap-2 '>
+									<TableCell>
+										<div className='flex items-center gap-2'>
 											<div
 												className={`${
 													tx.status === 'Успішно'
 														? 'bg-[#542A30]'
 														: 'bg-[#214D40]'
-												}  rounded-[7px] w-10 h-10  text-center  text-[11px] font-semibold`}
+												} rounded-[7px] w-10 h-10 text-center text-[11px] font-semibold`}
 											>
 												<div>{tx.scanned_date}</div>
 											</div>
@@ -260,7 +261,7 @@ export default function TransactionsTable({
 									<TableCell>{tx.amount} UAH</TableCell>
 									<TableCell>
 										<div className='flex items-center gap-9'>
-											<div className='bg-accent text-[#fff] py-[1px] px-[11px] text-[11px] font-semibold leading-[18px] rounded-[7px] '>
+											<div className='bg-accent text-[#fff] py-[1px] px-[11px] text-[11px] font-semibold leading-[18px] rounded-[7px]'>
 												28,67%
 											</div>
 											<div>{tx.savings_amount} UAH</div>
@@ -284,7 +285,7 @@ export default function TransactionsTable({
 						className='border-[#1E2128] px-[7.5px] py-[10px] text-[#919191] bg-transparent'
 					>
 						<ChevronLeft className='h-4 w-4 mr-2' />
-						Назад
+						{t('pagination.previous')}
 					</Button>
 					<div className='flex items-center gap-5 sm:gap-12'>
 						{[1, 2, 3, '...', 8, 9, 10].map((page, i) => (
@@ -292,7 +293,7 @@ export default function TransactionsTable({
 								key={i}
 								className={`bg-transparent text-[#919191] hover:bg-transparent ${
 									page === 1 ? 'text-[#FF8A00]' : 'border-gray-700'
-								} `}
+								}`}
 							>
 								{page}
 							</Button>
@@ -300,9 +301,9 @@ export default function TransactionsTable({
 					</div>
 					<Button
 						variant='outline'
-						className=' border-[#1E2128] px-[7.5px] py-[10px] text-accent bg-transparent'
+						className='border-[#1E2128] px-[7.5px] py-[10px] text-accent bg-transparent'
 					>
-						Далі
+						{t('pagination.next')}
 						<ChevronRight className='h-4 w-4 ml-2' />
 					</Button>
 				</div>

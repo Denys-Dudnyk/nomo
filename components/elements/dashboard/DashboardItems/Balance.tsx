@@ -4,6 +4,7 @@ import CardPreview from './CardPreview'
 import { UserProfile } from '@/types/database'
 import { useMediaQuery } from 'react-responsive'
 import InvestmentCard from './InvestmentCard'
+import { useTranslations } from 'next-intl'
 
 interface NavigationCardsProps {
 	balance: number
@@ -29,11 +30,20 @@ const Balance: FC<NavigationCardsProps> = ({ balance, profile }) => {
 	const [phraseIndex, setPhraseIndex] = useState(0)
 	const isMobile = useMediaQuery({ maxWidth: 1200 })
 
+	const t = useTranslations('dashboard')
+
+	// Функция для получения мотивационной фразы по индексу
+	const getMotivationalPhrase = (index: number): string =>
+		t(`motivationalPhrases.${index}`)
+
+	// Предположим, что всего определено 10 фраз (ключи 0...9)
+	const totalPhrases = 10
+
 	useEffect(() => {
 		let typingTimeout: NodeJS.Timeout
 		let phraseChangeTimeout: NodeJS.Timeout
 
-		const currentPhrase = motivationalPhrases[phraseIndex]
+		const currentPhrase = getMotivationalPhrase(phraseIndex)
 
 		const typePhrase = (index: number = 0) => {
 			if (index === 0) {
@@ -72,17 +82,19 @@ const Balance: FC<NavigationCardsProps> = ({ balance, profile }) => {
 					</Button>
 					<div className='w-[1.5px] h-[52px] bg-[#2F2F2F] balance-line'></div>
 					<div className='text-right flex justify-center items-center gap-7'>
-						<div className='text-[15px] font-normal text-[#fff]'>Баланс:</div>
+						<div className='text-[15px] font-normal text-[#fff]'>
+							{t('balanceLabel')}
+						</div>
 						<div className='text-[16px] font-normal text-[#80F8BF]'>
-							${balance}
+							₴{balance}
 						</div>
 					</div>
 				</div>
 			</div>
 			{isMobile && (
-				<div className='flex justify-center items-center'>
+				<div className='flex justify-center items-center '>
 					{/* <CardPreview cardHolder={profile?.full_name} /> */}
-					<InvestmentCard />
+					<InvestmentCard balance={profile?.cashback_balance} />
 				</div>
 			)}
 		</>

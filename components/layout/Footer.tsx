@@ -81,7 +81,6 @@ const Footer = () => {
 		<>
 			<footer className='bg-[#000000] text-[#fff] pt-16 pb-8'>
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-					{/* Main Footer Content */}
 					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-16 mx-auto'>
 						{footerSections.map(section => (
 							<div key={section.title}>
@@ -135,26 +134,22 @@ const Footer = () => {
 						</div>
 					</div>
 
-					{/* Footer Bottom */}
 					<div className='pt-8'>
 						<div className='flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0'>
-							{/* Legal Links */}
 							<div className='flex flex-wrap justify-center items-center mx-auto gap-5 text-[16px] text-[#fff]'>
 								<span>©2025BlockN, Inc.</span>
 								<div className='w-[25px] h-[1px] rotate-90 bg-[#fff]' />
 								<Link
-									href=''
+									href='/privacy-policy'
 									className='hover:text-accent transition-colors'
-									onClick={openDevelopModal}
 								>
 									{t('legal.privacyPolicy')}
 								</Link>
 								<div className='w-[25px] h-[1px] rotate-90 bg-[#fff]' />
 
 								<Link
-									href=''
+									href='/terms-of-use'
 									className='hover:text-accent transition-colors'
-									onClick={openDevelopModal}
 								>
 									{t('legal.termsOfUse')}
 								</Link>

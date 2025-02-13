@@ -23,6 +23,9 @@ import { User } from '@supabase/supabase-js'
 import { QRCodeModal } from '@/components/ui/QrModal/qr-code-modal'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { WelcomeModal } from '@/components/ui/welcome-modal'
+import { useAcknowledgmentStatus } from '@/hooks/useAcknowledgmentStatus'
 
 interface NavigationCardsProps {
 	userProfile?: UserProfile | null
@@ -34,6 +37,7 @@ export default function NavigationCards({
 	user,
 }: NavigationCardsProps) {
 	const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+	const [isWelcomeOpen, setIsWelcomeOpen] = useState(false)
 	const isAdmin = userProfile?.role === 'admin'
 
 	const [showQRCode, setShowQRCode] = useState(false)
@@ -42,6 +46,13 @@ export default function NavigationCards({
 
 	const [isVerified, setIsVerified] = useState(false)
 	const router = useRouter()
+	const { hasAcknowledged, loading } = useAcknowledgmentStatus(user.id)
+
+	useEffect(() => {
+		if (!loading && !hasAcknowledged) {
+			setIsWelcomeOpen(true)
+		}
+	}, [loading, hasAcknowledged])
 
 	useEffect(() => {
 		const fetchQRCode = async () => {
@@ -78,21 +89,23 @@ export default function NavigationCards({
 		router.push('/dashboard/profile')
 	}
 
+	const t = useTranslations('dashboard')
+
 	return (
 		<>
 			<div className='flex justify-between gap-[10px]'>
 				<div className='order-last sm:order-first space-y-[32px]'>
-					<Link href={''} passHref>
+					<button onClick={() => setIsWelcomeOpen(true)}>
 						<Image
-							src={'/dashboard/fbook.svg'}
+							src='/dashboard/fbook.svg'
 							width={32}
 							height={32}
-							className=' cursor-pointer hover:text-white transition-colors'
+							className='cursor-pointer hover:text-white transition-colors'
 							alt=''
 						/>
-					</Link>
+					</button>
 					<Link href='/dashboard/settings' passHref>
-						<Settings className='text-[#919191] mt-8 h-[32px] w-[32px]  cursor-pointer hover:text-white transition-colors' />
+						<Settings className='text-[#919191] mt-8 h-[32px] w-[32px] cursor-pointer hover:text-white transition-colors' />
 					</Link>
 					<Link href='/portfolio' passHref>
 						<Briefcase className='text-[#919191] mt-8 h-[32px] w-[32px] cursor-pointer hover:text-white transition-colors' />
@@ -111,50 +124,59 @@ export default function NavigationCards({
 					className='grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-[10px]'
 					style={{ maxWidth: '100%', width: '100%', height: 'auto' }}
 				>
-					{/* Первая карточка N-Inwest */}
 					<Card
-						className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
+						className='flex items-center justify-center p-4 bg-[#1E2128] border-none hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
 						style={{ width: '100%', maxWidth: '386px', height: '228px' }}
 						onClick={handleNavigateToNInwest}
 					>
-						<h3 className='font-light text-[#FFFFFF] text-[19px]'>N-Inwest</h3>
+						<h3 className='font-light text-[#FFFFFF] text-[19px]'>
+							{t('n_inwest')}
+						</h3>
 					</Card>
 
-					{/* Остальные карточки */}
 					<div className='grid grid-cols-2 gap-4 col-span-1 sm:col-span-2'>
 						<button onClick={() => setShowQRCode(true)}>
 							<Card
-								className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
+								className='flex items-center justify-center p-4 bg-[#1E2128] border-none hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
 								style={{ width: '100%', maxWidth: '185px', height: '105px' }}
 							>
-								<h3 className='font-medium text-gray-200'>QR-код</h3>
+								<h3 className='font-medium text-gray-200'>{t('qr_code')}</h3>
 							</Card>
 						</button>
 						<Card
-							className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
+							className='flex items-center justify-center p-4 bg-[#1E2128] border-none hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
 							style={{ width: '100%', maxWidth: '185px', height: '105px' }}
 							onClick={handleNavigateToNRefer}
 						>
-							<h3 className='font-medium text-gray-200'>Запросити друга</h3>
+							<h3 className='font-medium text-gray-200'>
+								{t('invite_friend')}
+							</h3>
 						</Card>
 
 						<Card
-							className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
+							className='flex items-center justify-center p-4 bg-[#1E2128] border-none hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
 							style={{ width: '100%', maxWidth: '185px', height: '105px' }}
 							onClick={handleNavigateData}
 						>
-							<h3 className='font-medium text-gray-200'>Дані</h3>
+							<h3 className='font-medium text-gray-200'>{t('data')}</h3>
 						</Card>
 
 						<Card
-							className='flex items-center justify-center p-4 bg-[#1E2128] border-none  hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
+							className='flex items-center justify-center p-4 bg-[#1E2128] border-none hover:bg-gray-800/50 transition-colors cursor-pointer rounded-[16px]'
 							style={{ width: '100%', maxWidth: '185px', height: '105px' }}
 							onClick={handleNavigateToNUB}
 						>
-							<h3 className='font-medium text-gray-200'>Баланс</h3>
+							<h3 className='font-medium text-gray-200'>{t('balance')}</h3>
 						</Card>
 					</div>
 				</div>
+
+				<WelcomeModal
+					isOpen={isWelcomeOpen}
+					onClose={() => setIsWelcomeOpen(false)}
+					userId={user.id}
+					isFirstLogin={!hasAcknowledged}
+				/>
 
 				<SettingsModal
 					isOpen={isSettingsOpen}

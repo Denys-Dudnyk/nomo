@@ -15,6 +15,7 @@ export type UserProfile = {
 	created_at: string
 	updated_at: string
 	profile_image?: string
+	has_acknowledged_terms: boolean
 }
 
 export interface PartnerProfile {

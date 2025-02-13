@@ -9,17 +9,20 @@ import {
 	TooltipTrigger,
 } from '@/components/ui/tooltip'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 interface InvestmentCardProps {
 	initialAmount?: number
 	cashback?: number
 	accumulated?: number
+	balance: number
 }
 
 export default function InvestmentCard({
 	initialAmount = 1000.70298,
 	cashback = 0,
 	accumulated = 0.0000001,
+	balance,
 }: InvestmentCardProps) {
 	const [currentAmount, setCurrentAmount] = useState(initialAmount)
 	const [currentAccumulated, setCurrentAccumulated] = useState(accumulated)
@@ -39,7 +42,7 @@ export default function InvestmentCard({
 		const hours = Math.floor(remainder / 3600)
 		const minutes = Math.floor((remainder % 3600) / 60)
 		const secs = remainder % 60
-		// Дни без ведущего нуля, а часы, минуты и секунды с двумя цифрами
+		// Дни без ведущего нуля, а часы, минуты и секунды — с двумя цифрами
 		return `${days}:${hours.toString().padStart(2, '0')}:${minutes
 			.toString()
 			.padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
@@ -111,9 +114,12 @@ export default function InvestmentCard({
 	const circleRadius = 50
 	const circumference = 2 * Math.PI * circleRadius
 
+	// Подключаем переводы из раздела dashboard
+	const t = useTranslations('dashboard')
+
 	return (
-		<div className='bg-[#1E2128] rounded-[16px] p-6 w-full shadow-xl max-h-[228px]'>
-			<div className='flex items-center justify-between gap-6'>
+		<div className='bg-[#1E2128] rounded-[16px] p-6 w-full shadow-xl h-auto sm:max-h-[228px]'>
+			<div className='flex items-center justify-between gap-6 flex-col sm:flex-row'>
 				{/* Левая часть с кругом */}
 				<div className='relative w-[180px] h-[180px]'>
 					<svg
@@ -159,7 +165,7 @@ export default function InvestmentCard({
 							/>
 						</div>
 						<div className='text-[#F4F4F4] text-[15px] font-normal'>
-							Нараховано
+							{t('accrued')}
 						</div>
 						<div className='text-white text-sm font-mono'>
 							{currentAccumulated.toFixed(7)}
@@ -171,7 +177,7 @@ export default function InvestmentCard({
 				<div className=''>
 					<div className='flex justify-between items-center mb-3'>
 						<div className='text-[#767785] text-[14px] font-normal'>
-							Нараховано кошти
+							{t('accumulated_funds')}
 						</div>
 						<TooltipProvider>
 							<Tooltip>
@@ -185,22 +191,23 @@ export default function InvestmentCard({
 									/>
 								</TooltipTrigger>
 								<TooltipContent className='bg-[#2A2A2D] border-[#363638] text-white'>
-									<p>Інформація про нараховані кошти</p>
+									<p>{t('info_accrued')}</p>
 								</TooltipContent>
 							</Tooltip>
 						</TooltipProvider>
 					</div>
 
-					<div className='text-[24px] font-medium text-[#F4F4F4] mb-[5px]'>
-						₴{currentAmount.toFixed(5)}
+					<div className='flex items-center text-[24px] font-medium text-[#F4F4F4] mb-[5px]'>
+						<img src='/dashboard/n-coin.svg' alt='' />
+						{currentAmount.toFixed(5)}
 					</div>
 
 					<div className='text-[#767785] text-[14px] mb-1'>
-						Час до наступного запуску
+						{t('free_funds')}
 					</div>
 
 					<div className='text-2xl font-mono font-medium text-[#F4F4F4] '>
-						{timer || '0:00:00:00'}
+						{balance}
 					</div>
 
 					<Button
@@ -208,7 +215,7 @@ export default function InvestmentCard({
 						onClick={handleInvest}
 						disabled={timer !== null}
 					>
-						Invest
+						{t('invest')}
 					</Button>
 				</div>
 			</div>
