@@ -112,6 +112,7 @@ export default function TransactionsTable({
 				transactionData as SupabaseTransactionResponse[]
 			).map(transaction => {
 				const client = userProfiles.find(
+					//@ts-ignore
 					user => user.user_id === transaction.user_id
 				)
 
