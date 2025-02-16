@@ -86,7 +86,7 @@ const Balance: FC<NavigationCardsProps> = ({ balance, profile }) => {
 							{t('balanceLabel')}
 						</div>
 						<div className='text-[16px] font-normal text-[#80F8BF]'>
-							₴{balance}
+							₴{balance.toFixed(2)}
 						</div>
 					</div>
 				</div>
@@ -94,7 +94,17 @@ const Balance: FC<NavigationCardsProps> = ({ balance, profile }) => {
 			{isMobile && (
 				<div className='flex justify-center items-center '>
 					{/* <CardPreview cardHolder={profile?.full_name} /> */}
-					<InvestmentCard balance={profile?.cashback_balance} />
+					{/* <InvestmentCard
+						balance={profile?.cashback_balance}
+						// userId={profile.user_id}
+						// initialAmount={profile.current_amount}
+						// accumulated={profile.current_accumulated}
+					/> */}
+
+					<InvestmentCard
+						balance={profile?.cashback_balance}
+						userId={profile.user_id} // Add userId prop
+					/>
 				</div>
 			)}
 		</>

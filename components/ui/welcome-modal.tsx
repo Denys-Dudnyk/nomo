@@ -136,7 +136,7 @@ export function WelcomeModal({
             flex-1 pr-2 -mr-2
             ${
 							needsScroll || isAccordionOpen
-								? 'overflow-y-auto custom-scrollbar'
+								? 'overflow-y-auto invisible-scrollbar'
 								: 'overflow-y-hidden'
 						}
           `}
@@ -303,36 +303,18 @@ export function WelcomeModal({
 			</DialogContent>
 
 			<style jsx global>{`
-				.custom-scrollbar::-webkit-scrollbar {
-					width: 6px;
+				.invisible-scrollbar {
+					-ms-overflow-style: none; /* IE and Edge */
+					scrollbar-width: none; /* Firefox */
 				}
 
-				.custom-scrollbar::-webkit-scrollbar-track {
-					background: rgba(255, 255, 255, 0.1);
-					border-radius: 3px;
+				.invisible-scrollbar::-webkit-scrollbar {
+					display: none; /* Chrome, Safari and Opera */
 				}
 
-				.custom-scrollbar::-webkit-scrollbar-thumb {
-					background: #ff8d2a;
-					border-radius: 3px;
-					transition: background 0.2s ease;
-				}
-
-				.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-					background: #ffbf88;
-				}
-
-				/* Firefox */
-				.custom-scrollbar {
-					scrollbar-width: thin;
-					scrollbar-color: #ff8d2a rgba(255, 255, 255, 0.1);
-				}
-
-				/* Скрываем скролл на мобильных устройствах */
-				@media (max-width: 640px) {
-					.custom-scrollbar::-webkit-scrollbar {
-						width: 4px;
-					}
+				/* Добавляем поддержку тач-скролла для мобильных устройств */
+				.invisible-scrollbar {
+					-webkit-overflow-scrolling: touch;
 				}
 			`}</style>
 		</Dialog>

@@ -16,6 +16,12 @@ export type UserProfile = {
 	updated_at: string
 	profile_image?: string
 	has_acknowledged_terms: boolean
+	// Added investment-related fields
+	current_amount: number
+	current_accumulated: number
+	investment_start_time: string | null
+	timer_state: string | null
+	is_accumulating: boolean
 }
 
 export interface PartnerProfile {

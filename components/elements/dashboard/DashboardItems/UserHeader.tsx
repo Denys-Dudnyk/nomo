@@ -37,7 +37,10 @@ export default function UserHeader({ user, profile }: UserHeaderProps) {
 			<div className='flex justify-end card-h'>
 				{/* <CardPreview cardHolder={profile?.full_name} /> */}
 
-				<InvestmentCard balance={profile?.cashback_balance} />
+				<InvestmentCard
+					balance={profile?.cashback_balance}
+					userId={profile.user_id} // Add userId prop
+				/>
 			</div>
 		</div>
 	)
