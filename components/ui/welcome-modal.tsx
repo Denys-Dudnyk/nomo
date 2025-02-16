@@ -46,7 +46,7 @@ export function WelcomeModal({
 			setIsLoading(true)
 			try {
 				const status = await getUserAcknowledgment(userId)
-				console.log('Received acknowledgment status:', status)
+				// console.log('Received acknowledgment status:', status)
 				setHasAcknowledged(status)
 				if (status) {
 					setPrivacyChecked(true)

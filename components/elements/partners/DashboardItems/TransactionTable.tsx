@@ -113,7 +113,7 @@ const today = new Date()
 const formattedDate = `${today.getDate()}/${
 	today.getMonth() + 1
 }/${today.getFullYear()}`
-console.log(formattedDate)
+// console.log(formattedDate)
 
 export default function TransactionsTable({
 	currentMonth,

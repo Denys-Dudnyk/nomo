@@ -80,7 +80,7 @@ export default function InvestmentCard({
 			accumulationIntervalRef.current = setInterval(() => {
 				const now = Date.now()
 				// Проверяем, прошло ли достаточно времени с последнего обновления
-				if (now - lastAccumulationUpdateRef.current >= 1000) {
+				if (now - lastAccumulationUpdateRef.current >= 3000) {
 					const newAccumulated = calculateAccumulation(
 						currentAmount,
 						baseAccumulated,
@@ -89,7 +89,7 @@ export default function InvestmentCard({
 					setCurrentAccumulated(newAccumulated)
 					lastAccumulationUpdateRef.current = now
 				}
-			}, 1000)
+			}, 3000)
 		}
 
 		return () => {

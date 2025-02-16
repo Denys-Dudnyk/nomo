@@ -193,7 +193,7 @@ export function useInvestmentSync(
 			subscriptionRef.current.unsubscribe()
 		}
 
-		console.log('Setting up Supabase subscription for user:', userId)
+		// console.log('Setting up Supabase subscription for user:', userId)
 
 		subscriptionRef.current = supabase
 			.channel(`investment_${userId}`)
@@ -206,12 +206,12 @@ export function useInvestmentSync(
 					filter: `user_id=eq.${userId}`,
 				},
 				async payload => {
-					console.log('Real-time update received')
+					// console.log('Real-time update received')
 					await checkStatus(true)
 				}
 			)
 			.subscribe(status => {
-				console.log('Subscription status:', status)
+				// console.log('Subscription status:', status)
 				if (status !== 'SUBSCRIBED') {
 					// Переподключаемся при потере соединения
 					setTimeout(() => {
