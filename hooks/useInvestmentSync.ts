@@ -165,7 +165,7 @@ export function useInvestmentSync(
 			}
 
 			try {
-				console.log('Checking investment status for user:', userId)
+				// console.log('Checking investment status for user:', userId)
 				const result = await checkAccumulationStatus(userId)
 
 				if (result.success && result.data) {

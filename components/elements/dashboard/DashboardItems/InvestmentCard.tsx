@@ -59,7 +59,7 @@ export default function InvestmentCard({
 		userId,
 		useCallback((data: any) => {
 			if (data) {
-				console.log('Received update from Supabase')
+				// console.log('Received update from Supabase')
 				setCurrentAmount(data.current_amount)
 				setBaseAccumulated(data.current_accumulated)
 				setTimer(data.timer_state)
@@ -121,22 +121,22 @@ export default function InvestmentCard({
 			setIsUpdating(true)
 
 			if (isAccumulating) {
-				console.log('Adding to investment. Current balance:', balance)
+				// console.log('Adding to investment. Current balance:', balance)
 				const result = await addToInvestment(userId)
 
 				if (result.success) {
-					console.log('Investment addition successful:', result.data)
+					// console.log('Investment addition successful:', result.data)
 					await checkStatus()
 					refreshSubscription() // Обновляем подписку
 				} else {
 					console.error('Failed to add to investment:', result.error)
 				}
 			} else {
-				console.log('Starting new investment with balance:', balance)
+				// console.log('Starting new investment with balance:', balance)
 				const result = await startInvestment(userId)
 
 				if (result.success) {
-					console.log('Investment start successful')
+					// console.log('Investment start successful')
 					await checkStatus()
 					refreshSubscription() // Обновляем подписку
 				} else {

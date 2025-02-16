@@ -397,11 +397,11 @@ export async function addToInvestment(userId: string) {
 			throw profileError
 		}
 
-		console.log('Current state:', {
-			cashback_balance: profile.cashback_balance,
-			current_amount: profile.current_amount,
-			current_accumulated: profile.current_accumulated,
-		})
+		// console.log('Current state:', {
+		// 	cashback_balance: profile.cashback_balance,
+		// 	current_amount: profile.current_amount,
+		// 	current_accumulated: profile.current_accumulated,
+		// })
 
 		// Добавляем новые средства к текущей инвестиции
 		const { data, error } = await supabase
@@ -419,7 +419,7 @@ export async function addToInvestment(userId: string) {
 			throw error
 		}
 
-		console.log('Updated state:', data)
+		// console.log('Updated state:', data)
 
 		// Принудительно обновляем кэш страницы
 		revalidatePath('/dashboard')
