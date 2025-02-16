@@ -70,7 +70,7 @@ export default function InvestmentCard({
 			lastUpdateTime &&
 			mountedRef.current
 		) {
-			accumulationTimeoutRef.current = setTimeout(() => {
+			accumulationTimeoutRef.current = setInterval(() => {
 				if (mountedRef.current) {
 					const newAccumulated = calculateAccumulation(
 						currentAmount,
