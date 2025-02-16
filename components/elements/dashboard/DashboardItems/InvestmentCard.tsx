@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import {
 	Tooltip,
@@ -39,12 +39,15 @@ export default function InvestmentCard({
 	const [progress, setProgress] = useState(0)
 	const [isAccumulating, setIsAccumulating] = useState(false)
 	const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null)
+	const [isUpdating, setIsUpdating] = useState(false)
+	const accumulationIntervalRef = useRef<NodeJS.Timeout | null>(null)
+	const lastAccumulationUpdateRef = useRef<number>(Date.now())
 
-	// Функция для расчета накопления
+	// Функция для расчета накопления с проверкой времени
 	const calculateAccumulation = useCallback(
 		(amount: number, baseAccum: number, lastUpdate: Date) => {
-			const now = new Date()
-			const elapsedSeconds = (now.getTime() - lastUpdate.getTime()) / 1000
+			const now = Date.now()
+			const elapsedSeconds = Math.max(0, (now - lastUpdate.getTime()) / 1000)
 			const newAccumulated = baseAccum + amount * SECONDS_RATE * elapsedSeconds
 			return Number(newAccumulated.toFixed(7))
 		},
@@ -52,39 +55,47 @@ export default function InvestmentCard({
 	)
 
 	// Обработка обновлений из базы данных
-	const { checkStatus } = useInvestmentSync(
+	const { checkStatus, refreshSubscription } = useInvestmentSync(
 		userId,
-		data => {
+		useCallback((data: any) => {
 			if (data) {
-				console.log('Received update from Supabase:', data)
+				console.log('Received update from Supabase')
 				setCurrentAmount(data.current_amount)
 				setBaseAccumulated(data.current_accumulated)
 				setTimer(data.timer_state)
 				setIsAccumulating(data.is_accumulating)
 				setLastUpdateTime(new Date(data.last_accumulation_update))
 			}
-		},
+		}, []),
 		setCurrentAccumulated
 	)
 
 	// Эффект для локального обновления накопления
 	useEffect(() => {
-		let interval: NodeJS.Timeout
+		if (accumulationIntervalRef.current) {
+			clearInterval(accumulationIntervalRef.current)
+		}
 
 		if (isAccumulating && currentAmount > 0 && lastUpdateTime) {
-			// Обновляем накопление каждую секунду
-			interval = setInterval(() => {
-				const newAccumulated = calculateAccumulation(
-					currentAmount,
-					baseAccumulated,
-					lastUpdateTime
-				)
-				setCurrentAccumulated(newAccumulated)
+			accumulationIntervalRef.current = setInterval(() => {
+				const now = Date.now()
+				// Проверяем, прошло ли достаточно времени с последнего обновления
+				if (now - lastAccumulationUpdateRef.current >= 1000) {
+					const newAccumulated = calculateAccumulation(
+						currentAmount,
+						baseAccumulated,
+						lastUpdateTime
+					)
+					setCurrentAccumulated(newAccumulated)
+					lastAccumulationUpdateRef.current = now
+				}
 			}, 1000)
 		}
 
 		return () => {
-			if (interval) clearInterval(interval)
+			if (accumulationIntervalRef.current) {
+				clearInterval(accumulationIntervalRef.current)
+			}
 		}
 	}, [
 		isAccumulating,
@@ -97,35 +108,26 @@ export default function InvestmentCard({
 	// Загрузка начального состояния
 	useEffect(() => {
 		const loadState = async () => {
-			const status = await checkStatus()
-			if (status) {
-				setCurrentAmount(status.currentAmount)
-				setBaseAccumulated(status.currentAccumulated)
-				setLastUpdateTime(new Date(status.lastUpdate))
-			}
+			await checkStatus()
 		}
 		loadState()
 	}, [checkStatus])
 
-	// Обработка кнопки инвестирования
+	// Обработка кнопки инвестирования с блокировкой повторных нажатий
 	const handleInvest = useCallback(async () => {
-		if (balance <= 0) return
+		if (balance <= 0 || isUpdating) return
 
 		try {
+			setIsUpdating(true)
+
 			if (isAccumulating) {
 				console.log('Adding to investment. Current balance:', balance)
 				const result = await addToInvestment(userId)
 
 				if (result.success) {
 					console.log('Investment addition successful:', result.data)
-					setCurrentAmount(prev => {
-						const newAmount = prev + balance
-						console.log('New current amount:', newAmount)
-						return newAmount
-					})
-
-					// Принудительно запрашиваем обновление состояния
 					await checkStatus()
+					refreshSubscription() // Обновляем подписку
 				} else {
 					console.error('Failed to add to investment:', result.error)
 				}
@@ -135,20 +137,25 @@ export default function InvestmentCard({
 
 				if (result.success) {
 					console.log('Investment start successful')
-					setCurrentAmount(balance)
-					setTimer('7:00:00:00')
-					setIsAccumulating(true)
-
-					// Принудительно запрашиваем обновление состояния
 					await checkStatus()
+					refreshSubscription() // Обновляем подписку
 				} else {
 					console.error('Failed to start investment:', result.error)
 				}
 			}
 		} catch (error) {
 			console.error('Investment error:', error)
+		} finally {
+			setIsUpdating(false)
 		}
-	}, [balance, isAccumulating, userId, checkStatus])
+	}, [
+		balance,
+		isAccumulating,
+		userId,
+		checkStatus,
+		refreshSubscription,
+		isUpdating,
+	])
 
 	// Format time display
 	const formatTime = useCallback((seconds: number): string => {
@@ -183,13 +190,14 @@ export default function InvestmentCard({
 					} else {
 						// Complete investment
 						await completeInvestment(userId)
-						await checkStatus() // Обновляем состояние после завершения инвестиции
+						await checkStatus()
+						refreshSubscription()
 					}
 				}, 1000)
 			}
 			return () => clearInterval(interval)
 		}
-	}, [timer, formatTime, userId, checkStatus])
+	}, [timer, formatTime, userId, checkStatus, refreshSubscription])
 
 	const t = useTranslations('dashboard')
 	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
@@ -292,9 +300,9 @@ export default function InvestmentCard({
 						<Button
 							className='w-full mt-[16px] bg-[#E37719] hover:bg-accenthover text-[#0F0F0F] font-medium rounded-lg py-[10px] transition-all'
 							onClick={handleInvest}
-							disabled={balance <= 0}
+							disabled={balance <= 0 || isUpdating}
 						>
-							{t('invest')}
+							{isUpdating ? 'Обработка...' : t('invest')}
 						</Button>
 					</div>
 				</div>
