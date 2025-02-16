@@ -75,6 +75,7 @@ export default function TransactionsTable({
 							table: 'transactions',
 							filter: `user_id=eq.${userId}`,
 						},
+						//@ts-ignore
 						payload => {
 							setTransactions(prev => [payload.new, ...prev])
 						}

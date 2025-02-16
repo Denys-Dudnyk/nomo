@@ -219,6 +219,7 @@ export default function CompanyProfile({
 			// 2. Delete all existing files if any exist
 			if (existingFiles && existingFiles.length > 0) {
 				const filesToDelete = existingFiles.map(
+					//@ts-ignore
 					file => `${userId}/${file.name}`
 				)
 				const { error: deleteError } = await supabase.storage
