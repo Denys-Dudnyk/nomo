@@ -43,7 +43,11 @@ export default function InvestmentCard({
 	const accumulationIntervalRef = useRef<NodeJS.Timeout | null>(null)
 	const lastAccumulationUpdateRef = useRef<number>(Date.now())
 
-	// Функция для расчета накопления с проверкой времени
+	// Добавляем ref для отслеживания монтирования компонента
+	const mountedRef = useRef(true)
+	const accumulationTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+	// Оптимизированная функция расчета накопления
 	const calculateAccumulation = useCallback(
 		(amount: number, baseAccum: number, lastUpdate: Date) => {
 			const now = Date.now()
@@ -54,12 +58,65 @@ export default function InvestmentCard({
 		[]
 	)
 
+	// Функция для планирования следующего обновления
+	const scheduleNextUpdate = useCallback(() => {
+		if (accumulationTimeoutRef.current) {
+			clearTimeout(accumulationTimeoutRef.current)
+		}
+
+		if (
+			isAccumulating &&
+			currentAmount > 0 &&
+			lastUpdateTime &&
+			mountedRef.current
+		) {
+			accumulationTimeoutRef.current = setTimeout(() => {
+				if (mountedRef.current) {
+					const newAccumulated = calculateAccumulation(
+						currentAmount,
+						baseAccumulated,
+						lastUpdateTime
+					)
+					setCurrentAccumulated(newAccumulated)
+					scheduleNextUpdate() // Планируем следующее обновление
+				}
+			}, 1000)
+		}
+	}, [
+		isAccumulating,
+		currentAmount,
+		baseAccumulated,
+		lastUpdateTime,
+		calculateAccumulation,
+	])
+
+	// Эффект для управления обновлениями
+	useEffect(() => {
+		scheduleNextUpdate()
+
+		return () => {
+			if (accumulationTimeoutRef.current) {
+				clearTimeout(accumulationTimeoutRef.current)
+			}
+		}
+	}, [scheduleNextUpdate])
+
+	// Эффект для очистки при размонтировании
+	useEffect(() => {
+		return () => {
+			mountedRef.current = false
+			if (accumulationTimeoutRef.current) {
+				clearTimeout(accumulationTimeoutRef.current)
+			}
+		}
+	}, [])
+
 	// Обработка обновлений из базы данных
 	const { checkStatus, refreshSubscription } = useInvestmentSync(
 		userId,
 		useCallback((data: any) => {
-			if (data) {
-				// console.log('Received update from Supabase')
+			if (data && mountedRef.current) {
+				console.log('Received update from Supabase:', data)
 				setCurrentAmount(data.current_amount)
 				setBaseAccumulated(data.current_accumulated)
 				setTimer(data.timer_state)
@@ -80,7 +137,7 @@ export default function InvestmentCard({
 			accumulationIntervalRef.current = setInterval(() => {
 				const now = Date.now()
 				// Проверяем, прошло ли достаточно времени с последнего обновления
-				if (now - lastAccumulationUpdateRef.current >= 3000) {
+				if (now - lastAccumulationUpdateRef.current >= 1000) {
 					const newAccumulated = calculateAccumulation(
 						currentAmount,
 						baseAccumulated,
@@ -89,7 +146,7 @@ export default function InvestmentCard({
 					setCurrentAccumulated(newAccumulated)
 					lastAccumulationUpdateRef.current = now
 				}
-			}, 3000)
+			}, 1000)
 		}
 
 		return () => {
@@ -121,22 +178,22 @@ export default function InvestmentCard({
 			setIsUpdating(true)
 
 			if (isAccumulating) {
-				// console.log('Adding to investment. Current balance:', balance)
+				console.log('Adding to investment. Current balance:', balance)
 				const result = await addToInvestment(userId)
 
 				if (result.success) {
-					// console.log('Investment addition successful:', result.data)
+					console.log('Investment addition successful:', result.data)
 					await checkStatus()
 					refreshSubscription() // Обновляем подписку
 				} else {
 					console.error('Failed to add to investment:', result.error)
 				}
 			} else {
-				// console.log('Starting new investment with balance:', balance)
+				console.log('Starting new investment with balance:', balance)
 				const result = await startInvestment(userId)
 
 				if (result.success) {
-					// console.log('Investment start successful')
+					console.log('Investment start successful')
 					await checkStatus()
 					refreshSubscription() // Обновляем подписку
 				} else {
