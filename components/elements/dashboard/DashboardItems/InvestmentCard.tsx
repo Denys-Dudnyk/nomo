@@ -113,7 +113,6 @@ export default function InvestmentCard({
 				if (data.investment_start_time) {
 					setProgress(calculateProgress(data.investment_start_time))
 				}
-				setIsLoading(false)
 			})
 		},
 		[calculateProgress, pathname]
@@ -127,7 +126,7 @@ export default function InvestmentCard({
 
 	// Оптимизированный обработчик инвестирования
 	const handleInvest = useCallback(async () => {
-		if (localBalance <= 0 || isPending) return
+		if (localBalance <= 0) return
 
 		startTransition(async () => {
 			try {
@@ -141,7 +140,7 @@ export default function InvestmentCard({
 				console.error('Investment error:', error)
 			}
 		})
-	}, [localBalance, isAccumulating, userId, checkStatus, pathname, isPending])
+	}, [localBalance, isAccumulating, userId, checkStatus, pathname])
 
 	useEffect(() => {
 		const loadState = async () => {
