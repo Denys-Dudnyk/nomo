@@ -409,8 +409,8 @@ export async function addToInvestment(userId: string) {
 		const { data, error } = await supabase
 			.from('user_profiles')
 			.update({
-				cashback_balance: 0, // Обнуляем баланс кешбэка
 				current_amount: profile.current_amount + profile.cashback_balance, // Добавляем к текущей сумме
+				cashback_balance: 0, // Обнуляем баланс кешбэка
 				last_accumulation_update: new Date().toISOString(), // Обновляем время последнего обновления
 			})
 			.eq('user_id', userId)
@@ -429,8 +429,8 @@ export async function addToInvestment(userId: string) {
 		return {
 			success: true,
 			data: {
-				previousAmount: profile.current_amount,
 				newAmount: profile.current_amount + profile.cashback_balance,
+				previousAmount: profile.current_amount,
 				addedAmount: profile.cashback_balance,
 			},
 		}

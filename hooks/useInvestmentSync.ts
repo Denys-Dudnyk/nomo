@@ -381,7 +381,7 @@ export function useInvestmentSync(
 			if (mountedRef.current) {
 				setupSubscription()
 			}
-		}, 5 * 60 * 1000) // Обновляем подписку каждые 5 минут
+		}, 30000) // Обновляем подписку каждые 5 минут
 
 		return () => {
 			mountedRef.current = false
