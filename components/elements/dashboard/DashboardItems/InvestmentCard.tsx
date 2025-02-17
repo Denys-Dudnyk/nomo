@@ -51,7 +51,7 @@ export default function InvestmentCard({
 	balance: initialBalance,
 	userId,
 }: InvestmentCardProps) {
-	// const [isPending, startTransition] = useTransition()
+	const [isPending, startTransition] = useTransition()
 	const [currentAmount, setCurrentAmount] = useState(0)
 	const [currentAccumulated, setCurrentAccumulated] = useState(0)
 	const [baseAccumulated, setBaseAccumulated] = useState(0)
@@ -97,22 +97,24 @@ export default function InvestmentCard({
 			if (!data || !mountedRef.current || !pathname.includes('dashboard'))
 				return
 
-			setCurrentAmount(data.current_amount || 0)
-			setBaseAccumulated(data.current_accumulated || 0)
-			setTimer(data.timer_state)
-			setIsAccumulating(!!data.is_accumulating)
-			setLastUpdateTime(
-				data.last_accumulation_update
-					? new Date(data.last_accumulation_update)
-					: new Date()
-			)
-			setInvestmentStartTime(data.investment_start_time)
-			setLocalBalance(data.cashback_balance || 0)
+			startTransition(() => {
+				setCurrentAmount(data.current_amount || 0)
+				setBaseAccumulated(data.current_accumulated || 0)
+				setTimer(data.timer_state)
+				setIsAccumulating(!!data.is_accumulating)
+				setLastUpdateTime(
+					data.last_accumulation_update
+						? new Date(data.last_accumulation_update)
+						: new Date()
+				)
+				setInvestmentStartTime(data.investment_start_time)
+				setLocalBalance(data.cashback_balance || 0)
 
-			if (data.investment_start_time) {
-				setProgress(calculateProgress(data.investment_start_time))
-			}
-			setIsLoading(false)
+				if (data.investment_start_time) {
+					setProgress(calculateProgress(data.investment_start_time))
+				}
+				setIsLoading(false)
+			})
 		},
 		[calculateProgress, pathname]
 	)
@@ -127,17 +129,19 @@ export default function InvestmentCard({
 	const handleInvest = useCallback(async () => {
 		if (localBalance <= 0) return
 
-		try {
-			const action = isAccumulating ? addToInvestment : startInvestment
-			const result = await action(userId)
+		startTransition(async () => {
+			try {
+				const action = isAccumulating ? addToInvestment : startInvestment
+				const result = await action(userId)
 
-			if (result.success && pathname.includes('dashboard')) {
-				await checkStatus()
+				if (result.success && pathname.includes('dashboard')) {
+					await checkStatus()
+				}
+			} catch (error) {
+				console.error('Investment error:', error)
 			}
-		} catch (error) {
-			console.error('Investment error:', error)
-		}
-	}, [localBalance, isAccumulating, userId, checkStatus, pathname])
+		})
+	}, [localBalance, isAccumulating, userId, checkStatus, pathname, isPending])
 
 	useEffect(() => {
 		const loadState = async () => {
