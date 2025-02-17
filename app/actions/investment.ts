@@ -349,7 +349,9 @@ export async function checkAccumulationStatus(userId: string) {
         current_amount,
         current_accumulated,
         is_accumulating,
-        last_accumulation_update
+        last_accumulation_update,
+				investment_start_time,
+				cashback_balance
       `
 			)
 			.eq('user_id', userId)

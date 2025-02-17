@@ -10,10 +10,6 @@ export function createClientSingleton() {
 					eventsPerSecond: 10, // Reduced to prevent throttling
 				},
 			},
-			auth: {
-				persistSession: true,
-				autoRefreshToken: true,
-			},
 		}
 	)
 

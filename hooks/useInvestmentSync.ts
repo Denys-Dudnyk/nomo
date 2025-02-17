@@ -254,7 +254,6 @@
 // 	}
 // }
 
-
 'use client'
 
 import { useEffect, useCallback, useRef } from 'react'
@@ -264,7 +263,7 @@ import { checkAccumulationStatus } from '@/app/actions/investment'
 export function useInvestmentSync(
 	userId: string,
 	onUpdate: (data: any) => void,
-	_onAccumulationUpdate: (accumulated: number) => void
+	onAccumulationUpdate: (accumulated: number) => void
 ) {
 	const supabase = createClient()
 	const subscriptionRef = useRef<ReturnType<typeof supabase.channel> | null>(
@@ -310,6 +309,8 @@ export function useInvestmentSync(
 						currentAmount: profile.current_amount,
 						currentAccumulated: profile.current_accumulated,
 						lastUpdate: profile.last_accumulation_update,
+						investmentStartTime: profile.investment_start_time,
+						cashback_balance: profile.cashback_balance,
 					}
 				}
 			} catch (error) {
@@ -344,14 +345,12 @@ export function useInvestmentSync(
 					table: 'user_profiles',
 					filter: `user_id=eq.${userId}`,
 				},
-				//@ts-ignore
 				async payload => {
 					if (mountedRef.current) {
 						await checkStatus(true)
 					}
 				}
 			)
-			//@ts-ignore
 			.subscribe(status => {
 				console.log('Subscription status:', status)
 				if (status !== 'SUBSCRIBED' && mountedRef.current) {
@@ -400,4 +399,3 @@ export function useInvestmentSync(
 		refreshSubscription: setupSubscription,
 	}
 }
-
