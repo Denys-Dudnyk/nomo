@@ -116,6 +116,54 @@ export async function POST(request: Request) {
 				throw transactionError
 			}
 
+			// После успешного добавления транзакции
+			if (transaction) {
+				// Получаем текущий кешбэк баланс пользователя
+				const { data: userProfile, error: userProfileError } = await supabase
+					.from('user_profiles')
+					.select('cashback_balance')
+					.eq('user_id', id)
+					.maybeSingle()
+
+				if (userProfileError) {
+					console.error(
+						'Ошибка получения профиля пользователя:',
+						userProfileError
+					)
+					return NextResponse.json(
+						{ error: 'Ошибка обновления баланса' },
+						{ status: 500 }
+					)
+				}
+
+				if (!userProfile) {
+					console.warn(`Пользователь с ID ${id} не найден в user_profiles`)
+					return NextResponse.json(
+						{ error: 'Пользователь не найден' },
+						{ status: 404 }
+					)
+				}
+
+				const newBalance =
+					(userProfile.cashback_balance || 0) + transaction.balance
+
+				// Обновляем баланс пользователя
+				const { error: updateError } = await supabase
+					.from('user_profiles')
+					.update({ cashback_balance: newBalance })
+					.eq('user_id', id)
+
+				if (updateError) {
+					console.error('Ошибка обновления баланса:', updateError)
+					return NextResponse.json(
+						{ error: 'Ошибка обновления баланса' },
+						{ status: 500 }
+					)
+				}
+
+				console.log(`Баланс обновлён! Новый баланс: ${newBalance}`)
+			}
+
 			console.log('Transaction created:', transaction)
 			return NextResponse.json({ success: true, transaction })
 		} catch (e) {

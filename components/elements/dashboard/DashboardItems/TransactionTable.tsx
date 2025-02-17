@@ -63,6 +63,7 @@ export default function TransactionsTable({
 	const [transactions, setTransactions] = useState<any[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
+	const [balance, setBalance] = useState()
 
 	const t = useTranslations('dashboard')
 
@@ -70,31 +71,58 @@ export default function TransactionsTable({
 	useEffect(() => {
 		const fetchTransactions = async () => {
 			try {
-				// Assuming you have a way to get the current userId
-				// const cookieStore = cookies()
-				// @ts-ignore
 				const supabase = await createClient()
 				const {
 					data: { user },
 				} = await supabase.auth.getUser()
-				const userId = String(user?.id) // Replace with real user ID
+				const userId = String(user?.id)
+
+				// Загружаем начальные транзакции и баланс
 				const data = await getTransactions(userId)
 				setTransactions(data)
+
+				const { data: userProfile } = await supabase
+					.from('user_profiles')
+					.select('cashback_balance')
+					.eq('user_id', userId)
+					.single()
+
+				if (userProfile) {
+					setBalance(userProfile.cashback_balance)
+				}
+
 				setLoading(false)
 
-				const subscription = supabase
+				// 🔴 Подписка на изменения в таблице transactions
+				const transactionSubscription = supabase
 					.channel('realtime:transactions')
 					.on(
 						'postgres_changes',
 						{ event: 'INSERT', schema: 'public', table: 'transactions' },
+						async payload => {
+							const newTransaction = payload.new
+
+							// Добавляем новую транзакцию
+							setTransactions(prev => [newTransaction, ...prev])
+						}
+					)
+					.subscribe()
+
+				// 🟢 Подписка на изменения в таблице user_profiles (реальное обновление баланса)
+				const balanceSubscription = supabase
+					.channel('realtime:user_profiles')
+					.on(
+						'postgres_changes',
+						{ event: 'UPDATE', schema: 'public', table: 'user_profiles' },
 						payload => {
-							setTransactions(prev => [payload.new, ...prev])
+							setBalance(payload.new.cashback_balance) // 🔄 Обновляем баланс в useState
 						}
 					)
 					.subscribe()
 
 				return () => {
-					supabase.removeChannel(subscription)
+					supabase.removeChannel(transactionSubscription)
+					supabase.removeChannel(balanceSubscription)
 				}
 			} catch (err) {
 				setError('Failed to load transactions')
