@@ -113,6 +113,7 @@ export default function InvestmentCard({
 				if (data.investment_start_time) {
 					setProgress(calculateProgress(data.investment_start_time))
 				}
+				setIsLoading(false)
 			})
 		},
 		[calculateProgress, pathname]
@@ -126,7 +127,7 @@ export default function InvestmentCard({
 
 	// Оптимизированный обработчик инвестирования
 	const handleInvest = useCallback(async () => {
-		if (localBalance <= 0) return
+		if (localBalance <= 0 || isPending) return
 
 		startTransition(async () => {
 			try {
@@ -140,7 +141,7 @@ export default function InvestmentCard({
 				console.error('Investment error:', error)
 			}
 		})
-	}, [localBalance, isAccumulating, userId, checkStatus, pathname])
+	}, [localBalance, isAccumulating, userId, checkStatus, pathname, isPending])
 
 	useEffect(() => {
 		const loadState = async () => {
@@ -315,9 +316,9 @@ export default function InvestmentCard({
 						<Button
 							className='w-full mt-[16px] bg-[#E37719] hover:bg-accenthover text-[#0F0F0F] font-medium rounded-lg py-[10px] transition-all'
 							onClick={handleInvest}
-							disabled={localBalance <= 0}
+							disabled={localBalance <= 0 || isPending}
 						>
-							{t('invest')}
+							{isPending ? t('invest') : t('invest')}
 						</Button>
 					</div>
 				</div>
