@@ -102,7 +102,7 @@ const Balance: FC<NavigationCardsProps> = ({ balance, profile }) => {
 					/> */}
 
 					<InvestmentCard
-						balance={profile?.cashback_balance}
+						balance={balance}
 						userId={profile.user_id} // Add userId prop
 					/>
 				</div>

@@ -9,9 +9,14 @@ import InvestmentCard from './InvestmentCard'
 interface UserHeaderProps {
 	user: User
 	profile: UserProfile
+	balance: number
 }
 
-export default function UserHeader({ user, profile }: UserHeaderProps) {
+export default function UserHeader({
+	user,
+	profile,
+	balance,
+}: UserHeaderProps) {
 	return (
 		<div className='flex items-center justify-between mb-[35px] gap-4 flex-col md:flex-row'>
 			<div className='flex items-center gap-6 flex-col mr-[21px]'>
@@ -38,7 +43,7 @@ export default function UserHeader({ user, profile }: UserHeaderProps) {
 				{/* <CardPreview cardHolder={profile?.full_name} /> */}
 
 				<InvestmentCard
-					balance={profile?.cashback_balance}
+					balance={balance}
 					userId={profile.user_id} // Add userId prop
 				/>
 			</div>
