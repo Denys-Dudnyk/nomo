@@ -262,7 +262,7 @@ export default function TransactionsTable({
 									<TableCell>
 										<div className='flex items-center gap-9'>
 											<div className='bg-accent text-[#fff] py-[1px] px-[11px] text-[11px] font-semibold leading-[18px] rounded-[7px]'>
-												28,67%
+												{tx.savings_percent}%
 											</div>
 											<div>{tx.savings_amount} UAH</div>
 										</div>

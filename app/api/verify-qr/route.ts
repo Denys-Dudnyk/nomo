@@ -79,6 +79,12 @@ export async function POST(request: Request) {
 			const formattedDate = format(now, 'dd MMMM.', { locale: uk }) // Например: 05 Трав.
 			const formattedTime = format(now, 'HH:mm') // Например: 03:46
 
+			const { data: companyData } = await supabase
+				.from('companies')
+				.select('*')
+				.eq('id', transactionData.company_id)
+				.single()
+
 			// Create new transaction for the QR code owner
 			const { data: transaction, error: transactionError } = await supabase
 				.from('transactions')
@@ -88,9 +94,13 @@ export async function POST(request: Request) {
 						description: transactionData.description,
 						status: 'success',
 						amount: transactionData.amount,
-						savings_percent: 28.67,
-						savings_amount: 40,
-						balance: 40,
+						savings_percent: companyData.additional_discount,
+						savings_amount: Math.round(
+							transactionData.amount * (companyData.additional_discount / 100)
+						),
+						balance: Math.round(
+							transactionData.amount * (companyData.additional_discount / 100)
+						),
 						qr_code_id: userId,
 						qr_signature: signature,
 						scanned_by: user.id, // Store who scanned the QR code

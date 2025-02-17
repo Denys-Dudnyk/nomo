@@ -43,6 +43,7 @@ export function ConfirmationDialog({
 					transactionData: {
 						description: company?.name || 'Unknown Company',
 						amount: Number.parseFloat(data.amount.replace(/\s/g, '')) || 0,
+						company_id: company?.id,
 					},
 				}),
 			})
