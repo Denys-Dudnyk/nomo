@@ -316,7 +316,7 @@ export default function InvestmentCard({
 						<Button
 							className='w-full mt-[16px] bg-[#E37719] hover:bg-accenthover text-[#0F0F0F] font-medium rounded-lg py-[10px] transition-all'
 							onClick={handleInvest}
-							disabled={localBalance <= 0 || isPending}
+							disabled={localBalance <= 0}
 						>
 							{t('invest')}
 						</Button>
