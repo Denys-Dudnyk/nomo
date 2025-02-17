@@ -1,9 +1,3 @@
-'use server'
-
-import { createClient } from '@/lib/supabase/server'
-import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
-
 // Start investment by moving funds from balance to current_amount
 // export async function startInvestment(userId: string) {
 // 	const cookieStore = cookies()
@@ -238,86 +232,283 @@ import { revalidatePath } from 'next/cache'
 // 		return { success: false, error }
 // 	}
 // }
+////////////////////////////////////////////////////////////////////////////////
+// 'use server'
 
-// Функция для завершения инвестиции
-export async function completeInvestment(userId: string) {
-	const cookieStore = cookies()
-	//@ts-ignore
-	const supabase = await createClient(cookieStore)
+// import { createClient } from '@/lib/supabase/server'
+// import { cookies } from 'next/headers'
+// import { revalidatePath } from 'next/cache'
 
-	try {
-		const { data: profile, error: profileError } = await supabase
-			.from('user_profiles')
-			.select('current_amount, current_accumulated')
-			.eq('user_id', userId)
-			.single()
+// // Функция для завершения инвестиции
+// export async function completeInvestment(userId: string) {
+// 	const cookieStore = cookies()
+// 	//@ts-ignore
+// 	const supabase = await createClient(cookieStore)
 
-		if (profileError) throw profileError
+// 	try {
+// 		const { data: profile, error: profileError } = await supabase
+// 			.from('user_profiles')
+// 			.select('current_amount, current_accumulated')
+// 			.eq('user_id', userId)
+// 			.single()
 
-		const { data, error } = await supabase
-			.from('user_profiles')
-			.update({
-				is_accumulating: false,
-				current_accumulated:
-					profile.current_amount + profile.current_accumulated,
-				updated_at: new Date().toISOString(),
-			})
-			.eq('user_id', userId)
+// 		if (profileError) throw profileError
 
-		if (error) throw error
+// 		const { data, error } = await supabase
+// 			.from('user_profiles')
+// 			.update({
+// 				is_accumulating: false,
+// 				current_accumulated:
+// 					profile.current_amount + profile.current_accumulated,
+// 				updated_at: new Date().toISOString(),
+// 			})
+// 			.eq('user_id', userId)
 
-		revalidatePath('/dashboard')
-		return { success: true, data }
-	} catch (error) {
-		console.error('Error completing investment:', error)
-		return { success: false, error }
-	}
-}
+// 		if (error) throw error
 
-// Обновленная функция startInvestment
+// 		revalidatePath('/dashboard')
+// 		return { success: true, data }
+// 	} catch (error) {
+// 		console.error('Error completing investment:', error)
+// 		return { success: false, error }
+// 	}
+// }
+
+// // Обновленная функция startInvestment
+// export async function startInvestment(userId: string) {
+// 	const cookieStore = cookies()
+// 	//@ts-ignore
+// 	const supabase = await createClient(cookieStore)
+
+// 	try {
+// 		// Get current profile
+// 		const { data: profile, error: profileError } = await supabase
+// 			.from('user_profiles')
+// 			.select('cashback_balance')
+// 			.eq('user_id', userId)
+// 			.single()
+
+// 		if (profileError) throw profileError
+
+// 		const now = new Date().toISOString()
+
+// 		// Start investment
+// 		const { data, error } = await supabase
+// 			.from('user_profiles')
+// 			.update({
+// 				cashback_balance: 0,
+// 				current_amount: profile.cashback_balance,
+// 				current_accumulated: 0,
+// 				investment_start_time: now,
+// 				is_accumulating: true,
+// 				timer_state: '7:00:00:00',
+// 				last_accumulation_update: now, // Добавляем время последнего обновления
+// 			})
+// 			.eq('user_id', userId)
+
+// 		if (error) throw error
+
+// 		// Запускаем первое обновление накопления
+// 		const { error: rpcError } = await supabase.rpc('update_user_accumulation', {
+// 			user_id_input: userId,
+// 		})
+
+// 		if (rpcError) {
+// 			console.error('Error updating accumulation:', rpcError)
+// 		}
+
+// 		revalidatePath('/dashboard')
+// 		return { success: true, data }
+// 	} catch (error) {
+// 		console.error('Error starting investment:', error)
+// 		return { success: false, error }
+// 	}
+// }
+
+// // Функция для проверки состояния накопления
+// export async function checkAccumulationStatus(userId: string) {
+// 	const cookieStore = cookies() //@ts-ignore
+// 	const supabase = await createClient(cookieStore)
+
+// 	try {
+// 		// Получаем логи накопления
+// 		const { data: logs, error: logsError } = await supabase
+// 			.from('accumulation_logs')
+// 			.select('*')
+// 			.eq('user_id', userId)
+// 			.order('calculation_time', { ascending: false })
+// 			.limit(5)
+
+// 		if (logsError) throw logsError
+
+// 		// Получаем текущее состояние
+// 		const { data: profile, error: profileError } = await supabase
+// 			.from('user_profiles')
+// 			.select(
+// 				`
+//         current_amount,
+//         current_accumulated,
+//         is_accumulating,
+//         last_accumulation_update,
+// 				investment_start_time,
+// 				cashback_balance
+//       `
+// 			)
+// 			.eq('user_id', userId)
+// 			.single()
+
+// 		if (profileError) throw profileError
+
+// 		// Принудительно запускаем обновление
+// 		const { error: rpcError } = await supabase.rpc('update_user_accumulation', {
+// 			user_id_input: userId,
+// 		})
+
+// 		if (rpcError) throw rpcError
+
+// 		return {
+// 			success: true,
+// 			data: {
+// 				profile,
+// 				logs,
+// 			},
+// 		}
+// 	} catch (error) {
+// 		console.error('Error checking accumulation status:', error)
+// 		return { success: false, error }
+// 	}
+// }
+
+// // Обновленная функция addToInvestment
+// // Обновленная функция addToInvestment
+// export async function addToInvestment(userId: string) {
+// 	const cookieStore = cookies()
+// 	//@ts-ignore
+// 	const supabase = await createClient(cookieStore)
+
+// 	try {
+// 		// Получаем текущее состояние профиля
+// 		const { data: profile, error: profileError } = await supabase
+// 			.from('user_profiles')
+// 			.select('cashback_balance, current_amount, current_accumulated')
+// 			.eq('user_id', userId)
+// 			.single()
+
+// 		if (profileError) {
+// 			console.error('Error fetching profile:', profileError)
+// 			throw profileError
+// 		}
+
+// 		// console.log('Current state:', {
+// 		// 	cashback_balance: profile.cashback_balance,
+// 		// 	current_amount: profile.current_amount,
+// 		// 	current_accumulated: profile.current_accumulated,
+// 		// })
+
+// 		// Добавляем новые средства к текущей инвестиции
+// 		const { data, error } = await supabase
+// 			.from('user_profiles')
+// 			.update({
+// 				current_amount: profile.current_amount + profile.cashback_balance, // Добавляем к текущей сумме
+// 				cashback_balance: 0, // Обнуляем баланс кешбэка
+// 				last_accumulation_update: new Date().toISOString(), // Обновляем время последнего обновления
+// 			})
+// 			.eq('user_id', userId)
+// 			.select()
+
+// 		if (error) {
+// 			console.error('Error updating investment:', error)
+// 			throw error
+// 		}
+
+// 		// console.log('Updated state:', data)
+
+// 		// Принудительно обновляем кэш страницы
+// 		revalidatePath('/dashboard')
+
+// 		return {
+// 			success: true,
+// 			data: {
+// 				newAmount: profile.current_amount + profile.cashback_balance,
+// 				previousAmount: profile.current_amount,
+// 				addedAmount: profile.cashback_balance,
+// 			},
+// 		}
+// 	} catch (error) {
+// 		console.error('Error adding to investment:', error)
+// 		return { success: false, error }
+// 	}
+// }
+
+// // Получение текущего состояния инвестиции
+// export async function getInvestmentState(userId: string) {
+// 	const cookieStore = cookies()
+// 	//@ts-ignore
+// 	const supabase = await createClient(cookieStore)
+
+// 	try {
+// 		const { data, error } = await supabase
+// 			.from('user_profiles')
+// 			.select(
+// 				`
+//         current_amount,
+//         current_accumulated,
+//         investment_start_time,
+//         timer_state,
+//         is_accumulating,
+//         updated_at
+//       `
+// 			)
+// 			.eq('user_id', userId)
+// 			.single()
+
+// 		if (error) throw error
+
+// 		// Если есть активная инвестиция, проверяем не истек ли срок
+// 		if (data.is_accumulating && data.investment_start_time) {
+// 			const startTime = new Date(data.investment_start_time)
+// 			const now = new Date()
+// 			const diff = now.getTime() - startTime.getTime()
+// 			const daysElapsed = diff / (1000 * 60 * 60 * 24)
+
+// 			if (daysElapsed >= 7) {
+// 				// Если прошло 7 дней, завершаем инвестицию
+// 				await completeInvestment(userId)
+// 				return getInvestmentState(userId)
+// 			}
+// 		}
+
+// 		return { success: true, data }
+// 	} catch (error) {
+// 		console.error('Error getting investment state:', error)
+// 		return { success: false, error }
+// 	}
+// }
+
+'use server'
+
+import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
+
 export async function startInvestment(userId: string) {
 	const cookieStore = cookies()
 	//@ts-ignore
 	const supabase = await createClient(cookieStore)
 
 	try {
-		// Get current profile
-		const { data: profile, error: profileError } = await supabase
-			.from('user_profiles')
-			.select('cashback_balance')
-			.eq('user_id', userId)
-			.single()
-
-		if (profileError) throw profileError
-
 		const now = new Date().toISOString()
 
-		// Start investment
-		const { data, error } = await supabase
-			.from('user_profiles')
-			.update({
-				cashback_balance: 0,
-				current_amount: profile.cashback_balance,
-				current_accumulated: 0,
-				investment_start_time: now,
-				is_accumulating: true,
-				timer_state: '7:00:00:00',
-				last_accumulation_update: now, // Добавляем время последнего обновления
-			})
-			.eq('user_id', userId)
+		// Транзакция для атомарного обновления
+		const { data, error } = await supabase.rpc('start_investment', {
+			user_id_input: userId,
+			investment_time: now,
+		})
 
 		if (error) throw error
 
-		// Запускаем первое обновление накопления
-		const { error: rpcError } = await supabase.rpc('update_user_accumulation', {
-			user_id_input: userId,
-		})
-
-		if (rpcError) {
-			console.error('Error updating accumulation:', rpcError)
-		}
-
-		revalidatePath('/dashboard')
+		// Используем более специфичный путь для ревалидации
+		revalidatePath('/dashboard/[userId]', 'page')
 		return { success: true, data }
 	} catch (error) {
 		console.error('Error starting investment:', error)
@@ -325,138 +516,47 @@ export async function startInvestment(userId: string) {
 	}
 }
 
-// Функция для проверки состояния накопления
-export async function checkAccumulationStatus(userId: string) {
-	const cookieStore = cookies() //@ts-ignore
-	const supabase = await createClient(cookieStore)
-
-	try {
-		// Получаем логи накопления
-		const { data: logs, error: logsError } = await supabase
-			.from('accumulation_logs')
-			.select('*')
-			.eq('user_id', userId)
-			.order('calculation_time', { ascending: false })
-			.limit(5)
-
-		if (logsError) throw logsError
-
-		// Получаем текущее состояние
-		const { data: profile, error: profileError } = await supabase
-			.from('user_profiles')
-			.select(
-				`
-        current_amount,
-        current_accumulated,
-        is_accumulating,
-        last_accumulation_update,
-				investment_start_time,
-				cashback_balance
-      `
-			)
-			.eq('user_id', userId)
-			.single()
-
-		if (profileError) throw profileError
-
-		// Принудительно запускаем обновление
-		const { error: rpcError } = await supabase.rpc('update_user_accumulation', {
-			user_id_input: userId,
-		})
-
-		if (rpcError) throw rpcError
-
-		return {
-			success: true,
-			data: {
-				profile,
-				logs,
-			},
-		}
-	} catch (error) {
-		console.error('Error checking accumulation status:', error)
-		return { success: false, error }
-	}
-}
-
-// Обновленная функция addToInvestment
-// Обновленная функция addToInvestment
 export async function addToInvestment(userId: string) {
 	const cookieStore = cookies()
 	//@ts-ignore
 	const supabase = await createClient(cookieStore)
 
 	try {
-		// Получаем текущее состояние профиля
-		const { data: profile, error: profileError } = await supabase
-			.from('user_profiles')
-			.select('cashback_balance, current_amount, current_accumulated')
-			.eq('user_id', userId)
-			.single()
+		// Транзакция для атомарного обновления
+		const { data, error } = await supabase.rpc('add_to_investment', {
+			user_id_input: userId,
+			investment_time: new Date().toISOString(),
+		})
 
-		if (profileError) {
-			console.error('Error fetching profile:', profileError)
-			throw profileError
-		}
+		if (error) throw error
 
-		// console.log('Current state:', {
-		// 	cashback_balance: profile.cashback_balance,
-		// 	current_amount: profile.current_amount,
-		// 	current_accumulated: profile.current_accumulated,
-		// })
-
-		// Добавляем новые средства к текущей инвестиции
-		const { data, error } = await supabase
-			.from('user_profiles')
-			.update({
-				current_amount: profile.current_amount + profile.cashback_balance, // Добавляем к текущей сумме
-				cashback_balance: 0, // Обнуляем баланс кешбэка
-				last_accumulation_update: new Date().toISOString(), // Обновляем время последнего обновления
-			})
-			.eq('user_id', userId)
-			.select()
-
-		if (error) {
-			console.error('Error updating investment:', error)
-			throw error
-		}
-
-		// console.log('Updated state:', data)
-
-		// Принудительно обновляем кэш страницы
-		revalidatePath('/dashboard')
-
-		return {
-			success: true,
-			data: {
-				newAmount: profile.current_amount + profile.cashback_balance,
-				previousAmount: profile.current_amount,
-				addedAmount: profile.cashback_balance,
-			},
-		}
+		// Используем более специфичный путь для ревалидации
+		revalidatePath('/dashboard/[userId]', 'page')
+		return { success: true, data }
 	} catch (error) {
 		console.error('Error adding to investment:', error)
 		return { success: false, error }
 	}
 }
 
-// Получение текущего состояния инвестиции
-export async function getInvestmentState(userId: string) {
+export async function checkAccumulationStatus(userId: string) {
 	const cookieStore = cookies()
 	//@ts-ignore
 	const supabase = await createClient(cookieStore)
 
 	try {
-		const { data, error } = await supabase
+		// Оптимизированный запрос с минимальным набором полей
+		const { data: profile, error } = await supabase
 			.from('user_profiles')
 			.select(
 				`
         current_amount,
         current_accumulated,
         investment_start_time,
-        timer_state,
+        last_accumulation_update,
         is_accumulating,
-        updated_at
+        timer_state,
+        cashback_balance
       `
 			)
 			.eq('user_id', userId)
@@ -464,23 +564,31 @@ export async function getInvestmentState(userId: string) {
 
 		if (error) throw error
 
-		// Если есть активная инвестиция, проверяем не истек ли срок
-		if (data.is_accumulating && data.investment_start_time) {
-			const startTime = new Date(data.investment_start_time)
-			const now = new Date()
-			const diff = now.getTime() - startTime.getTime()
-			const daysElapsed = diff / (1000 * 60 * 60 * 24)
+		return { success: true, data: { profile } }
+	} catch (error) {
+		console.error('Error checking accumulation status:', error)
+		return { success: false, error }
+	}
+}
 
-			if (daysElapsed >= 7) {
-				// Если прошло 7 дней, завершаем инвестицию
-				await completeInvestment(userId)
-				return getInvestmentState(userId)
-			}
-		}
+export async function completeInvestment(userId: string) {
+	const cookieStore = cookies()
+	//@ts-ignore
+	const supabase = await createClient(cookieStore)
 
+	try {
+		// Транзакция для атомарного обновления
+		const { data, error } = await supabase.rpc('complete_investment', {
+			user_id_input: userId,
+		})
+
+		if (error) throw error
+
+		// Используем более специфичный путь для ревалидации
+		revalidatePath('/dashboard/[userId]', 'page')
 		return { success: true, data }
 	} catch (error) {
-		console.error('Error getting investment state:', error)
+		console.error('Error completing investment:', error)
 		return { success: false, error }
 	}
 }

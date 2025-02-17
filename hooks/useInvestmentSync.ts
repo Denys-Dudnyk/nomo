@@ -254,148 +254,298 @@
 // 	}
 // }
 
-'use client'
+// 'use client'
 
-import { useEffect, useCallback, useRef } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { checkAccumulationStatus } from '@/app/actions/investment'
+// import { useEffect, useCallback, useRef } from 'react'
+// import { createClient } from '@/lib/supabase/client'
+// import { checkAccumulationStatus } from '@/app/actions/investment'
+
+// export function useInvestmentSync(
+// 	userId: string,
+// 	onUpdate: (data: any) => void,
+// 	onAccumulationUpdate: (accumulated: number) => void
+// ) {
+// 	const supabase = createClient()
+// 	const subscriptionRef = useRef<ReturnType<typeof supabase.channel> | null>(
+// 		null
+// 	)
+// 	const lastUpdateRef = useRef<number>(Date.now())
+// 	const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+// 	const errorCountRef = useRef(0)
+// 	const mountedRef = useRef(true)
+
+// 	// Функция для проверки статуса с debounce и обработкой ошибок
+// 	const checkStatus = useCallback(
+// 		async (force = false) => {
+// 			const now = Date.now()
+// 			const timeSinceLastUpdate = now - lastUpdateRef.current
+
+// 			if (!force && timeSinceLastUpdate < 2000) {
+// 				if (updateTimeoutRef.current) {
+// 					clearTimeout(updateTimeoutRef.current)
+// 				}
+
+// 				updateTimeoutRef.current = setTimeout(() => {
+// 					if (mountedRef.current) {
+// 						checkStatus(true)
+// 					}
+// 				}, 2000 - timeSinceLastUpdate)
+
+// 				return null
+// 			}
+
+// 			try {
+// 				const result = await checkAccumulationStatus(userId)
+
+// 				if (result.success && result.data) {
+// 					const { profile } = result.data
+// 					if (mountedRef.current) {
+// 						onUpdate(profile)
+// 						lastUpdateRef.current = now
+// 						errorCountRef.current = 0 // Сбрасываем счетчик ошибок при успешном обновлении
+// 					}
+
+// 					return {
+// 						currentAmount: profile.current_amount,
+// 						currentAccumulated: profile.current_accumulated,
+// 						lastUpdate: profile.last_accumulation_update,
+// 						investmentStartTime: profile.investment_start_time,
+// 						cashback_balance: profile.cashback_balance,
+// 					}
+// 				}
+// 			} catch (error) {
+// 				console.error('Error checking status:', error)
+// 				errorCountRef.current += 1
+
+// 				// Если произошло 3 ошибки подряд, пробуем переподключиться
+// 				if (errorCountRef.current >= 3) {
+// 					console.log('Multiple errors detected, attempting to reconnect...')
+// 					setupSubscription()
+// 					errorCountRef.current = 0
+// 				}
+// 			}
+// 			return null
+// 		},
+// 		[userId, onUpdate]
+// 	)
+
+// 	// Настройка подписки с улучшенной обработкой ошибок
+// 	const setupSubscription = useCallback(() => {
+// 		if (subscriptionRef.current) {
+// 			subscriptionRef.current.unsubscribe()
+// 		}
+
+// 		const channel = supabase
+// 			.channel(`investment_${userId}_${Date.now()}`) // Уникальный канал для каждой подписки
+// 			.on(
+// 				'postgres_changes',
+// 				{
+// 					event: '*',
+// 					schema: 'public',
+// 					table: 'user_profiles',
+// 					filter: `user_id=eq.${userId}`,
+// 				},
+// 				async payload => {
+// 					if (mountedRef.current) {
+// 						await checkStatus(true)
+// 					}
+// 				}
+// 			)
+// 			.subscribe(status => {
+// 				console.log('Subscription status:', status)
+// 				if (status !== 'SUBSCRIBED' && mountedRef.current) {
+// 					setTimeout(setupSubscription, 5000)
+// 				}
+// 			})
+
+// 		subscriptionRef.current = channel
+// 		return () => {
+// 			channel.unsubscribe()
+// 		}
+// 	}, [userId, supabase, checkStatus])
+
+// 	// Эффект для подписки с cleanup
+// 	useEffect(() => {
+// 		mountedRef.current = true
+// 		const cleanup = setupSubscription()
+
+// 		// Периодическая проверка состояния
+// 		const statusInterval = setInterval(() => {
+// 			if (mountedRef.current) {
+// 				checkStatus(true)
+// 			}
+// 		}, 30000)
+
+// 		// Периодическое обновление подписки
+// 		const subscriptionInterval = setInterval(() => {
+// 			if (mountedRef.current) {
+// 				setupSubscription()
+// 			}
+// 		}, 30000) // Обновляем подписку каждые 5 минут
+
+// 		return () => {
+// 			mountedRef.current = false
+// 			cleanup()
+// 			clearInterval(statusInterval)
+// 			clearInterval(subscriptionInterval)
+// 			if (updateTimeoutRef.current) {
+// 				clearTimeout(updateTimeoutRef.current)
+// 			}
+// 		}
+// 	}, [setupSubscription, checkStatus])
+
+// 	return {
+// 		checkStatus: () => checkStatus(true),
+// 		refreshSubscription: setupSubscription,
+// 	}
+// }
+
+"use client"
+
+import { useEffect, useCallback, useRef } from "react"
+import { createClient } from "@/lib/supabase/client"
+import { checkAccumulationStatus } from "@/app/actions/investment"
+import { usePathname } from "next/navigation"
 
 export function useInvestmentSync(
-	userId: string,
-	onUpdate: (data: any) => void,
-	onAccumulationUpdate: (accumulated: number) => void
+  userId: string,
+  onUpdate: (data: any) => void,
+  onAccumulationUpdate: (accumulated: number) => void,
 ) {
-	const supabase = createClient()
-	const subscriptionRef = useRef<ReturnType<typeof supabase.channel> | null>(
-		null
-	)
-	const lastUpdateRef = useRef<number>(Date.now())
-	const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-	const errorCountRef = useRef(0)
-	const mountedRef = useRef(true)
+  const supabase = createClient()
+  const subscriptionRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
+  const lastUpdateRef = useRef<number>(Date.now())
+  const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const errorCountRef = useRef(0)
+  const mountedRef = useRef(true)
+  const pathname = usePathname()
 
-	// Функция для проверки статуса с debounce и обработкой ошибок
-	const checkStatus = useCallback(
-		async (force = false) => {
-			const now = Date.now()
-			const timeSinceLastUpdate = now - lastUpdateRef.current
+  // Функция для проверки статуса с debounce
+  const checkStatus = useCallback(
+    async (force = false) => {
+      const now = Date.now()
+      const timeSinceLastUpdate = now - lastUpdateRef.current
 
-			if (!force && timeSinceLastUpdate < 2000) {
-				if (updateTimeoutRef.current) {
-					clearTimeout(updateTimeoutRef.current)
-				}
+      if (!force && timeSinceLastUpdate < 2000) {
+        if (updateTimeoutRef.current) {
+          clearTimeout(updateTimeoutRef.current)
+        }
 
-				updateTimeoutRef.current = setTimeout(() => {
-					if (mountedRef.current) {
-						checkStatus(true)
-					}
-				}, 2000 - timeSinceLastUpdate)
+        updateTimeoutRef.current = setTimeout(() => {
+          if (mountedRef.current) {
+            checkStatus(true)
+          }
+        }, 2000 - timeSinceLastUpdate)
 
-				return null
-			}
+        return null
+      }
 
-			try {
-				const result = await checkAccumulationStatus(userId)
+      try {
+        const result = await checkAccumulationStatus(userId)
 
-				if (result.success && result.data) {
-					const { profile } = result.data
-					if (mountedRef.current) {
-						onUpdate(profile)
-						lastUpdateRef.current = now
-						errorCountRef.current = 0 // Сбрасываем счетчик ошибок при успешном обновлении
-					}
+        if (result.success && result.data && mountedRef.current) {
+          const { profile } = result.data
+          onUpdate(profile)
+          lastUpdateRef.current = now
+          errorCountRef.current = 0
+          return profile
+        }
+      } catch (error) {
+        console.error("Error checking status:", error)
+        errorCountRef.current += 1
 
-					return {
-						currentAmount: profile.current_amount,
-						currentAccumulated: profile.current_accumulated,
-						lastUpdate: profile.last_accumulation_update,
-						investmentStartTime: profile.investment_start_time,
-						cashback_balance: profile.cashback_balance,
-					}
-				}
-			} catch (error) {
-				console.error('Error checking status:', error)
-				errorCountRef.current += 1
+        if (errorCountRef.current >= 3) {
+          setupSubscription()
+          errorCountRef.current = 0
+        }
+      }
+      return null
+    },
+    [userId, onUpdate],
+  )
 
-				// Если произошло 3 ошибки подряд, пробуем переподключиться
-				if (errorCountRef.current >= 3) {
-					console.log('Multiple errors detected, attempting to reconnect...')
-					setupSubscription()
-					errorCountRef.current = 0
-				}
-			}
-			return null
-		},
-		[userId, onUpdate]
-	)
+  // Оптимизированная настройка подписки
+  const setupSubscription = useCallback(() => {
+    // Очищаем предыдущую подписку
+    if (subscriptionRef.current) {
+      subscriptionRef.current.unsubscribe()
+      subscriptionRef.current = null
+    }
 
-	// Настройка подписки с улучшенной обработкой ошибок
-	const setupSubscription = useCallback(() => {
-		if (subscriptionRef.current) {
-			subscriptionRef.current.unsubscribe()
-		}
+    // Создаем новую подписку только если мы на странице dashboard
+    if (pathname.includes("dashboard")) {
+      const channel = supabase
+        .channel(`investment_${userId}_${Date.now()}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "user_profiles",
+            filter: `user_id=eq.${userId}`,
+          },
+          async (payload) => {
+            if (mountedRef.current && pathname.includes("dashboard")) {
+              // Немедленно обновляем состояние из payload
+              if (payload.new) {
+                onUpdate(payload.new)
+              }
+            }
+          },
+        )
+        .subscribe((status) => {
+          if (status === "SUBSCRIBED") {
+            console.log("Successfully subscribed to changes")
+          }
+        })
 
-		const channel = supabase
-			.channel(`investment_${userId}_${Date.now()}`) // Уникальный канал для каждой подписки
-			.on(
-				'postgres_changes',
-				{
-					event: '*',
-					schema: 'public',
-					table: 'user_profiles',
-					filter: `user_id=eq.${userId}`,
-				},
-				async payload => {
-					if (mountedRef.current) {
-						await checkStatus(true)
-					}
-				}
-			)
-			.subscribe(status => {
-				console.log('Subscription status:', status)
-				if (status !== 'SUBSCRIBED' && mountedRef.current) {
-					setTimeout(setupSubscription, 5000)
-				}
-			})
+      subscriptionRef.current = channel
+    }
 
-		subscriptionRef.current = channel
-		return () => {
-			channel.unsubscribe()
-		}
-	}, [userId, supabase, checkStatus])
+    return () => {
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe()
+        subscriptionRef.current = null
+      }
+    }
+  }, [userId, supabase, onUpdate, pathname])
 
-	// Эффект для подписки с cleanup
-	useEffect(() => {
-		mountedRef.current = true
-		const cleanup = setupSubscription()
+  // Эффект для очистки при изменении маршрута
+  useEffect(() => {
+    return () => {
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe()
+        subscriptionRef.current = null
+      }
+    }
+  }, [pathname])
 
-		// Периодическая проверка состояния
-		const statusInterval = setInterval(() => {
-			if (mountedRef.current) {
-				checkStatus(true)
-			}
-		}, 30000)
+  // Основной эффект для инициализации
+  useEffect(() => {
+    mountedRef.current = true
 
-		// Периодическое обновление подписки
-		const subscriptionInterval = setInterval(() => {
-			if (mountedRef.current) {
-				setupSubscription()
-			}
-		}, 30000) // Обновляем подписку каждые 5 минут
+    // Устанавливаем подписку только если мы на странице dashboard
+    let cleanup: (() => void) | undefined
+    if (pathname.includes("dashboard")) {
+      cleanup = setupSubscription()
 
-		return () => {
-			mountedRef.current = false
-			cleanup()
-			clearInterval(statusInterval)
-			clearInterval(subscriptionInterval)
-			if (updateTimeoutRef.current) {
-				clearTimeout(updateTimeoutRef.current)
-			}
-		}
-	}, [setupSubscription, checkStatus])
+      // Выполняем начальную проверку статуса
+      checkStatus(true)
+    }
 
-	return {
-		checkStatus: () => checkStatus(true),
-		refreshSubscription: setupSubscription,
-	}
+    return () => {
+      mountedRef.current = false
+      if (cleanup) cleanup()
+      if (updateTimeoutRef.current) {
+        clearTimeout(updateTimeoutRef.current)
+      }
+    }
+  }, [setupSubscription, checkStatus, pathname]) // Added pathname to dependencies
+
+  return {
+    checkStatus: () => checkStatus(true),
+    refreshSubscription: setupSubscription,
+  }
 }
+
+

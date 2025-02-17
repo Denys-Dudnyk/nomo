@@ -8,16 +8,14 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { Skeleton } from '@/components/ui/skeleton'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { InvestmentProgramModal } from '@/components/ui/investment-program-modal'
-import {
-	startInvestment,
-	addToInvestment,
-	completeInvestment,
-} from '@/app/actions/investment'
+import { startInvestment, addToInvestment } from '@/app/actions/investment'
 import { useInvestmentSync } from '@/hooks/useInvestmentSync'
-import { Skeleton } from '@/components/ui/skeleton'
+import { useTransition } from 'react'
+import { usePathname } from 'next/navigation'
 
 interface InvestmentCardProps {
 	balance: number
@@ -25,7 +23,7 @@ interface InvestmentCardProps {
 }
 
 const TIMER_DURATION = 7 * 24 * 60 * 60
-const ANNUAL_RATE = 0.004 // 0.4%
+const ANNUAL_RATE = 0.004
 const DAILY_RATE = ANNUAL_RATE / 365
 const SECONDS_RATE = DAILY_RATE / 86400
 
@@ -50,11 +48,11 @@ const LoadingSkeleton = () => (
 )
 
 export default function InvestmentCard({
-	balance,
+	balance: initialBalance,
 	userId,
 }: InvestmentCardProps) {
+	const [isPending, startTransition] = useTransition()
 	const [currentAmount, setCurrentAmount] = useState(0)
-	const [currentBalance, setCurrentBalance] = useState(balance)
 	const [currentAccumulated, setCurrentAccumulated] = useState(0)
 	const [baseAccumulated, setBaseAccumulated] = useState(0)
 	const [timer, setTimer] = useState<string | null>(null)
@@ -62,62 +60,124 @@ export default function InvestmentCard({
 	const [isAccumulating, setIsAccumulating] = useState(false)
 	const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null)
 	const [isLoading, setIsLoading] = useState(true)
-	const [isUpdating, setIsUpdating] = useState(false)
 	const [investmentStartTime, setInvestmentStartTime] = useState<string | null>(
 		null
 	)
 	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
+	const [localBalance, setLocalBalance] = useState(initialBalance)
 
-	const accumulationIntervalRef = useRef<NodeJS.Timeout | null>(null)
-	const lastAccumulationUpdateRef = useRef<number>(Date.now())
-
-	// Добавляем ref для отслеживания монтирования компонента
 	const mountedRef = useRef(true)
-	const accumulationTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+	const progressIntervalRef = useRef<NodeJS.Timeout | null>(null)
+	const accumulationIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
-	// Оптимизированная функция расчета накопления
+	const t = useTranslations('dashboard')
+	const pathname = usePathname()
+
 	const calculateAccumulation = useCallback(
 		(amount: number, baseAccum: number, lastUpdate: Date) => {
 			const now = Date.now()
 			const elapsedSeconds = Math.max(0, (now - lastUpdate.getTime()) / 1000)
-			const newAccumulated = baseAccum + amount * SECONDS_RATE * elapsedSeconds
-			return Number(newAccumulated.toFixed(7))
+			return Number(
+				(baseAccum + amount * SECONDS_RATE * elapsedSeconds).toFixed(7)
+			)
 		},
 		[]
 	)
 
-	// Функция для расчета прогресса на основе времени начала инвестиции
 	const calculateProgress = useCallback((startTime: string) => {
 		const start = new Date(startTime).getTime()
 		const now = Date.now()
 		const elapsed = now - start
-		const totalDuration = TIMER_DURATION * 1000 // конвертируем в миллисекунды
-		return Math.min((elapsed / totalDuration) * 100, 100)
+		return Math.min((elapsed / (TIMER_DURATION * 1000)) * 100, 100)
 	}, [])
 
-	// Функция для планирования следующего обновления
-	const scheduleNextUpdate = useCallback(() => {
-		if (accumulationTimeoutRef.current) {
-			clearTimeout(accumulationTimeoutRef.current)
-		}
+	// Оптимизированный обработчик обновлений
+	const handleDataUpdate = useCallback(
+		(data: any) => {
+			if (!data || !mountedRef.current || !pathname.includes('dashboard'))
+				return
 
+			startTransition(() => {
+				setCurrentAmount(data.current_amount || 0)
+				setBaseAccumulated(data.current_accumulated || 0)
+				setTimer(data.timer_state)
+				setIsAccumulating(!!data.is_accumulating)
+				setLastUpdateTime(
+					data.last_accumulation_update
+						? new Date(data.last_accumulation_update)
+						: new Date()
+				)
+				setInvestmentStartTime(data.investment_start_time)
+				setLocalBalance(data.cashback_balance || 0)
+
+				if (data.investment_start_time) {
+					setProgress(calculateProgress(data.investment_start_time))
+				}
+				setIsLoading(false)
+			})
+		},
+		[calculateProgress, pathname]
+	)
+
+	const { checkStatus, refreshSubscription } = useInvestmentSync(
+		userId,
+		handleDataUpdate,
+		setCurrentAccumulated
+	)
+
+	// Оптимизированный обработчик инвестирования
+	const handleInvest = useCallback(async () => {
+		if (localBalance <= 0 || isPending) return
+
+		startTransition(async () => {
+			try {
+				const action = isAccumulating ? addToInvestment : startInvestment
+				const result = await action(userId)
+
+				if (result.success && pathname.includes('dashboard')) {
+					await checkStatus()
+				}
+			} catch (error) {
+				console.error('Investment error:', error)
+			}
+		})
+	}, [localBalance, isAccumulating, userId, checkStatus, pathname, isPending])
+
+	useEffect(() => {
+		const loadState = async () => {
+			try {
+				await checkStatus()
+			} catch (error) {
+				console.error('Error loading initial state:', error)
+				if (mountedRef.current) {
+					setIsLoading(false)
+				}
+			}
+		}
+		loadState()
+	}, [checkStatus])
+
+	useEffect(() => {
 		if (
 			isAccumulating &&
 			currentAmount > 0 &&
 			lastUpdateTime &&
 			mountedRef.current
 		) {
-			accumulationTimeoutRef.current = setInterval(() => {
-				if (mountedRef.current) {
-					const newAccumulated = calculateAccumulation(
-						currentAmount,
-						baseAccumulated,
-						lastUpdateTime
-					)
-					setCurrentAccumulated(newAccumulated)
-					scheduleNextUpdate() // Планируем следующее обновление
-				}
+			accumulationIntervalRef.current = setInterval(() => {
+				const newAccumulated = calculateAccumulation(
+					currentAmount,
+					baseAccumulated,
+					lastUpdateTime
+				)
+				setCurrentAccumulated(newAccumulated)
 			}, 1000)
+
+			return () => {
+				if (accumulationIntervalRef.current) {
+					clearInterval(accumulationIntervalRef.current)
+				}
+			}
 		}
 	}, [
 		isAccumulating,
@@ -127,212 +187,37 @@ export default function InvestmentCard({
 		calculateAccumulation,
 	])
 
-	// Обработка обновлений из базы данных
-	const { checkStatus, refreshSubscription } = useInvestmentSync(
-		userId,
-		useCallback((data: any) => {
-			if (data && mountedRef.current) {
-				// console.log('Received update from Supabase:', data)
-				setCurrentAmount(data.current_amount)
-				setBaseAccumulated(data.current_accumulated)
-				setTimer(data.timer_state)
-				setIsAccumulating(data.is_accumulating)
-				setLastUpdateTime(new Date(data.last_accumulation_update))
-				setInvestmentStartTime(data.investment_start_time)
-				setCurrentBalance(data.cashback_balance)
-				if (data.investment_start_time) {
-					const newProgress = calculateProgress(data.investment_start_time)
-					setProgress(newProgress)
+	useEffect(() => {
+		if (investmentStartTime && isAccumulating) {
+			progressIntervalRef.current = setInterval(() => {
+				setProgress(calculateProgress(investmentStartTime))
+			}, 1000)
+
+			return () => {
+				if (progressIntervalRef.current) {
+					clearInterval(progressIntervalRef.current)
 				}
 			}
-		}, []),
-		setCurrentAccumulated
-	)
-
-	// Эффект для управления обновлениями
-	useEffect(() => {
-		scheduleNextUpdate()
-
-		return () => {
-			if (accumulationTimeoutRef.current) {
-				clearTimeout(accumulationTimeoutRef.current)
-			}
 		}
-	}, [scheduleNextUpdate])
-
-	// Загрузка начального состояния
-	// useEffect(() => {
-	// 	const loadState = async () => {
-	// 		setIsLoading(true)
-	// 		try {
-	// 			await checkStatus()
-	// 		} finally {
-	// 			if (mountedRef.current) {
-	// 				setIsLoading(false)
-	// 			}
-	// 		}
-	// 	}
-	// 	loadState()
-	// }, [checkStatus])
+	}, [investmentStartTime, isAccumulating, calculateProgress])
 
 	// Эффект для очистки при размонтировании
 	useEffect(() => {
 		return () => {
 			mountedRef.current = false
-			if (accumulationTimeoutRef.current) {
-				clearTimeout(accumulationTimeoutRef.current)
-			}
+			if (progressIntervalRef.current)
+				clearInterval(progressIntervalRef.current)
+			if (accumulationIntervalRef.current)
+				clearInterval(accumulationIntervalRef.current)
 		}
 	}, [])
 
-	// Эффект для локального обновления накопления
+	// Эффект для обновления локального баланса
 	useEffect(() => {
-		if (accumulationIntervalRef.current) {
-			clearInterval(accumulationIntervalRef.current)
+		if (pathname.includes('dashboard')) {
+			setLocalBalance(initialBalance)
 		}
-
-		if (isAccumulating && currentAmount > 0 && lastUpdateTime) {
-			accumulationIntervalRef.current = setInterval(() => {
-				const now = Date.now()
-				// Проверяем, прошло ли достаточно времени с последнего обновления
-				if (now - lastAccumulationUpdateRef.current >= 1000) {
-					const newAccumulated = calculateAccumulation(
-						currentAmount,
-						baseAccumulated,
-						lastUpdateTime
-					)
-					setCurrentAccumulated(newAccumulated)
-					lastAccumulationUpdateRef.current = now
-				}
-			}, 1000)
-		}
-
-		return () => {
-			if (accumulationIntervalRef.current) {
-				clearInterval(accumulationIntervalRef.current)
-			}
-		}
-	}, [
-		isAccumulating,
-		currentAmount,
-		baseAccumulated,
-		lastUpdateTime,
-		calculateAccumulation,
-	])
-
-	// Обновляем прогресс каждую секунду если есть время начала инвестиции
-	useEffect(() => {
-		if (investmentStartTime && isAccumulating) {
-			const interval = setInterval(() => {
-				const newProgress = calculateProgress(investmentStartTime)
-				setProgress(newProgress)
-			}, 1000)
-
-			return () => clearInterval(interval)
-		}
-	}, [investmentStartTime, isAccumulating, calculateProgress])
-
-	// Загрузка начального состояния
-	useEffect(() => {
-		const loadState = async () => {
-			await checkStatus()
-		}
-		loadState()
-	}, [checkStatus])
-
-	// Обработка кнопки инвестирования с блокировкой повторных нажатий
-	const handleInvest = useCallback(async () => {
-		if (currentBalance <= 0 || isUpdating) return
-
-		try {
-			setIsUpdating(true)
-
-			if (isAccumulating) {
-				// console.log('Adding to investment. Current balance:', balance)
-				const result = await addToInvestment(userId)
-
-				if (result.success) {
-					// console.log('Investment addition successful:', result.data)
-					await checkStatus()
-					refreshSubscription() // Обновляем подписку
-				} else {
-					console.error('Failed to add to investment:', result.error)
-				}
-			} else {
-				// console.log('Starting new investment with balance:', balance)
-				const result = await startInvestment(userId)
-
-				if (result.success) {
-					// console.log('Investment start successful')
-					await checkStatus()
-					refreshSubscription() // Обновляем подписку
-				} else {
-					console.error('Failed to start investment:', result.error)
-				}
-			}
-		} catch (error) {
-			console.error('Investment error:', error)
-		} finally {
-			setIsUpdating(false)
-		}
-	}, [
-		currentBalance,
-		isAccumulating,
-		userId,
-		checkStatus,
-		refreshSubscription,
-		isUpdating,
-	])
-
-	// // Format time display
-	// const formatTime = useCallback((seconds: number): string => {
-	// 	const days = Math.floor(seconds / 86400)
-	// 	const remainder = seconds % 86400
-	// 	const hours = Math.floor(remainder / 3600)
-	// 	const minutes = Math.floor((remainder % 3600) / 60)
-	// 	const secs = remainder % 60
-	// 	return `${days}:${hours.toString().padStart(2, '0')}:${minutes
-	// 		.toString()
-	// 		.padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-	// }, [])
-
-	// Effect for timer and progress
-	// useEffect(() => {
-	// 	let interval: NodeJS.Timeout
-
-	// 	if (timer) {
-	// 		const parts = timer.split(':').map(Number)
-	// 		if (parts.length === 4) {
-	// 			let totalSeconds =
-	// 				parts[0] * 86400 + parts[1] * 3600 + parts[2] * 60 + parts[3]
-
-	// 			interval = setInterval(async () => {
-	// 				if (totalSeconds > 0) {
-	// 					totalSeconds -= 1
-	// 					setTimer(formatTime(totalSeconds))
-
-	// 					const elapsedSeconds = TIMER_DURATION - totalSeconds
-	// 					const progressPercentage = (elapsedSeconds / TIMER_DURATION) * 100
-	// 					setProgress(progressPercentage)
-	// 				} else {
-	// 					// Complete investment
-	// 					await completeInvestment(userId)
-	// 					await checkStatus()
-	// 					refreshSubscription()
-	// 				}
-	// 			}, 1000)
-	// 		}
-	// 		return () => clearInterval(interval)
-	// 	}
-	// }, [timer, formatTime, userId, checkStatus, refreshSubscription])
-
-	const t = useTranslations('dashboard')
-
-	// Circle properties
-	const circleRadius = 50
-	const circumference = 2 * Math.PI * circleRadius
-
-	// Компонент для отображения скелетона
+	}, [initialBalance, pathname])
 
 	// if (isLoading) {
 	// 	return <LoadingSkeleton />
@@ -342,13 +227,11 @@ export default function InvestmentCard({
 		<>
 			<div className='bg-[#1E2128] rounded-[16px] p-6 w-full shadow-xl h-auto sm:max-h-[228px]'>
 				<div className='flex items-center justify-between gap-6 flex-col sm:flex-row'>
-					{/* Left side with circle */}
 					<div className='relative w-[180px] h-[180px]'>
 						<svg
 							width='180'
 							height='180'
 							viewBox='0 0 120 120'
-							className='-rotate-90'
 							style={{ overflow: 'visible' }}
 						>
 							<circle
@@ -367,11 +250,13 @@ export default function InvestmentCard({
 								stroke='#FF8A00'
 								strokeWidth='8'
 								strokeLinecap='round'
-								strokeDasharray={circumference}
-								strokeDashoffset={
-									circumference - (circumference * progress) / 100
-								}
+								strokeDasharray={`${2 * Math.PI * 50}`}
+								strokeDashoffset={`${2 * Math.PI * 50 * (1 - progress / 100)}`}
 								className='transition-all duration-1000 ease-linear'
+								style={{
+									transform: 'rotate(-90deg)',
+									transformOrigin: 'center',
+								}}
 							/>
 						</svg>
 
@@ -392,8 +277,7 @@ export default function InvestmentCard({
 						</div>
 					</div>
 
-					{/* Right side */}
-					<div className=''>
+					<div>
 						<div className='flex justify-between items-center mb-3'>
 							<div className='text-[#767785] text-[14px] font-normal'>
 								{t('accumulated_funds')}
@@ -426,15 +310,15 @@ export default function InvestmentCard({
 						</div>
 
 						<div className='text-2xl font-mono font-medium text-[#F4F4F4]'>
-							{currentBalance.toFixed(2)}
+							{localBalance.toFixed(2)}
 						</div>
 
 						<Button
 							className='w-full mt-[16px] bg-[#E37719] hover:bg-accenthover text-[#0F0F0F] font-medium rounded-lg py-[10px] transition-all'
 							onClick={handleInvest}
-							disabled={currentBalance <= 0 || isUpdating}
+							disabled={localBalance <= 0 || isPending}
 						>
-							{isUpdating ? 'Обработка...' : t('invest')}
+							{t('invest')}
 						</Button>
 					</div>
 				</div>
