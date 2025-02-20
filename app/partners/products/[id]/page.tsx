@@ -1,17 +1,21 @@
 import { getProduct, getCategories } from '@/app/actions/products'
 import ProductDetails from '@/components/elements/business/products/ProductsItems/ProductsDetail'
-
 import { notFound } from 'next/navigation'
 
 interface ProductPageProps {
-	params: {
+	params: Promise<{
 		id: string
-	}
+	}>
 }
 
+// Указываем, что маршрут динамический (SSR):
+export const dynamic = 'force-dynamic'
+
 export default async function ProductPage({ params }: ProductPageProps) {
+	const { id } = await params
+
 	const [productResult, categoriesResult] = await Promise.all([
-		await getProduct(params.id),
+		getProduct(id),
 		getCategories(),
 	])
 
