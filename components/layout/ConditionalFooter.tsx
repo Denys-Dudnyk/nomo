@@ -10,7 +10,9 @@ export default function ConditionalFooter() {
 	if (
 		pathname === '/portfolio' ||
 		pathname === '/partners' ||
-		pathname === '/partners/products'
+		pathname === '/partners/products' ||
+		pathname.startsWith('/partners/products/') ||
+		pathname.startsWith('/partners/')
 	)
 		return null
 

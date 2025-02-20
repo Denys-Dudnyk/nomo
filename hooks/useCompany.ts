@@ -7,7 +7,7 @@ interface Company {
 	id: string
 	name: string
 	edrpou: string
-	// Add other fields as needed
+	additional_discount?: number
 }
 
 export function useCompany() {

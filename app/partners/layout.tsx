@@ -12,7 +12,7 @@ export default function DashboardLayout({
 }) {
 	return (
 		<SidebarProvider>
-			<div className='flex h-screen w-full bg-[#0c0d10] text-foreground'>
+			<div className='flex h-screen w-full bg-[#0f0f0f] text-foreground'>
 				<AppSidebar />
 				<div className='flex flex-col flex-1 overflow-hidden'>
 					<AppHeader />

@@ -104,7 +104,42 @@ export async function getCompanyById(id: string): Promise<Company | null> {
 		throw error
 	}
 
-	// Convert database response to frontend model
+	return {
+		...data,
+		description: data.description ?? '',
+		logo_url: data.logo_url,
+		banner_url: data.banner_url,
+		location: data.location ?? '',
+		promocode: data.promocode ?? '',
+		advantages: data.advantages || [],
+		contacts: data.contacts || {
+			address: '',
+			phone: '',
+			email: '',
+		},
+	} as Company
+}
+
+export async function getCompanyByIds(): Promise<Company | null> {
+	const cookieStore = cookies()
+	//@ts-ignore
+	const supabase = await createClient(cookieStore)
+
+	const { data: session } = await supabase.auth.getSession()
+
+	const { data, error } = await supabase
+		.from('companies')
+		.select('*')
+		.eq('id', session.session?.user.id)
+		.single()
+
+	if (error) {
+		if (error.code === 'PGRST116') {
+			return null // Company not found
+		}
+		throw error
+	}
+
 	return {
 		...data,
 		description: data.description ?? '',

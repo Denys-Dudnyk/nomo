@@ -28,6 +28,7 @@ import {
 	SidebarMenuItem,
 	SidebarRail,
 } from '@/components/ui/sidebar'
+import { useCompany } from '@/hooks/useCompany'
 
 const sidebarItems = [
 	// { title: "Аналітика", icon: BarChart3, path: "/business", hasDropdown: true },
@@ -80,6 +81,8 @@ export function AppSidebar() {
 	const pathname = usePathname()
 
 	const [isModalOpen, setIsModalOpen] = useState(false)
+
+	const { company } = useCompany()
 
 	return (
 		<Sidebar className='border-r  border-border bg-[#121315] leading-[2rem] border-none shadow-none text-white w-[257px] flex flex-col justify-between p-0'>
@@ -159,7 +162,7 @@ export function AppSidebar() {
 			</SidebarContent>
 
 			{/* Sidebar Footer */}
-			<SidebarFooter className='px-4 py-3 bg-[#121315] flex flex-col gap-2 border-t border-border'>
+			<SidebarFooter className='px-4 py-3 bg-[#121315] flex flex-col gap-2 '>
 				{!isCollapsed && (
 					<>
 						<Button
@@ -177,7 +180,7 @@ export function AppSidebar() {
 							variant='default'
 							className='bg-[#FF8D2A] text-white w-full py-2 px-3 rounded hover:bg-orange-600'
 						>
-							Дані
+							<Link href={`/partners/${company?.id}/settings`}>Дані</Link>
 						</Button>
 					</>
 				)}

@@ -43,3 +43,32 @@ export interface PartnerProfile {
 	updated_at: string
 	qr_code_id: string
 }
+
+export interface Product {
+	id: string
+	name: string
+	description?: string
+	price: number
+	price_without_vat?: number
+	vat_percentage?: number
+	cashback_percentage?: number
+	cashback_amount?: number
+	unit: string
+	category?: string
+	category_id?: string
+	image_path?: string
+	internal_id?: string
+	product_id?: string
+	plu?: string
+	ean?: string
+	tags?: string[]
+	created_at?: string
+	updated_at?: string
+	partner_id?: string
+}
+
+export interface Category {
+	id: string
+	name: string
+	created_at?: string
+}

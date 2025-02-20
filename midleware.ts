@@ -61,11 +61,6 @@ export async function middleware(request: NextRequest) {
 		}
 	)
 
-	// const {
-	// 	data: { session },
-	// } = await supabase.auth.getSession()
-
-	// Protected routes
 	const verifyToken = request.nextUrl.searchParams.get('token')
 	const isVerifyPage = request.nextUrl.pathname === '/verify'
 
@@ -125,18 +120,29 @@ export async function middleware(request: NextRequest) {
 		return NextResponse.redirect(new URL('/dashboard', request.url))
 	}
 
-	// Protected routes
-	// if (!session && request.nextUrl.pathname.startsWith('/dashboard')) {
-	// 	return NextResponse.redirect(new URL('/auth/login', request.url))
-	// }
-
-	// Verify page protection
 	if (isVerifyPage) {
 		const email = request.nextUrl.searchParams.get('email')
-		// Allow access only if there's an email parameter (from registration)
-		// or a verification token (from password reset)
+
 		if (!email && !verifyToken) {
 			return NextResponse.redirect(new URL('/', request.url))
+		}
+	}
+
+	// Проверяем авторизацию для доступа к продуктам
+	if (request.nextUrl.pathname.startsWith('/products')) {
+		if (!session) {
+			return NextResponse.redirect(new URL('/login', request.url))
+		}
+
+		// Проверяем, является ли пользователь партнером
+		const { data: partner } = await supabase
+			.from('partner_profiles')
+			.select('user_id')
+			.eq('user_id', session.user.id)
+			.single()
+
+		if (!partner) {
+			return NextResponse.redirect(new URL('/dashboard', request.url))
 		}
 	}
 

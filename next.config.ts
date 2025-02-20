@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
 				hostname: 'nndgocwwteltezwmynvh.supabase.co',
 				pathname: '/storage/v1/object/public/user-image/**', // Добавлено новое хранилище
 			},
+			{
+				protocol: 'https',
+				hostname: 'nndgocwwteltezwmynvh.supabase.co',
+				pathname: '/storage/v1/object/public/products/**', // Добавлено новое хранилище
+			},
 		],
 	},
 }

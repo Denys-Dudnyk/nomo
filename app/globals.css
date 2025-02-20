@@ -360,3 +360,27 @@ body {
 		gap: 10px;
 	}
 }
+
+.products-scrollbar::-webkit-scrollbar {
+	width: 8px; /* Уменьшаем ширину до 4px */
+}
+
+.products-scrollbar::-webkit-scrollbar-track {
+	background: #191b20;
+	border-radius: 11px; /* Уменьшаем радиус */
+	/* Уменьшаем вертикальные отступы */
+}
+
+.products-scrollbar::-webkit-scrollbar-thumb {
+	background: #191b20;
+	border-radius: 11px; /* Синхронизируем радиус с треком */
+}
+
+.products-scrollbar::-webkit-scrollbar-thumb {
+	background: #272a35 !important; /* Более светлый цвет как на скриншоте */
+}
+
+.products-scrollbar::-webkit-scrollbar-track {
+	background: #191b20 !important; /* Темный фон трека */
+}
+

@@ -13,7 +13,7 @@ interface DashboardContentProps {
 const Business = ({ session, profile }: DashboardContentProps) => {
 	return (
 		<div>
-			<main className='flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-gray-800 scrollbar-thumb-rounded-lg'>
+			<main className=' flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-gray-800 scrollbar-thumb-rounded-lg'>
 				<MainContents />
 			</main>
 		</div>
