@@ -12,7 +12,7 @@ const MainPage = () => {
 			<ProductOverview />
 			<Projects bgColor='bg-[#0f0f0f]' />
 			<About />
-			<Statistics />
+{/* 			<Statistics /> */}
 			<News />
 		</main>
 	)
