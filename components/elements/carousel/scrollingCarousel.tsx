@@ -49,16 +49,17 @@ export function CarouselScroll({
 						</CarouselItem>
 					)}
 
-					{initialCompanies.map(item => (
-						<CarouselItem
-							key={item.id}
-							className='flex-shrink-0 w-[90%] max-w-[250px]'
-						>
-							<div className='flex flex-col items-center justify-center  px-4 py-8 space-y-4'>
-								<CashbackItem {...item} />
-							</div>
-						</CarouselItem>
-					))}
+					{isAdmin &&
+						initialCompanies.map(item => (
+							<CarouselItem
+								key={item.id}
+								className='flex-shrink-0 w-[90%] max-w-[250px]'
+							>
+								<div className='flex flex-col items-center justify-center  px-4 py-8 space-y-4'>
+									<CashbackItem {...item} />
+								</div>
+							</CarouselItem>
+						))}
 				</CarouselContent>
 
 				<CarouselPrevious className='absolute left-0 top-1/2 transform -translate-y-1/2 bg-accent' />

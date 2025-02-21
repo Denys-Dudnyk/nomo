@@ -110,16 +110,17 @@ const Cashback = ({ initialCompanies }: { initialCompanies: Company[] }) => {
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.5 }}
 						>
-							{currentItems.map((item, index) => (
-								<motion.div
-									key={item.id}
-									initial={{ opacity: 0, y: 20 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ duration: 0.5, delay: index * 0.1 }}
-								>
-									<CashbackItem {...item} />
-								</motion.div>
-							))}
+							{isAdmin &&
+								currentItems.map((item, index) => (
+									<motion.div
+										key={item.id}
+										initial={{ opacity: 0, y: 20 }}
+										animate={{ opacity: 1, y: 0 }}
+										transition={{ duration: 0.5, delay: index * 0.1 }}
+									>
+										<CashbackItem {...item} />
+									</motion.div>
+								))}
 
 							{isAdmin && (
 								<Card className='min-h-[250px] w-full flex justify-center items-center border-dashed border-2 border-gray-300 hover:border-accent transition-colors duration-300 self-center'>
